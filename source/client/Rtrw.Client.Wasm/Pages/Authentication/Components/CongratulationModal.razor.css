@@ -1,0 +1,11 @@
+::deep .congratulation-modal-container {
+  display: flex;
+}
+
+::deep .congratulation-modal-text {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 28px;
+  text-align: left;
+  color: #707070;
+}

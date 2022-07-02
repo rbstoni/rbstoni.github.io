@@ -1,0 +1,63 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes" class="@Class" style="@Style"
+     @ontouchstart="OnTouchStartHandler" @ontouchstart:stopPropagation="true"
+     @ontouchend="OnTouchEndHandler" @ontouchend:stopPropagation="true"
+     @ontouchcancel="OnTouchCancelHandler" @ontouchcancel:stopPropagation="true">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Action<SwipeDirection>? OnSwipe { get; set; }
+    (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
+    (TouchPoint ReferencePoint, DateTime StartTime) endPoint;
+    private void OnTouchStartHandler(TouchEventArgs touch) => startPoint = (touch.TargetTouches[0], DateTime.Now);
+
+    private void OnTouchEndHandler(TouchEventArgs touch)
+    {
+        endPoint = (touch.ChangedTouches[0], DateTime.Now);
+        var deltaX = startPoint.ReferencePoint.ClientX - endPoint.ReferencePoint.ClientX;
+        var deltaY = startPoint.ReferencePoint.ClientY - endPoint.ReferencePoint.ClientY;
+        var deltaTime = startPoint.StartTime - endPoint.StartTime;
+        var velocityX = Math.Abs(deltaX / deltaTime.Milliseconds);
+        var velocityY = Math.Abs(deltaY / deltaTime.Milliseconds);
+        //var angleSwipeRadians = Math.Atan2(deltaY, deltaX);
+        //var angleSwipeDegrees = angleSwipeRadians * (180 / Math.PI);
+        if (velocityX > velocityY)
+        {
+            if (velocityX > 0.8)
+                if (deltaX > 0)
+                    InvokeAsync(() => OnSwipe(SwipeDirection.RightToLeft));
+                else
+                    InvokeAsync(() => OnSwipe(SwipeDirection.LeftToRight));
+            else
+            {
+                startPoint.ReferencePoint = null;
+                endPoint.ReferencePoint = null;
+                return;
+            }
+        }
+        if (velocityX < velocityY)
+            if (velocityY > 0.8)
+                if (deltaY > 0)
+                    InvokeAsync(() => OnSwipe(SwipeDirection.BottomToTop));
+                else
+                    InvokeAsync(() => OnSwipe(SwipeDirection.TopToBottom));
+            else
+            {
+                startPoint.ReferencePoint = null;
+                endPoint.ReferencePoint = null;
+                return;
+            }
+        startPoint.ReferencePoint = null;
+        endPoint.ReferencePoint = null;
+    }
+
+    internal void OnTouchCancelHandler(TouchEventArgs touch)
+    {
+        startPoint.ReferencePoint = null;
+        endPoint.ReferencePoint = null;
+    }
+}

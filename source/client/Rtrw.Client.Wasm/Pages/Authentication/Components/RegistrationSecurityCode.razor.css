@@ -1,0 +1,73 @@
+.security-code-container {
+  position: relative;
+  margin-top: 36px;
+  padding: 0 16px;
+  max-width: 100%;
+}
+@media screen and (min-device-width: 600px) {
+  .security-code-container {
+    padding: 0 24px;
+  }
+}
+
+::deep .security-code-paragraph {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 24px;
+  text-align: left;
+  color: #707070;
+}
+
+.security-code-input-control {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px auto;
+}
+.security-code-input-control .security-code-input-caption {
+  text-align: center;
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 17px;
+  color: #707070;
+  padding: 4px;
+}
+.security-code-input-control .security-code-input {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 64px;
+  border-bottom: 1px solid var(--rtrw-gray-500);
+  overflow-x: hidden;
+  text-align: center;
+  min-width: 64px;
+  max-width: 256px;
+  flex-wrap: wrap;
+  letter-spacing: 8px;
+  color: var(--rtrw-primary);
+}
+.security-code-input-control .security-code-input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--rtrw-primary);
+}
+
+.security-code-resend {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 17px;
+  text-align: left;
+  color: #0db201;
+  text-align: center;
+}
+.security-code-resend .security-code-resend-timer {
+  display: inline-flex;
+  color: #707070;
+}
+
+.security-code-sub-paragraph {
+  font-family: Roboto;
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
+  color: #716464;
+}

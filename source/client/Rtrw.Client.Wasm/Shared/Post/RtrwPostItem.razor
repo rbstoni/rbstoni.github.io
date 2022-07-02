@@ -1,0 +1,121 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Enums
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+@inject NavigationManager NavigationManager
+@inject IPostService PostService
+@inject ICurrentUser currentUser
+
+<CascadingValue Value="@Post" IsFixed="true">
+    <div class="post-container @Class" style="@PostListItemStyle">
+        <div class="rtrw-flex rtrw-flex-col rtrw-gap-col-8px">
+            <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-start rtrw-margin-4px">
+                <div class="rtrw-flex rtrw-gap-col-8px">
+                    <AvatarWarga Id="@Post.Author.Id" FullName="@Post.Author.FullName" AvatarUrl="@Post.Author.AvatarUrl" />
+                    <div class="rtrw-flex rtrw-flex-col">
+                        <div class="rtrw-inline-flex rtrw-align-items-center rtrw-gap-col-8px">
+                            <div class="display-name" type="button">
+                                @Post.Author.FullName
+                            </div>
+                            <span style="color:black">
+                                &bull;
+                            </span>
+                            <div class="display-location" type="button">
+                                @Post.Author.Location?.Alamat
+                            </div>
+                        </div>
+                        <div class="display-date" type="button">
+                            @Post.CreatedAt.TimeSpanToString()
+                        </div>
+                    </div>
+                </div>
+                <div class="rtrw-margin-start-auto">
+                    <PostOptions />
+                </div>
+            </div>
+        </div>
+
+        <RtrwCarousel ItemsSource="@Post.Media" @bind-SelectedIndex="selectedIndex" Style="height: 250px">
+            <ItemTemplate>
+                <img src="@context.MediumUrl" style="border-radius: 12px; height: 100%" />
+            </ItemTemplate>
+        </RtrwCarousel>
+
+        <div class="post-content" type="button" @onclick="@(()=>NavigationManager.NavigateTo($"post/{Post.Id}"))">
+            <TruncateText Text="@Post.Text" />
+        </div>
+        <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-col-4px" type="button">
+            <RtrwSvgGeoTag />
+            <span class="display-post-location rtrw-margin-start-8px"> @Post.PostLocation?.Alamat</span>
+        </div>
+
+        <div class="rtrw-flex rtrw-justify-content-between rtrw-width-100">
+            <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center">
+                <LastThreeReaction Reactions="@Post.Reactions" />
+            </div>
+            <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center">
+                @if (currentUserHasReacted)
+                {
+                    <RtrwButton OnClick="RemoveCurrentUserReaction">
+                        @currentUserReactionName
+                    </RtrwButton>
+                }
+                else if (!currentUserHasReacted)
+                {
+                    <AddReaction AddNewReactionCallback="GetCurrentUserReaction" />
+                }
+                <RtrwButton Style="gap: 8px">
+                    <RtrwSvgComment />
+                    @if (Post.Comments?.Count > 0)
+                    {
+                        <span class="message-count-label">@Post.Comments?.Count</span>
+                    }
+                </RtrwButton>
+                <RtrwButton Style="margin-right: -22px;">
+                    <RtrwSvgShare />
+                </RtrwButton>
+            </div>
+        </div>
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public string PostId { get; set; }
+    [Parameter] public bool NoPadding { get; set; }
+    Post Post { get; set; } = new();
+    int selectedIndex;
+    string currentUserReactionName;
+    bool currentUserHasReacted;
+    Task GetCurrentUserReaction(Emoji emoji)
+    {
+        Reaction reaction = new Reaction() { Reactor = currentUser.Warga, Emoji = emoji };
+        var userHasReacted = Post.Reactions.Any(x => x.Reactor.Id == reaction.Reactor.Id);
+        if (!userHasReacted)
+        {
+            Post.Reactions.Add(reaction);
+            currentUserReactionName = reaction.Emoji.EnumToDescriptionString();
+            currentUserHasReacted = true;
+        }
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+    Task RemoveCurrentUserReaction()
+    {
+        var currentUserReaction = Post.Reactions.FirstOrDefault(x => x.Reactor.Id == currentUser.Warga.Id);
+        if (currentUserReaction != null)
+        {
+            Post.Reactions.Remove(currentUserReaction);
+            currentUserHasReacted = false;
+        }
+        return Task.CompletedTask;
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        Post = await PostService.GetPostByIdAsync(PostId);
+    }
+    protected string PostListItemStyle => new StyleBuilder().AddStyle("padding", "0", NoPadding).AddStyle(Style).Build();
+}

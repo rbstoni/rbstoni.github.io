@@ -1,0 +1,27 @@
+﻿@using Rtrw.Client.Wasm.Enums
+@using Rtrw.Client.Wasm.Svgs
+
+@if (Emoji == Emoji.TerimaKasih)
+{
+    <RtrwSvgTerimaKasih />
+}
+@if (Emoji == Emoji.Suka)
+{
+    <RtrwSvgSuka />
+}
+@if (Emoji == Emoji.Kaget)
+{
+    <RtrwSvgKaget />
+}
+@if (Emoji == Emoji.TidakSuka)
+{
+    <RtrwSvgTidakSuka />
+}
+@if (Emoji == Emoji.Setuju)
+{
+    <RtrwSvgSetuju />
+}
+
+@code {
+    [Parameter] public Emoji Emoji { get; set; }
+}

@@ -1,0 +1,126 @@
+﻿.user-profile {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 4px;
+    margin: 4px auto;
+    padding: 16px;
+
+    @media screen and (min-device-width: 600px) {
+        padding: 24px;
+    }
+
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 4px;
+    border-radius: 4px;
+}
+
+.user-profile-header {
+    display: flex;
+    gap: 16px;
+}
+
+.user-profile-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    column-gap: 8px;
+
+    .custom-button {
+        color: var(--rtrw-white);
+        background-color: var(--rtrw-success);
+        margin-block: 0;
+        appearance: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 15px;
+        text-transform: capitalize;
+        width: 100%;
+    }
+}
+
+.user-post {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 4px;
+    border-radius: 4px;
+    padding: 16px;
+
+    @media screen and (min-device-width: 600px) {
+        padding: 24px;
+    }
+
+    .post-container {
+        box-shadow: unset;
+        border-radius: unset;
+        padding: unset;
+    }
+}
+
+.user-profile-name {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    font-size: 32px;
+    width: 100%;
+    font-family: var(--rtrw-font-roboto);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--rtrw-black);
+    line-height: 1;
+
+    .user-badges {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--rtrw-font-roboto);
+
+        & svg {
+            height: 16px;
+        }
+    }
+}
+
+.user-profile-kelurahan {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 4px;
+
+    .kelurahan {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        color: var(--rtrw-font-roboto);
+        background-color: var(--rtrw-font-roboto);
+        border-radius: 9999px;
+        padding: 2px 6px;
+    }
+}
+
+.section-title {
+    font-family: var(--#rtrw-font-roboto);
+    font-weight: 500;
+    font-size: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.section-subtitle {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    text-align: right;
+    color: var(--rtrw-success);
+    flex-shrink: 0;
+}

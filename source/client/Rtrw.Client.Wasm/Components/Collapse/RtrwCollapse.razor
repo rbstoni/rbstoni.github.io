@@ -1,0 +1,10 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @ref="container" @attributes="UserAttributes" class="@Classname" style="@Stylename">
+    <div @ref="wrapper" class="rtrw-collapse-wrapper">
+        <div class="rtrw-collapse-wrapper-inner">
+            @ChildContent
+        </div>
+    </div>
+</div>

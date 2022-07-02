@@ -1,0 +1,108 @@
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value") !default;
+$colors-rgb: map-loop($colors, to-rgb, "$value") !default;
+$gradient: linear-gradient(180deg,
+    rgba($white, 0.15),
+    rgba($white, 0)) !default;
+
+$code-color: $danger  !default;
+$mark-bg: $warning  !default;
+
+// scss-docs-start headings-variables
+$headings-margin-bottom: $spacer * 0.5 !default;
+$headings-font-family: null !default;
+$headings-font-style: normal !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.2 !default;
+$headings-color: null !default;
+// scss-docs-end headings-variables
+
+:root {
+  // Colors
+  @each $color,
+  $value in $colors {
+    --#{$prefix}#{$color}: #{$value};
+  }
+
+  @each $color,
+  $value in $grays {
+    --#{$prefix}#{$color}: #{$value};
+  }
+
+  @each $color,
+  $value in $theme-colors {
+    --#{$prefix}#{$color}: #{$value};
+  }
+
+  @each $color,
+  $value in $theme-colors-rgb {
+    --#{$prefix}#{$color}-rgb: #{$value};
+  }
+
+  @each $color,
+  $value in $theme-colors-rgb {
+    --#{$prefix}#{$color}-text: #{$light};
+  }
+
+  @each $color,
+  $value in $theme-colors-rgb {
+    --#{$prefix}#{$color}-hover: rgba(#{$value}, 0.08);
+  }
+
+  @each $color,
+  $value in $colors-rgb {
+    --#{$prefix}#{$color}-rgb: #{$value};
+  }
+
+
+  --#{$prefix}body-color-rgb: #{to-rgb($body-color)};
+  --#{$prefix}body-bg-rgb: #{to-rgb($body-bg)};
+
+  // Gradient
+  --#{$prefix}bg-gradient: #{$gradient};
+
+  // Shadow box
+  --#{$prefix}box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  // Fonts
+  --#{$prefix}font-roboto: #{inspect($font-family-roboto)};
+  --#{$prefix}font-alegreya-sans: #{inspect($font-family-alegreya-sans)};
+  --#{$prefix}font-monospace: #{inspect($font-family-monospace)};
+
+  // Root and body
+  @if $font-size-root  !=null {
+    --#{$prefix}root-font-size: #{$font-size-root};
+  }
+
+  --#{$prefix}body-font-family: #{$font-family-base};
+  --#{$prefix}body-font-weight: #{$font-weight-base};
+  // --#{$prefix}body-line-height: #{$line-height-base};
+  --#{$prefix}body-text-align: left;
+  --#{$prefix}body-color: #{$black};
+  --#{$prefix}body-bg: #{$body-bg};
+  --#{$prefix}disabled-bg: #0000001e;
+  --#{$prefix}disabled-color: #00000042;
+
+  --#{$prefix}border-width: #{$border-width};
+  --#{$prefix}border-style: #{$border-style};
+  --#{$prefix}border-color: #{$border-color};
+  --#{$prefix}border-color-translucent: #{$border-color-translucent};
+  --#{$prefix}border-radius: 8px;
+  --#{$prefix}hover-color: rgba(0, 0, 0, 0.058823529411764705);
+  --#{$prefix}overlay-dark: rgba(33, 33, 33, 0.4980392156862745);
+  --#{$prefix}overlay-light: rgba(255, 255, 255, 0.4980392156862745);
+
+  --#{$prefix}zindex-drawer: #{$zindex-drawer};
+  --#{$prefix}zindex-sticky: #{$zindex-sticky};
+  --#{$prefix}zindex-fixed: #{$zindex-fixed};
+  --#{$prefix}zindex-appbar: #{$zindex-appbar};
+  --#{$prefix}zindex-navbar: #{$zindex-navbar};
+  --#{$prefix}zindex-modal: #{$zindex-modal};
+  --#{$prefix}zindex-popover: #{$zindex-popover};
+  --#{$prefix}zindex-tooltip: #{$zindex-tooltip};
+
+
+  // development
+  // * {
+  //   outline: 1px solid red;
+  // }
+}

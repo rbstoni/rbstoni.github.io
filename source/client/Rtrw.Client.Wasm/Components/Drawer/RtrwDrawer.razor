@@ -1,0 +1,11 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<aside @ref="drawerRef" @attributes="UserAttributes" class="@Classname" style="@Stylename">
+    <div @ref="contentRef" class="rtrw-drawer-content">
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </div>
+</aside>
+<RtrwOverlay Visible="@OverlayVisible" OnClick="@CloseDrawer" Class="@OverlayClass" DarkBackground="true" LockScroll="false" />

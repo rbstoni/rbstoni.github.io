@@ -1,0 +1,10 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+
+<CascadingValue Value="this" IsFixed="true">
+    <CascadingValue Value="globalModalOptions">
+        @foreach (var modalReference in modalRefs.Where(x => !x.Result.IsCompleted))
+        {
+            @modalReference.RenderFragment
+        }
+    </CascadingValue>
+</CascadingValue>

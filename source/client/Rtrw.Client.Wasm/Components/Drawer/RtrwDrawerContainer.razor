@@ -1,0 +1,22 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes">
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    private List<RtrwDrawer> rtrwDrawers = new();
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    internal void FireDrawersChanged() => StateHasChanged();
+
+    internal void Add(RtrwDrawer drawer)
+    {
+        rtrwDrawers.Add(drawer);
+        StateHasChanged();
+    }
+    internal void Remove(RtrwDrawer drawer) => rtrwDrawers.Remove(drawer);
+}

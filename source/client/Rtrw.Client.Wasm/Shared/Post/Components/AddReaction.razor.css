@@ -1,0 +1,61 @@
+.reaction-popover-anchor-origin {
+  position: relative;
+}
+
+.reaction-popover-wrapper {
+  position: absolute;
+  bottom: 100%;
+  z-index: 500;
+  background-color: var(--rtrw-white);
+  transition: opacity 0.25s ease-in-out;
+  padding: 6px 0px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 6px;
+}
+.reaction-popover-wrapper .fade {
+  opacity: 0;
+}
+.reaction-popover-wrapper .show {
+  opacity: 1;
+}
+
+.reaction-popover-container {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  -moz-column-gap: 8px;
+       column-gap: 8px;
+  padding: 0 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.reaction-popover-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 4px;
+  width: 36px;
+  cursor: pointer;
+  transition: overflow 0.25s ease-in-out;
+}
+
+.reaction-popover-icon {
+  height: 24px;
+  width: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reaction-popover-label {
+  display: inline;
+  font-family: "Alegreya Sans", sans-serif;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}

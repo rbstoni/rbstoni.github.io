@@ -1,0 +1,23 @@
+﻿@using Rtrw.Client.Wasm.Models
+@if (Reactions.Count == 0)
+{
+    <span class="reaction-empty">Yuk tanggapi!</span>
+}
+else
+{
+    <div class="reaction-container">
+        <div class="reaction-list" type="button">
+            @foreach (var reaction in lastThreeReactions)
+            {
+                <div class="reaction-item" @key="reaction.Id"><ReactionSvg Emoji="@reaction.Emoji" /></div>
+            }
+        </div>
+        <div class="reaction-count">@Reactions.Count()</div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public List<Reaction> Reactions { get; set; } = new();
+    private IEnumerable<Reaction> lastThreeReactions => Reactions.OrderBy(x => x.CreatedAt).TakeLast(3);
+}

@@ -1,0 +1,64 @@
+﻿@using Rtrw.Client.Wasm.Enums
+@*@using RtRw.Client.UI.Shared.Components.Icons.Post;*@
+<RtrwButton OnClick="TogglePopOver" Class="reaction-popover-anchor-origin">
+    <RtrwSvgAddRection />
+    @if (show)
+    {
+        <div class="reaction-popover-wrapper show">
+            <div class="reaction-popover-container">
+
+                <div class="reaction-popover-item" type="button" @onclick="@(async ()=>await AddNewReaction(Emoji.TerimaKasih))">
+                    <div class="reaction-popover-icon">
+                        <RtrwSvgTerimaKasih />
+                        @*<RtRw.Client.UI.Shared.Components.Icons.Reaction.TerimaKasihSvg/>*@
+                    </div>
+                    <div class="reaction-popover-label">Terima Kasih</div>
+                </div>
+
+                <div class="reaction-popover-item" type="button" @onclick="@(()=>AddNewReaction(Emoji.Suka))">
+                    <div class=" reaction-popover-icon">
+                        <RtrwSvgSuka />
+                        @*<RtRw.Client.UI.Shared.Components.Icons.Reaction.SukaSvg/>*@
+                    </div>
+                    <div class="reaction-popover-label">Suka</div>
+                </div>
+                <div class="reaction-popover-item" type="button" @onclick="@(()=>AddNewReaction(Emoji.Kaget))">
+                    <div class="reaction-popover-icon">
+                        <RtrwSvgKaget />
+                        @*<RtRw.Client.UI.Shared.Components.Icons.Reaction.KagetSvg/>*@
+                    </div>
+                    <div class="reaction-popover-label">Kaget</div>
+                </div>
+                <div class="reaction-popover-item" type="button" @onclick="@(()=>AddNewReaction(Emoji.TidakSuka))">
+                    <div class="reaction-popover-icon">
+                        <RtrwSvgTidakSuka />
+                        @*<RtRw.Client.UI.Shared.Components.Icons.Reaction.TidakSukaSvg/>*@
+                    </div>
+                    <div class="reaction-popover-label">Tidak Suka</div>
+                </div>
+                <div class="reaction-popover-item" type="button" @onclick="@(()=>AddNewReaction(Emoji.Setuju))">
+                    <div class="reaction-popover-icon">
+                        <RtrwSvgSetuju />
+                        @*<RtRw.Client.UI.Shared.Components.Icons.Reaction.SetujuSvg />*@
+                    </div>
+                    <div class="reaction-popover-label">Setuju</div>
+                </div>
+            </div>
+        </div>
+    }
+</RtrwButton>
+
+@code {
+    private bool show = false;
+
+    [Parameter] public EventCallback<Emoji> AddNewReactionCallback { get; set; } = new();
+
+    async Task AddNewReaction(Emoji emoji)
+    {
+        await AddNewReactionCallback.InvokeAsync(emoji);
+    }
+    private void TogglePopOver()
+    {
+        show = !show;
+    }
+}

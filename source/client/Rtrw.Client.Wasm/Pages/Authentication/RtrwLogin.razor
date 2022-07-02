@@ -1,0 +1,124 @@
+﻿@page "/auth/login/{returnUrl?}"
+@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.FakeData.Services
+@using Rtrw.Client.Wasm.Validators
+@using Rtrw.Client.Wasm.ViewModels
+@attribute [AllowAnonymous]
+@layout AuthBaseLayout
+@inject IAuthenticationService AuthenticationService
+
+<div class="login-container" tabindex="-1">
+    <div class="login-title">Selamat Datang Kembali!</div>
+    <RtrwForm Model="loginRequest" @ref="loginForm" Validation="@(loginRequestFluentValidator.ValidateValue)" @bind-IsValid="@validated">
+        <RtrwTextField T="string"
+                       @bind-Value="loginRequest.Email"
+                       Validation="@(new Func<string, Task<bool>>(CheckIfEmailExistOnDatabase))"
+                       For="@(()=>loginRequest.Email)"
+                       Variant="Variant.Outlined"
+                       Label="Email atau No. Telp"
+                       Immediate
+                       Adornment="Adornment.End"
+                       Required
+                       Clearable
+                       MaxLength="100">
+            <AdornmentContent>
+                @if (emailExist)
+                {
+                    <RtrwSvgCheckCircleFill />
+                }
+            </AdornmentContent>
+        </RtrwTextField>
+        <RtrwTextField T="string"
+                       InputType="@(passwordVisible? InputType.Text:InputType.Password)"
+                       @bind-Value="loginRequest.Password"
+                       For="@(()=>loginRequest.Password)"
+                       Variant="Variant.Outlined"
+                       Label="Kata Sandi"
+                       Immediate
+                       Required
+                       Clearable
+                       Adornment="Adornment.End"
+                       OnAdornmentClick="ChangePasswordVisibility"
+                       MaxLength="100">
+            <AdornmentSvg>
+                @if (passwordVisible)
+                {
+                    <div><RtrwSvgEyeOpen /></div>
+                }
+                else
+                {
+                    <div><RtrwSvgEyeClosed /></div>
+                }
+            </AdornmentSvg>
+        </RtrwTextField>
+        <div class="lupa-kata-sandi" type="button" @onclick="LupaKataSandi">Lupa kata sandi?</div>
+        <div class="rtrw-flex rtrw-justify-content-center">
+            <RtrwButton Type=ButtonType.Button
+                        OnClick="@OnValidSubmitHandler"
+                        Variant=Variant.Filled
+                        Color=ThemeColor.Primary
+                        Disabled="@(!validated)"
+                        FullWidth="false"
+                        Class="rtrw-align-self-center"
+                        Style="align-self:center; border-radius: 22px; min-width:300px">
+                @if (submitted)
+                {
+                    <RtrwSpinner Color="ThemeColor.Primary" Indeterminate />
+                }
+                else
+                {
+                    @buttonLabel
+                    ;
+                }
+            </RtrwButton>
+        </div>
+    </RtrwForm>
+    <hr class="garis-horizontal" />
+    <div class="rtrw-text-center">Baru di RTRW? Gabung <a class="rtrw-text-primary rtrw-text-decoration-underline" href="auth/register">di sini</a></div>
+</div>
+
+@code {
+    LoginRequest loginRequest = new();
+    bool validated;
+    bool passwordVisible;
+    bool submitted;
+    bool emailExist;
+    string buttonLabel = "Masuk RTRW";
+    RtrwForm loginForm;
+    LoginRequestFluentValidator loginRequestFluentValidator = new();
+    [Parameter] public string? ReturnUrl { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    [CascadingParameter] AuthBaseLayout Parent { get; set; }
+    protected override void OnInitialized()
+    {
+        ReturnUrl = ReturnUrl ?? "/";
+        Parent.Appbar = true;
+        Parent.Title = string.Empty;
+        base.OnInitialized();
+    }
+    async void OnValidSubmitHandler()
+    {
+        var login = await AuthenticationService.LoginAsync(loginRequest);
+        if (login)
+        {
+            NavigationManager.NavigateTo(ReturnUrl);
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    async Task<bool> CheckIfEmailExistOnDatabase(string email)
+    {
+        emailExist = await AuthenticationService.CheckIfEmailExistOnDatabase(email);
+        return emailExist;
+    }
+
+    void ChangePasswordVisibility() => passwordVisible = !passwordVisible;
+
+    void LupaKataSandi()
+    {
+        return;
+    }
+}

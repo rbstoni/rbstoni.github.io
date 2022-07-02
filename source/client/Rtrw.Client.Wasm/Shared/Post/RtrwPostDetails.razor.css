@@ -1,0 +1,310 @@
+.post-container {
+  --rtrw-post-color: #0f1419;
+  --rtrw-text-color: #0f1419;
+  position: relative;
+  display: block;
+  padding: 4px 16px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: --rtrw-post-color;
+  background-color: #ffffff;
+  border: 0px solid var(--rtrw-black);
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+}
+@media screen and (min-device-width: 600px) {
+  .post-container {
+    padding: 8px 24px;
+    font-size: 16px;
+  }
+}
+
+.post-detail-container {
+  --rtrw-post-color: #0f1419;
+  position: relative;
+  display: block;
+  padding: 0 16px;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  color: var(--rtrw-post-color);
+  background-color: #ffffff;
+  text-decoration: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+@media screen and (min-device-width: 428px) {
+  .post-detail-container {
+    padding: 0 24px;
+    font-size: 16ppx;
+  }
+}
+
+.post-header {
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+
+.post-body {
+  position: relative;
+}
+
+.post-media {
+  position: relative;
+}
+
+.post-footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 20px;
+  color: #6f7681;
+  position: relative;
+}
+
+.display-body {
+  font-size: 16px;
+  color: var(--rtrw-post-color);
+}
+
+.display-name {
+  color: var(--rtrw-post-color);
+  font-weight: bold;
+  text-align: left;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;
+  background: transparent;
+  background-color: transparent;
+}
+
+.display-location {
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 20px;
+  text-align: left;
+  color: var(--rtrw-text-color);
+  text-decoration: none;
+  background: transparent;
+  background-color: transparent;
+}
+
+.display-date {
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 20px;
+  text-align: left;
+  color: #6f7681;
+  text-decoration: none;
+  background: transparent;
+  background-color: transparent;
+}
+
+.display-post-location {
+  font-size: 15px;
+  font-weight: bold;
+  color: #11a830;
+}
+
+.display-no-reaction {
+  font-size: 15px;
+  text-align: left;
+  font-weight: normal;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.display-comment-count {
+  color: #0f1419;
+  font-size: 13px;
+}
+
+.line-separator {
+  border-color: currentColor;
+  border-style: solid none none;
+  border-width: 1px 0px 0px;
+  -o-border-image: none 100%/1/0 stretch;
+     border-image: none 100%/1/0 stretch;
+  margin-block: 0px;
+  color: rgb(242, 242, 242);
+  margin-left: 12px;
+  height: 0;
+}
+
+.emoji-anchor {
+  position: relative;
+  height: 40px;
+  width: 40px;
+}
+.emoji-anchor:hover > .emoji-placeholder {
+  visibility: visible;
+  pointer-events: all;
+  transform: translate(43%, -102%);
+  transition: all 0.4s ease-in;
+}
+
+.emoji-placeholder {
+  visibility: collapse;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(43%);
+  z-index: 1;
+}
+
+.emoji-container {
+  background-color: var(--rtrw-gray);
+  border-radius: 9999px;
+  display: flex;
+  width: 100%;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.emoji-button {
+  display: inherit;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.emoji-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: inherit;
+  gap: 12px;
+  padding: 6px;
+  color: inherit;
+  background: none;
+  background-color: none;
+}
+
+.emoji-icon {
+  background: none;
+  margin: 0;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.emoji-label {
+  position: absolute;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background: var(--rtrw-dark);
+  color: var(--rtrw-light);
+  font-size: 10px;
+  font-weight: bold;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.emoji-label::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--rtrw-dark) transparent transparent transparent;
+}
+
+.message-count-label {
+  color: var(--rtrw-text-color);
+}
+
+.truncate-button {
+  border: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+  text-align: left;
+  color: #b4a9a9;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  transition: all 0.1s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  -webkit-appearance: button;
+  text-transform: none;
+  overflow: visible;
+  background-color: none;
+  background: none;
+  outline: none;
+}
+
+.post-linkify-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  border-radius: 8px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  width: 100%;
+  border: 1px solid;
+  min-height: 40px;
+  max-height: 62px;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  cursor: pointer;
+}
+.post-linkify-container .link-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+  max-height: 62px;
+  width: 40px;
+  text-align: center;
+  background-color: #52c336;
+  color: #000;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 6px 0 0 6px;
+}
+.post-linkify-container .link-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+.post-linkify-container .link-info .link-title {
+  font-weight: bold;
+  font-size: 11px;
+  text-align: left;
+  color: #716464;
+}
+.post-linkify-container .link-info .link-url {
+  font-weight: normal;
+  font-size: 11px;
+  text-align: left;
+  color: #716464;
+}

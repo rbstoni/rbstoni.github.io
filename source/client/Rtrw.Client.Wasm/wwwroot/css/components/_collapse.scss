@@ -1,0 +1,39 @@
+.#{$prefix}collapse-container{
+    height: 0;
+    overflow: hidden;
+}
+
+.#{$prefix}collapse-entering {
+    animation: #{$prefix}expand-anim 1s ease-in-out 0ms 1 forwards;
+}
+
+.#{$prefix}collapse-entered {
+    overflow: initial;
+}
+
+.#{$prefix}collapse-exiting {
+    animation: #{$prefix}collapse-anim 0.5s cubic-bezier(0, 1, 0, 1) 0ms 1 forwards;
+}
+
+.#{$prefix}collapse-hidden {
+    visibility: hidden;
+}
+
+.#{$prefix}collapse-wrapper {
+    display: flex;
+}
+
+.#{$prefix}collapse-wrapper-inner {
+    width: 100%;
+}
+
+@keyframes #{$prefix}expand-anim {
+    from {
+        height: 0;
+    }
+}
+@keyframes #{$prefix}collapse-anim {
+    to {
+        height: 0;
+    }
+}

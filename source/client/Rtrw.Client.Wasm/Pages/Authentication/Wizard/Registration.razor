@@ -1,0 +1,16 @@
+﻿<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public int CurrentStep { get; set; } = 0;
+    void GoToNextStep()
+    {
+        CurrentStep += 1;
+    }
+    void GoToPreviousStep()
+    {
+        CurrentStep -=1;
+    }
+}

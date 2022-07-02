@@ -1,0 +1,38 @@
+﻿<div class="bisnis-lokal-populer">
+    @if (Products.Count > 0)
+    {
+        <div class="jual-beli-section-title">Bisnis Lokal Populer</div>
+        <div class="bisnis-lokal-list-group">
+            @foreach (var product in Products)
+            {
+                <div class="bisnis-lokal-list-item" type="button" onclick="@(()=>NavigateTo(product.ProductUrl))">
+                    <div class="bisnis-lokal-avatar">
+                        @if (product.ProductAvatar is not null)
+                        {
+                            <img src="@product.ProductAvatar">
+                        }
+                        else
+                        {
+                            @product.Name.ToUpper().FirstOrDefault()
+                            ;
+                        }
+                    </div>
+                    <div class="bisnis-lokal-info">
+                        <div class="title">@product.Name</div>
+                        <div class="subtitle">@product.Location.Kelurahan Lihat lokasi</div>
+                    </div>
+                    <div class="bisnis-lokal-like">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20">
+                            <path id="Path_350" data-name="Path 350"
+                          d="M9,21h9a1.987,1.987,0,0,0,1.84-1.22l3.02-7.05A1.976,1.976,0,0,0,23,12V10a2.006,2.006,0,0,0-2-2H14.69l.95-4.57.03-.32a1.505,1.505,0,0,0-.44-1.06L14.17,1,7.58,7.59A1.987,1.987,0,0,0,7,9V19A2.006,2.006,0,0,0,9,21ZM9,9l4.34-4.34L12,10h9v2l-3,7H9ZM1,9H5V21H1Z"
+                          transform="translate(-1 -1)" fill="#716464" />
+                        </svg>
+                        <div class="bisnis-lokal-like-label">
+                            @product.LikeCount
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

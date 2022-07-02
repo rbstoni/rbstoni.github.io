@@ -1,0 +1,19 @@
+﻿@inject IJSRuntime JsRuntime
+
+<div id="geocoder" @ref="elementGeocoder"></div>
+
+@code {
+    ElementReference elementGeocoder;
+    IJSObjectReference? geocoderControl;
+    IJSObjectReference? mapboxModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            mapboxModule = await JsRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./js/mapComponent.js");
+            geocoderControl = await mapboxModule.InvokeAsync<IJSObjectReference>("addGeocoderToElement", elementGeocoder);
+        }
+    }
+}

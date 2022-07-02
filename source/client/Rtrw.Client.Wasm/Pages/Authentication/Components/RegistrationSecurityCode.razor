@@ -1,0 +1,77 @@
+﻿@implements IDisposable
+
+<div class="security-code-container">
+    <div class="security-code-paragraph">
+        Masukkan 4 digit kode keamanan
+        yang telah dikirim ke email atau
+        nomor telepon Anda untuk verifikasi.
+    </div>
+    <div class="security-code-input-control">
+        <form>
+            <input class="security-code-input" @bind-value="@securityCode" @bind-value:event="oninput" type="text" maxlength="4" />
+            <p class="security-code-input-caption">Ketik 4 digit kode keamanan</p>
+            @securityCode
+        </form>
+    </div>
+    <div class="security-code-resend">
+        <span class="security-code-resend-text" type="button">Kirim ulang kode keamanan</span>
+        <span class="security-code-resend-timer">
+            <span class="security-code-resend-minutes">@duration.Minutes.ToString("D2")</span>
+            <span>:</span>
+            <span class="security-code-resend-seconds">@duration.Seconds.ToString("D2")</span>
+        </span>
+    </div>
+    <hr />
+    <div class="security-code-sub-paragraph">
+        Untuk Akun yang tidak dapat terverifikasi dalam waktu 15 menit,
+        data-data akan dihapus dari database Kami. Mohon untuk melakukan
+        registerasi ulang.
+    </div>
+</div>
+
+@code {
+
+    TimeSpan duration = new TimeSpan(0, 15, 0);
+    string? securityCode;
+    System.Timers.Timer timer;
+
+    [Parameter] public string Id { get; set; }
+    DateTime Time => DateTime.Now;
+
+    public void CountDownTimer(object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (duration.TotalSeconds > 0)
+        {
+            duration -= new TimeSpan(0, 0, 1);
+        }
+        if (duration.TotalSeconds is 0)
+        {
+            timer.Enabled = false;
+
+            // Something-something
+        }
+        StateHasChanged();
+    }
+    public void Dispose()
+    {
+        timer?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    protected override void OnInitialized()
+    {
+        StartTimer(15);
+    }
+    void OnValidSubmitHandler()
+    {
+        return;
+    }
+    private void StartTimer(int minute)
+    {
+        duration = new TimeSpan(0, minute, 0);
+        timer = new System.Timers.Timer(1000);
+        timer.Elapsed += CountDownTimer;
+        timer.Enabled = true;
+    }
+
+}

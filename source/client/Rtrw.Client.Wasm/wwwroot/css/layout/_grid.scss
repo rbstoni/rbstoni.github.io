@@ -1,0 +1,30 @@
+@mixin make-cssgrid($columns: $grid-columns) {
+  @if $columns > 0 {
+    @for $i from 1 through $columns {
+      .g-col-#{$i} {
+        grid-column: auto / span $i;
+      }
+    }
+
+    // Start with `1` because `0` is and invalid value.
+    // Ends with `$columns - 1` because offsetting by the width of an entire row isn't possible.
+    @for $i from 1 through ($columns - 1) {
+      .g-start-#{$i} {
+        grid-column-start: $i;
+      }
+    }
+  }
+}
+
+$grid-gap: 8px;
+
+.#{$prefix}grid {
+  --#{$prefix}grid-gap: #{$grid-gap};
+
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--#{$prefix}grid-gap);
+
+  @include make-cssgrid();
+}

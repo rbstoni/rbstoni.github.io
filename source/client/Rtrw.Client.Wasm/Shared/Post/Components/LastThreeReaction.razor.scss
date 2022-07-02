@@ -1,0 +1,44 @@
+﻿$prefix: rtrw-;
+
+.reaction-container {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+}
+
+.reaction-list {
+  display: inline-flex;
+  border: none;
+  background: none;
+}
+
+.reaction-list:hover {
+  cursor: pointer;
+}
+
+.reaction-item {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: -6px;
+  background: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid white;
+}
+
+.reaction-empty {
+  font-family: var(--#{$prefix}font-roboto);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.reaction-count {
+  margin-left: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 18px;
+  color: rgb(15, 20, 25);
+}

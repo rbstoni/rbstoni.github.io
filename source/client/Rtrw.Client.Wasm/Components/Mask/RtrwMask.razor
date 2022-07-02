@@ -1,0 +1,66 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@using Rtrw.Client.Wasm.Components.Input.Base
+@using Rtrw.Client.Wasm.Components.Input.Internal
+@inherits RtrwBaseInput<string>
+
+<div id="@elementId" class="@Classname" style="@Style">
+    @if (Adornment == Adornment.Start)
+    {
+        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="AdornmentContent" />
+    }
+
+    <input class="@InputClassname"
+           @ref="elementReference"
+           @attributes="UserAttributes"
+           type="@InputType.EnumToDescriptionString()"
+           value="@Text"
+           placeholder="@Placeholder"
+           disabled=@Disabled
+           readonly="@ReadOnly"
+           @onblur="@OnBlurred"
+           @onfocus="OnFocused"
+           @oncut="OnCut"
+           @oncopy="OnCopy"
+           inputmode="@InputMode.ToString()" />
+
+    @if (Disabled)
+    {
+        @*Note: this div must always be there to avoid crashes in WASM, but it is hidden most of the time except if ChildContent should be shown.
+    In Disabled state the tabindex attribute must NOT be set at all or else it will get focus on click
+    *@
+        <div class="@InputClassname"
+         style="@("display:" + (InputType == InputType.Hidden && ChildContent != null ? "inline" : "none"))"
+         @onblur="@OnBlurred" @ref="@elementReference1">
+            @ChildContent
+        </div>
+    }
+    else
+    {
+        @*Note: this div must always be there to avoid crashes in WASM, but it is hidden most of the time except if ChildContent should be shown.*@
+        <div class="@InputClassname"
+         style="@("display:" + (InputType == InputType.Hidden && ChildContent != null ? "inline" : "none"))"
+         tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
+         @onblur="@OnBlurred" @ref="@elementReference1">
+            @ChildContent
+        </div>
+    }
+
+
+    @if (showClearable && !Disabled)
+    {
+        <RtrwIconButton Class="@ClearButtonClassname" Color=ThemeColor.Inherit OnClick="@HandleClearButton">
+            <ClearXSvg />
+        </RtrwIconButton>
+    }
+
+    @if (Adornment == Adornment.End)
+    {
+        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="@AdornmentContent" />
+    }
+
+    @if (Variant == Variant.Outlined)
+    {
+        <div class="mud-input-outlined-border"></div>
+    }
+
+</div>

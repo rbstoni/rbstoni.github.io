@@ -1,0 +1,34 @@
+.login-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.login-title {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 28px;
+  text-align: left;
+  color: #707070;
+}
+
+.lupa-kata-sandi {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 17px;
+  text-align: left;
+  color: #0db201;
+  margin: 24px 0;
+}
+
+.garis-horizontal {
+  height: 0px;
+  background: transparent;
+  border: 1px solid rgba(112, 112, 112, 0.35);
+  margin: 32px 0;
+}

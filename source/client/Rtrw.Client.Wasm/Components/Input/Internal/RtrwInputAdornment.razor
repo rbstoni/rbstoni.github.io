@@ -1,0 +1,21 @@
+﻿@namespace Rtrw.Client.Wasm.Components.Input.Internal
+
+<div class="@Class" style="@Style">
+    @if (AdornmentClick.HasDelegate)
+    {
+        <RtrwIconButton Style="padding: 6px" OnClick="@AdornmentClick" tabindex="-1">@AdornmentSvg</RtrwIconButton>
+    }
+    else
+    {
+        @AdornmentContent
+    }
+</div>
+
+
+@code {
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public RenderFragment? AdornmentContent { get; set; }
+    [Parameter] public RenderFragment? AdornmentSvg { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> AdornmentClick { get; set; }
+}

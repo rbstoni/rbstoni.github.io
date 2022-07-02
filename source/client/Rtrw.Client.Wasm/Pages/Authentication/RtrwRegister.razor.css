@@ -1,0 +1,34 @@
+.register-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.register-title {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 28px;
+  text-align: left;
+  color: #707070;
+  margin: 32px 0;
+}
+
+.register-page-info {
+  font-family: Roboto;
+  font-weight: normal;
+  font-size: 13px;
+  text-align: left;
+  color: #716464;
+}
+
+.garis-horizontal {
+  height: 0px;
+  background: transparent;
+  border: 1px solid rgba(112, 112, 112, 0.35);
+  margin: 32px 0;
+}

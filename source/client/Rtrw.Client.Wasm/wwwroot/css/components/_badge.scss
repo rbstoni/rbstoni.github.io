@@ -1,0 +1,61 @@
+// Always put this badge as a child inside a element you want to put a badge
+// don't forget to put the parent position to relative
+
+.#{$prefix}badge-root {
+    position: relative;
+    display: inline-block;
+    
+    .#{$prefix}badge-wrapper {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        &.#{$prefix}badge {
+            &-top {
+                &-start {
+                    top: 0;
+                    left: 0;
+                    transform: translate(-50%, -50%);
+                }
+
+                &-center {
+                    top: 0;
+                    transform: translate(0, -50%);
+                }
+
+                &-end {
+                    top: 0;
+                    right: 0;
+                    transform: translate(50%, -50%);
+                }
+            }
+        }
+    }
+}
+
+.#{$prefix}badge {
+    padding: 2px 4px;
+    border-radius: 9999px;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 1;
+    text-align: center;
+    text-indent: 0;
+    white-space: nowrap;
+    pointer-events: auto;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    color: var(--#{$prefix}white);
+    background-color: var(--#{$prefix}danger);
+    border: 2px solid var(--#{$prefix}white);
+
+    &.#{$prefix}badge-dot {
+        border-radius: 50%;
+        height: 12px;
+        width: 12px;
+        min-width: 0;
+        padding: 0;
+    }
+}

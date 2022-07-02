@@ -1,0 +1,21 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+<span @attributes="UserAttributes" class="@Classname" style="@Style" focusable="false" aria-hidden="true">
+    @ChildContent
+</span>
+
+@code {
+    protected string Classname =>
+        new CssBuilder("rtrw-icon")
+            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text", Color != ThemeColor.Inherit)
+            .AddClass($"rtrw-icon-size-{Size}", !string.IsNullOrEmpty(Size))
+            .AddClass(Class)
+            .Build();
+
+    [Parameter]
+    public string? Size { get; set; } = "24px";
+    [Parameter]
+    public ThemeColor Color { get; set; } = ThemeColor.Inherit;
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

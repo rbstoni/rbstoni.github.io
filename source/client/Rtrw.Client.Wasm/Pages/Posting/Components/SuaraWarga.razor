@@ -1,0 +1,187 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Svgs
+@using Rtrw.Client.Wasm.Utilities
+<CascadingValue Value="this">
+    <div class="page-body">
+        <div class="page-body-content">
+            <div class="page-body-input-container">
+                <InputTextArea @bind-Value="@Post.Text" class="page-body-input" translate="no" spellcheck="false"></InputTextArea>
+
+                <div class="page-body-input-toolbars" type="button" @onclick="OpenScopeOptions">
+                    @if (Post.Scope == Scope.SemuaWargaRtrw)
+                    {
+                        <RtrwSvgSemuaWarga />
+                        <div class="scope-info" style="margin-right: auto">
+                            <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                            <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+                        </div>
+                    }
+                    @if (Post.Scope == Scope.WargaLebihLuas)
+                    {
+                        <RtrwSvgWargaLebihLuas />
+                        <div class="scope-info" style="margin-right: auto">
+                            <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                            <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+                        </div>
+                    }
+                    @if (Post.Scope == Scope.WargaSekitar)
+                    {
+                        <RtrwSvgWargaSekitar />
+                        <div class="scope-info" style="margin-right: auto">
+                            <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                            <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+                        </div>
+                    }
+                    <svg class="rtrw-justify-content-end @ScopeCollapsedClassname" style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                    </svg>
+                </div>
+                @if (scopeCollapsed)
+                {
+                    <hr />
+                    <div class="scope-options">
+                        <div class="scope-list-option">
+                            <div class="scope-image"><RtrwSvgSemuaWarga /></div>
+                            <div class="scope-info">
+                                <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                                <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+                            </div>
+                            <RtrwButton Type=ButtonType.Button
+                                    Variant=Variant.Filled
+                                    Color=ThemeColor.Primary
+                                    @onclick="@(()=>ChangeScopeHandler(Scope.SemuaWargaRtrw))">
+                                Pilih
+                            </RtrwButton>
+                        </div>
+
+                        <div class="scope-list-option">
+                            <div class="scope-image">
+                                <RtrwSvgWargaLebihLuas />
+                            </div>
+                            <div class="scope-info">
+                                <div class="scope-name">@Audience.WargaLebihLuas.Name</div>
+                                <div class="scope-desc">@Audience.WargaLebihLuas.Description</div>
+                            </div>
+                            <RtrwButton Type=ButtonType.Button
+                                    Variant=Variant.Filled
+                                    Color=ThemeColor.Primary
+                                    @onclick="@(()=>ChangeScopeHandler(Scope.WargaLebihLuas))">
+                                Pilih
+                            </RtrwButton>
+                        </div>
+
+                        <div class="scope-list-option">
+                            <div class="scope-image">
+                                <RtrwSvgWargaSekitar />
+                            </div>
+                            <div class="scope-info">
+                                <div class="scope-name">@Audience.WargaSekitar.Name</div>
+                                <div class="scope-desc">@Audience.WargaSekitar.Description</div>
+                            </div>
+                            <RtrwButton Type=ButtonType.Button
+                                    Variant=Variant.Filled
+                                    Color=ThemeColor.Primary @onclick="@(()=>ChangeScopeHandler(Scope.WargaSekitar))">
+                                Pilih
+                            </RtrwButton>
+                        </div>
+                    </div>
+                }
+                <div style="margin-top: 8px">
+                    <div class="location-container" type="button" @onclick="OpenAddLocationModalAsync">
+                        <RtrwSvgGeoTag Style="width: 24px; height: 24px" />
+                        @if (Post.PostLocation != null)
+                        {
+                            <div class="location-info-label">@Post.PostLocation</div>
+                        }
+                        else
+                        {
+                            <div class="rtrw-body-text">Tambah lokasi</div>
+                        }
+                    </div>
+                    @if (Post.Media?.Count > 0)
+                    {
+                        <div class="images-result-container"></div>
+
+                    }
+                    else
+                    {
+                        <InputFile id="fileInput" OnChange="UploadImageFiles" hidden multiple accept=".jpg, .jpeg, .png" capture />
+                        <label class="images-container" type="button" for="fileInput">
+                            <RtrwSvgTambahFoto Style="width: 24px; height: 24px" />
+                            <span class="rtrw-body-text">Tambah foto</span>
+                        </label>
+                    }
+
+                    @if (Post.Poll != null)
+                    {
+                        <PollPreview Poll="Post.Poll" OnPollDelete="OnPollDelete"></PollPreview>
+                    }
+                    else
+                    {
+                        <div class="polling-container" type="button" @onclick="OpenAddNewPollModal">
+                            <RtrwSvgTambahPoll Style="width: 24px; height: 24px" />
+                            <div class="rtrw-body-text">Tambah polling</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</CascadingValue>
+
+@code {
+    private bool scopeCollapsed;
+    [CascadingParameter] public Post Post { get; set; } = new();
+
+    [Inject] IModalService ModalService { get; set; }
+    private void OpenScopeOptions()
+    {
+        scopeCollapsed = !scopeCollapsed;
+    }
+    protected string ScopeCollapsedClassname =>
+    new CssBuilder()
+        .AddClass("rtrw-rotate-180deg", scopeCollapsed)
+        .Build();
+    private void ChangeScopeHandler(Scope scope)
+    {
+        scopeCollapsed = false;
+        Post.Scope = scope;
+    }
+    async Task OpenAddLocationModalAsync()
+    {
+        ModalOptions options = new()
+            {
+                FullScreen = false,
+                CloseButton = true,
+                NoHeader = true
+            };
+        var modal = ModalService.Show<RtrwAddLocationModal>(string.Empty, options);
+        var result = await modal.Result;
+    }
+
+    async void OpenAddNewPollModal()
+    {
+        ModalOptions pollingModal = new()
+            {
+                FullScreen = false,
+                CloseButton = true,
+                NoHeader = false,
+            };
+        ModalParameters parameters = new();
+        parameters.Add("Poll", new Poll());
+        var modal = ModalService.Show<AddNewPollModal>("Pembuatan polling: ", parameters, pollingModal);
+        var result = await modal.Result;
+        Console.WriteLine(result.Data == null);
+        Post.Poll = (Poll?)result.Data;
+        StateHasChanged();
+    }
+    void OnPollDelete()
+    {
+        Post.Poll = null;
+    }
+    async Task UploadImageFiles(InputFileChangeEventArgs e)
+    {
+        return;
+    }
+}

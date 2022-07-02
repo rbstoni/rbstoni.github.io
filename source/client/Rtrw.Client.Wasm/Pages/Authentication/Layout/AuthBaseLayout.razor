@@ -1,0 +1,53 @@
+﻿@using Rtrw.Client.Wasm.Services
+@inherits LayoutComponentBase
+@inject IWindowHistoryService HistoryService
+@inject NavigationManager NavigationManager
+
+<CascadingValue Value="this">
+    <div class="auth-layout">
+        @if (appbar)
+        {
+            <RtrwAppBar Position="sticky-top" Title="@title">
+                <StartBarContent>
+                    <RtrwIconButton Style="margin-left: -12px;" OnClick="@(()=>HistoryService.Back())">
+                        <RtrwSvgChevronLeft />
+                    </RtrwIconButton>
+                </StartBarContent>
+                <EndBarContent>
+                    <div class="rtrw-flex rtrw-align-content-center" type="button" @onclick="@(()=>NavigationManager.NavigateTo("/"))">
+                        <RtrwSvgHorizontalLogo />
+                    </div>
+                </EndBarContent>
+            </RtrwAppBar>
+        }
+        <div class="auth-body">
+            @Body
+        </div>
+    </div>
+</CascadingValue>
+
+@code {
+    string? title;
+    bool appbar = true;
+    public bool Appbar
+    {
+        get => appbar;
+        set
+        {
+            if (appbar != value)
+            {
+                appbar = value;
+                StateHasChanged();
+            }
+        }
+    }
+    public string? Title
+    {
+        get => title;
+        set
+        {
+            title = value;
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,64 @@
+﻿@page "/auth/register"
+@layout AuthBaseLayout
+@attribute [AllowAnonymous]
+@inject IModalService ModalService
+
+<CascadingValue Value="this">
+    <EditForm Model="location" OnValidSubmit="OnValidSubmitHandler">
+        <div class="register-container">
+            <Registration CurrentStep="CurrentStep">
+                <RegistrationStep StepIndex="0"
+                                  CurrentStepIndex="CurrentStep"
+                                  StepName="Add location">
+                    <AddLocationForm OnClick="@GoToNextStep" />
+                </RegistrationStep>
+                <RegistrationStep StepIndex="1"
+                                  CurrentStepIndex="CurrentStep"
+                                  StepName="Fill form">
+                    <RegistrationForm OnClick="@GoToNextStep"/>
+                </RegistrationStep>
+                <RegistrationStep StepIndex="2"
+                                  CurrentStepIndex="CurrentStep"
+                                  StepName="Security code">
+                    <RegistrationSecurityCode />
+                </RegistrationStep>
+            </Registration>
+        </div>
+    </EditForm>
+</CascadingValue>
+
+@code {
+    Geocoder location = new();
+    Warga warga = new();
+    int CurrentStep = 0;
+    bool validated = true;
+
+    void GoToNextStep()
+    {
+        CurrentStep += 1;
+    }
+    [CascadingParameter] AuthBaseLayout Parent { get; set; }
+
+    void OpenCongratulationModal()
+    {
+        ModalOptions options = new()
+            {
+                FullScreen = true,
+                NoHeader = true,
+                CloseButton = false,
+            };
+        ModalService.Show<CongratulationModal>(string.Empty, options);
+    }
+
+    protected override void OnInitialized()
+    {
+        Parent.Appbar = true;
+        Parent.Title = string.Empty;
+        base.OnInitialized();
+    }
+    void OnValidSubmitHandler()
+    {
+        return;
+    }
+
+}

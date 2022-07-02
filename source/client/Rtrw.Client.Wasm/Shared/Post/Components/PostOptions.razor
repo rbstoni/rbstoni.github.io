@@ -1,0 +1,47 @@
+﻿@using Rtrw.Client.Wasm.Svgs
+<RtrwIconButton Style="padding: 6px; margin-left: auto; margin-right: -6px; margin-top: -6px" OnClick="@OpenDrawer">
+    <RtrwSvgThreeDotHorizontal />
+</RtrwIconButton>
+
+<RtrwDrawer @bind-Open=@open>
+    @if (isLoading)
+    {
+        <div style="height: 256px">
+            <div class="location-indicator-container">
+                <div class="location-indicator"></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="rtrw-flex rtrw-flex-col rtrw-gap-row-8px">
+            <div class="rtrw-flex rtrw-gap-col-8px rtrw-justify-content-start rtrw-align-items-center">
+                <RtrwSvgBell />
+                <div class="rtrw-margin-end-auto">
+                    <div>
+                        Nyalakan notifikasi
+                    </div>
+                    <div>
+                        Terima notfikasi dari komentar di post ini
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</RtrwDrawer>
+
+@code {
+    bool open;
+    bool isLoading = true;
+
+    async void OpenDrawer()
+    {
+        open = true;
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Task.Delay(3000);
+        isLoading = false;
+        StateHasChanged();
+    }
+}

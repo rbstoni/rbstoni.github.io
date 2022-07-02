@@ -1,0 +1,74 @@
+﻿.bisnis-lokal-populer {
+}
+
+.jual-beli-section-title {
+  font-family: "Alegreya Sans";
+  font-weight: 500;
+  font-size: 24px;
+  text-align: left;
+  color: #716464;
+}
+
+.bisnis-lokal-list-group {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  position: relative;
+  width: 100%;
+}
+
+.bisnis-lokal-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 8px;
+  width: 100&;
+  height: 48px;
+}
+
+.bisnis-lokal-avatar {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Roboto, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 30px;
+  border-radius: 50%;
+}
+
+.bisnis-lokal-info {
+  width: 100%;
+
+  .title {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+    color: #716464;
+  }
+
+  .subtitle {
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 13px;
+    text-align: left;
+    color: #716464;
+  }
+}
+
+.bisnis-lokal-like {
+  display: flex;
+  align-items: baseline;
+  column-gap: 4px;
+}
+
+.bisnis-lokal-like-label {
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: left;
+  color: #716464;
+}

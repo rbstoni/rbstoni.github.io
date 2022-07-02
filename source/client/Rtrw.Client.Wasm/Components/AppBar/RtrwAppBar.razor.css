@@ -1,0 +1,71 @@
+/*!
+* Rtrw v1.0.0(https://rtrw.app/)
+* Copyright 2022 The Rtrw Authors
+*/
+.header-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
+  color: var(--rtrw-body-color);
+  background-color: var(--rtrw-body-bg);
+  border: 0 solid black;
+  border-bottom: 1px solid var(--rtrw-border-color);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.appbar-container {
+  position: relative;
+  color: inherit;
+  background-color: inherit;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  width: 100%;
+  z-index: 1;
+}
+
+.appbar-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--rtrw-body-color);
+  background-color: var(--rtrw-body-bg);
+  z-index: 1;
+  transition: background-color 0.24s cubic-bezier(0.79, 0.14, 0.15, 0.86) 0s;
+  width: 100%;
+}
+
+.appbar-start-toolbar {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  -moz-column-gap: 24px;
+       column-gap: 24px;
+  font-family: var(--rtrw-font-robot);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+.appbar-start-toolbar .rtrw-icon-button:first-of-type {
+  margin-left: -12px;
+}
+
+.appbar-end-toolbar {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+.appbar-end-toolbar .rtrw-icon-button:last-child {
+  margin-right: -12px;
+}

@@ -1,0 +1,32 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+
+<div class="register-title">Temukan #RTRW Anda</div>
+<div class="rtrw-flex rtrw-align-items-start rtrw-justify-content-between rtrw-gap-8px">
+    <MapboxGeocoder />
+    <div><RtrwSvgRegisterBanner /></div>
+</div>
+
+@if (validated)
+{
+    <div class="rtrw-flex rtrw-justify-content-center rtrw-margin-top-24px">
+        <RtrwButton Type=ButtonType.Submit
+                Color=ThemeColor.Primary
+                FullWidth=true
+                Variant=Variant.Filled
+                Class="rtrw-align-self-center"
+                Style="align-self:center; border-radius: 22px; min-width:300px"
+                OnClick="OnClick">
+            Lanjutkan
+        </RtrwButton>
+    </div>
+}
+<hr class="garis-horizontal" />
+<div class="register-page-info">
+    #RTRW menggunakan batas administrasi Kelurahan/Desa
+    sebagai identitas lingkungan tempat tinggal Anda.
+</div>
+
+@code {
+    bool validated = true;
+    [Parameter] public EventCallback OnClick { get; set; }
+}

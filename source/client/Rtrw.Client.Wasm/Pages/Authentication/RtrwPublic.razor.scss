@@ -1,0 +1,84 @@
+﻿.public-page-background {
+    background-image: url("media/welcome_screen_background.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @media screen and (min-device-width: 600px) {
+        max-width: 600px;
+    }
+}
+
+.public-page-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    z-index: 1;
+    & .welcome-info-text {
+        font-family: "Alegreya Sans";
+        font-weight: 300;
+        font-size: 20px;
+        text-align: left;
+        color: #716464;
+        max-width: 200px;
+    }
+
+    width: 100%;
+}
+
+.auth-container {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    gap: 8px;
+
+    & .login-container {
+        .login-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 64px;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 10px;
+            background: #0db201;
+            font-family: Roboto;
+            font-weight: normal;
+            font-size: 16px;
+            text-align: left;
+            color: #fff;
+        }
+    }
+
+    & .register-container {
+        .register-button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            border-radius: 10px;
+            color: #fff;
+            background-color: #716464;
+        }
+    }
+}
+
+.text {
+    font-family: "Alegreya Sans";
+    font-weight: 300;
+    font-size: 12px;
+    text-align: left;
+    color: #716464;
+}

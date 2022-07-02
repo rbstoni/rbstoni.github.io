@@ -1,0 +1,57 @@
+.kelurahan-info-detail .title {
+  font-family: "Alegreya Sans";
+  font-weight: 500;
+  font-size: 24px;
+  text-align: left;
+  color: #716464;
+}
+.kelurahan-info-detail .subtitle {
+  font-family: "Alegreya Sans";
+  font-weight: 500;
+  font-size: 15px;
+  text-align: left;
+  color: #716464;
+}
+.kelurahan-info-detail .caption {
+  font-family: Roboto;
+  font-weight: normal;
+  font-size: 13px;
+  text-align: left;
+  color: #716464;
+}
+
+.button-filled {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 16px;
+  outline: 0;
+  min-width: 64px;
+  font-family: var(--rtrw-font-roboto);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: var(--rtrw-white);
+  background-color: var(--rtrw-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-decoration: none;
+}
+.button-filled::-moz-focus-inner {
+  border-style: none;
+}
+.button-filled:hover {
+  color: var(--rtrw-primary);
+  background-color: var(--rtrw-gray-300);
+}

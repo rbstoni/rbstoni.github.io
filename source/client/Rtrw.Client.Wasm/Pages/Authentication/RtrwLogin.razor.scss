@@ -1,0 +1,31 @@
+﻿.login-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    user-select: none;
+}
+
+.login-title {
+    font-family: "Alegreya Sans";
+    font-weight: 300;
+    font-size: 28px;
+    text-align: left;
+    color: #707070;
+}
+
+.lupa-kata-sandi {
+    font-family: "Alegreya Sans";
+    font-weight: 300;
+    font-size: 17px;
+    text-align: left;
+    color: #0db201;
+    margin: 24px 0;
+}
+
+.garis-horizontal {
+    height: 0px;
+    background: transparent;
+    border: 1px solid rgba(#707070, 0.35);
+    margin: 32px 0;
+}

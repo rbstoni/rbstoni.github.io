@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@inject IModalService ModalService
+@inject IPostService PostService
+@using Rtrw.Client.Wasm.FakeData.Services
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Svgs
+
+<RtrwAppBar Position="sticky-top" Style="filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.16));">
+    <EndBarContent>
+        <RtrwIconButton Href="search">
+            <RtrwSvgSearch />
+        </RtrwIconButton>
+        <RtrwIconButton Href="pesan">
+            <RtrwSvgChat />
+        </RtrwIconButton>
+        <RtrwIconButton Href="new-post" Style="margin-right: -12px">
+            <RtrwSvgNewPost />
+        </RtrwIconButton>
+    </EndBarContent>
+</RtrwAppBar>
+
+<main class="body-layout">
+    @foreach (var post in Posts)
+   {
+       <RtrwPostItem PostId="@post.Id" @key="@post.Id"/>
+   }
+</main>
+
+<RtrwNavBar NotificationNumber="notificationNumber"/>
+
+@code {
+    List<Post> Posts { get; set; } = new();
+    int notificationNumber = 9999;
+
+    protected override async Task OnInitializedAsync() { Posts = await PostService.GetPostsAsync(); }
+}

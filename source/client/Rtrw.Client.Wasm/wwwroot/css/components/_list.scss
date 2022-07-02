@@ -1,0 +1,103 @@
+.#{$prefix}list {
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    list-style: none;
+
+    &.#{$prefix}list-padding {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.#{$prefix}list-item {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: start;
+    text-decoration: none;
+    width: 100%;
+}
+
+.#{$prefix}list-item-clickable {
+    border: 0;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+    outline: 0;
+    border-radius: 0;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+    &:hover {
+        background-color: var(--#{$prefix}hover-color);
+    }
+
+    &:focus:not(.#{$prefix}-selected-item) {
+        background-color: var(--#{$prefix}hover-color);
+    }
+}
+
+.#{$prefix}list-item-gutters {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.#{$prefix}list-item-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.#{$prefix}list-item-icon {
+    color: var(--#{$prefix}body-color);
+    display: inline-flex;
+    min-width: 56px;
+    flex-shrink: 0;
+}
+
+.#{$prefix}list-subheader {
+    color: var(--#{$prefix}body-color);
+    font-size: 0.875rem;
+    box-sizing: border-box;
+    list-style: none;
+    font-weight: 500;
+    padding-top: 8px;
+    padding-bottom: 20px;
+}
+
+.#{$prefix}list-subheader-gutters {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.#{$prefix}list-subheader-sticky {
+    top: 0;
+    z-index: 1;
+    position: sticky;
+    background-color: inherit;
+}
+
+
+.#{$prefix}list-item-avatar {
+    min-width: 56px;
+    flex-shrink: 0;
+}
+
+.#{$prefix}nested-list {
+    &>.#{$prefix}list-item {
+        padding-left: 32px;
+        padding-inline-start: 32px;
+        padding-inline-end: unset;
+    }
+}

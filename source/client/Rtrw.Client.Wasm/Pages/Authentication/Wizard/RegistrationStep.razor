@@ -1,0 +1,17 @@
+﻿@if (StepIndex == CurrentStepIndex)
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public EventCallback GoToNextStep { get; set; }
+    [Parameter] public string StepName { get; set; }
+    [Parameter] public int StepIndex{ get; set; }
+    [Parameter] public int CurrentStepIndex { get; set; }
+
+    void OnClickFromChild()
+    {
+        GoToNextStep.InvokeAsync();
+    }
+}

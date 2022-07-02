@@ -1,0 +1,47 @@
+@mixin img-fluid {
+  // Part 1: Set a maximum relative to the parent
+  // max-width: 100%;
+  width: 100%;
+  // Part 2: Override the height to auto, otherwise images will be stretched
+  // when setting a width and height attribute on the img element.
+  height: auto;
+}
+$thumbnail-padding: 0.25em;
+$thumbnail-bg: $body-bg;
+$thumbnail-border-width: $border-width;
+$thumbnail-border-color: var(--#{$prefix}border-color);
+$thumbnail-border-radius: $border-radius;
+$figure-caption-font-size: $small-font-size;
+$figure-caption-color: $gray;
+.#{$prefix}img-fluid {
+  @include img-fluid();
+}
+
+.#{$prefix}img-thumb {
+  padding: $thumbnail-padding;
+  background-color: $thumbnail-bg;
+  border: $thumbnail-border-width solid $thumbnail-border-color;
+  @include border-radius($thumbnail-border-radius);
+
+  // Keep them at most 100% wide
+  @include img-fluid();
+}
+
+//
+// Figures
+//
+
+.#{$prefix}figure {
+  // Ensures the caption's text aligns with the image.
+  display: inline-block;
+}
+
+.#{$prefix}figure-img {
+  margin-bottom: $spacer * 0.5;
+  line-height: 1;
+}
+
+.#{$prefix}figure-caption {
+  @include font-size($figure-caption-font-size);
+  color: $figure-caption-color;
+}

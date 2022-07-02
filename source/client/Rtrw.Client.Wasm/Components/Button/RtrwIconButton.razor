@@ -1,0 +1,35 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwBaseButton
+
+<RtrwElement @bind-Ref="@elementReference"
+             HtmlTag="@HtmlTag"
+             Class="@Classname"
+             Style="@Style"
+             @attributes="UserAttributes"
+             @onclick="OnClickHandler"
+             type="@Type"
+             href="@Href"
+             target="@Target"
+             rel="@(Target=="_blank"?"noopener":null)"
+             disabled="@Disabled"
+             title="@Title">
+    @ChildContent
+</RtrwElement>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public ThemeColor Color { get; set; }
+    [Parameter] public Edge Tepian { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public Variant Variant { get; set; } = Variant.Text;
+    protected bool AsButton => Variant != Variant.Text;
+    protected string Classname =>
+        new CssBuilder("rtrw-button-root rtrw-icon-button")
+            .AddClass("rtrw-button", when: AsButton)
+            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text hover:rtrw-{Color.EnumToDescriptionString}-hover", !AsButton && Color != ThemeColor.Default)
+            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}", AsButton)
+            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}-{Color.EnumToDescriptionString()}", AsButton)
+            .AddClass($"rtrw-icon-button-tepian-{Tepian.EnumToDescriptionString()}", when: () => Tepian != Edge.False)
+            .AddClass(Class)
+            .Build();
+}

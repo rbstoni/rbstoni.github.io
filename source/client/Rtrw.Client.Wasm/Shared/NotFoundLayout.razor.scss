@@ -1,0 +1,37 @@
+﻿$prefix: rtrw-;
+
+.not-found-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin:0 auto;
+    padding: 0 16px;
+    min-height: 100vh;
+
+    gap: 8px;
+
+    border: 1px solid red;
+    @media screen and (min-device-width: 600px) {
+        max-width: 600px;
+        padding: 0 24px;
+    }
+
+}
+
+.not-found-text{
+    text-align: center;
+    font-family: var(--#{$prefix}font-monospace);
+}
+
+.home-button{
+    color:var(--#{$prefix}white);
+    background-color: var(--#{$prefix}primary);
+    padding: 9px 16px;
+    min-width: 64px;
+    border-radius: 4px;
+    font-family: var(--#{$prefix}font-roboto);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: normal;
+}

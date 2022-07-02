@@ -1,0 +1,16 @@
+.register-form-container {
+  margin: 24px 0;
+  padding: 0 16px;
+}
+@media screen and (min-device-width: 600px) {
+  .register-form-container {
+    padding: 0 24px;
+  }
+}
+.register-form-container .register-form-title {
+  font-family: "Alegreya Sans";
+  font-weight: 300;
+  font-size: 28px;
+  text-align: left;
+  color: #707070;
+}

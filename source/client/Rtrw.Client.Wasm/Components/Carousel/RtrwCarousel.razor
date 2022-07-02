@@ -1,0 +1,65 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwBaseBindableItemsControl<RtrwCarouselItem, TData>
+@implements IAsyncDisposable
+@typeparam TData
+
+<section @attributes="UserAttributes" aria-roledescription="carousel" class="@Classname" style="@Style">
+    <CascadingValue Value="this">
+        <RtrwSwipe OnSwipe="OnSwipe" Class="rtrw-carousel-swipe">
+            @*Selected Content*@
+            @if (ItemsSource == null)
+            {
+                @ChildContent
+            }
+            else
+            {
+                foreach (TData item in ItemsSource)
+                {
+                    <RtrwCarouselItem>
+                        @ItemTemplate(item)
+                    </RtrwCarouselItem>
+                }
+            }
+        </RtrwSwipe>
+
+        @*Controls*@
+        <div class="rtrw-carousel-controls">
+            @*Left Arrow*@
+            @if (ShowArrows && ItemsSource.Count() > 1)
+            {
+                <RtrwIconButton tabindex="1" aria-label="Go to previous" Style="z-index:3; padding: 6px" OnClick="Previous">
+                    <RtrwSvgChevronLeft />
+                </RtrwIconButton>
+            }
+
+            @*Bullets*@
+            @if (ShowBullets && ItemsSource.Count() > 1)
+            {
+                <div class="rtrw-carousel-bullets">
+                    @for (int i = 0; i < Items.Count; i++)
+                    {
+                        int current = i;
+                        <RtrwIconButton tabindex="@(i+3)" aria-label="@(i+1)" Class="rtrw-align-self-end" Style="z-index:3; padding: 0" OnClick="(() => MoveTo(current))">
+                            @if (current == SelectedIndex)
+                            {
+                                <RtrwSvgRadioButtonChecked />
+                            }
+                            else
+                            {
+                                <RtrwSvgRadioButtonUnchecked />
+                            }
+                        </RtrwIconButton>
+                    }
+                </div>
+            }
+
+            @*Right Arrow*@
+            @if (ShowArrows && ItemsSource.Count() > 1)
+            {
+                <RtrwIconButton tabindex="2" aria-label="Go to next" Style="z-index:3; padding:6px" OnClick="Next">
+                    <RtrwSvgChevronRight />
+                </RtrwIconButton>
+            }
+        </div>
+    </CascadingValue>
+</section>

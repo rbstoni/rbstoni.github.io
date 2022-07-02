@@ -1,0 +1,58 @@
+$prefix: rtrw-;
+
+$btn-font-family: "Roboto", sans-serif;
+$btn-font-size: 14px;
+$btn-font-weight: 500;
+$btn-line-height: 1.75;
+$btn-letter-spacing: 1.25px;
+$btn-text-transform: capitalize;
+$btn-disabled-color: $gray;
+
+@mixin root-button {
+  --#{$prefix}button-disabled-color: #{$btn-disabled-color};
+  --#{$prefix}button-font-family: #{$btn-font-family};
+  --#{$prefix}button-font-size: #{$btn-font-size};
+  --#{$prefix}button-font-weight: #{$btn-font-weight};
+  --#{$prefix}button-line-height: #{$btn-line-height};
+  --#{$prefix}button-letter-spacing: #{$btn-letter-spacing};
+  --#{$prefix}button-text-transform: #{$btn-text-transform};
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  height: 36px;
+  min-width: 64px;
+  font-family: var(--#{$prefix}button-font-family);
+  font-size: var(--#{$prefix}button-font-size);
+  font-weight: var(--#{$prefix}button-font-weight);
+  line-height: var(--#{$prefix}button-line-height);
+  letter-spacing: var(--#{$prefix}button-letter-spacing);
+  text-transform: var(--#{$prefix}button-text-transform);
+  color: inherit;
+  background: transparent;
+  background-color: transparent;
+  border-radius: var(--#{$prefix}border-radius);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  // vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  &::-moz-focus-inner {
+    border-style: none;
+  }
+  &:disabled,
+  &.disabled {
+    color: var(--#{$prefix}btn-disabled-color) !important;
+    background-color: var(--#{$prefix}btn-disabled-color) !important;
+    cursor: default;
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,43 @@
+//
+// Rotating border
+//
+.#{$prefix}spinner {
+  display: flex;
+  box-sizing: content-box;
+  width: var(--#{$prefix}spinner-width);
+  height: var(--#{$prefix}spinner-height);
+  border-radius: 50%;
+  animation: var(--#{$prefix}spinner-animation-speed) linear infinite
+    var(--#{$prefix}spinner-animation-name);
+    vertical-align: middle;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg) #{"/* rtl:ignore */"};
+  }
+}
+
+.#{$prefix}spinner {
+  --#{$prefix}spinner-width: 1em;
+  --#{$prefix}spinner-height: 1em;
+  --#{$prefix}spinner-vertical-align: -0.125em;
+  --#{$prefix}spinner-border-width: 0.25em;
+  --#{$prefix}spinner-animation-speed: 0.75s;
+  --#{$prefix}spinner-animation-name: spinner;
+
+  border: var(--#{$prefix}spinner-border-width) solid currentcolor;
+  border-right-color: transparent;
+}
+
+.#{$prefix}spinner-small {
+  --#{$prefix}spinner-width: 1em;
+  --#{$prefix}spinner-height: 1em;
+  --#{$prefix}spinner-border-width: 0.1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$prefix}spinner {
+    --#{$prefix}spinner-animation-speed: #{$spinner-animation-speed * 2};
+  }
+}

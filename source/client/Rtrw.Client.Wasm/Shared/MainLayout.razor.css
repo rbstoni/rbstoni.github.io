@@ -1,0 +1,15 @@
+/*!
+* Rtrw v1.0.0 (https://rtrw.app/)
+* Copyright 2022 The Rtrw Authors
+*/
+.main-layout {
+  margin: 0 auto;
+  min-height: 100vh;
+  color: var(--rtrw-body-color);
+  background-color: var(--rtrw-bg-color);
+}
+@media screen and (min-device-width: 600px) {
+  .main-layout {
+    max-width: 600px;
+  }
+}

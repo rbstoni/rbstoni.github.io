@@ -1,0 +1,9 @@
+.#{$prefix}rotate-90deg {
+    transform: rotate(90deg);
+    transition: transform 0.25 ease-in-out;
+}
+
+.#{$prefix}rotate-180deg {
+    transform: rotate(180deg);
+    transition: transform 0.25 ease-in-out;
+}

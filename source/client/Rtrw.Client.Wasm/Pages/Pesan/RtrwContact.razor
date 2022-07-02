@@ -1,0 +1,74 @@
+﻿@using Rtrw.Client.Wasm.Components.Extensions
+<div class="contact-item-container" @ontouchstart="OnTouchStartHandler" @ontouchend="OnTouchEndHandler">
+    <div class="contact-avatar-container" @onclick="AvatarOnClickHandler">
+        @if (!string.IsNullOrEmpty(@Contact.ImageUrl))
+        {
+            <div class="rtrw-avatar rtrw-avatar-40">@Contact.ImageUrl</div>
+        }
+        else
+        {
+            <div class="rtrw-avatar rtrw-avatar-40">@Contact.Name.ToUpper().FirstOrDefault()</div>
+            if (Contact.Type.EnumToDescriptionString() == "Group")
+            {
+                <div class="rtrw-avatar rtrw-avatar-40">C</div>
+            }
+        }
+        @if (true)
+        {
+
+        }
+        <div class="contact-pinned">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill-rule="evenodd">
+                <circle stroke="#fff" stroke-width="2" fill="#32afff" cx="9" cy="9" r="8" />
+                <path d="M6.96 6.656a.466.466 0 0 0-.33.797l3.783 3.782a.468.468 0 0 0 .795-.33v-1.9l1.646-1.646.295.295a.59.59 0 0 0 .834 0 .557.557 0 0 0 .07-.084.652.652 0 0 0-.088-.766l-2.904-2.9a.61.61 0 0 0-.769-.091.59.59 0 0 0-.154.819c.02.03.044.058.07.084l.295.295L8.85 6.656H6.96zm-2.136 5.76l2.472-2.895 1.048 1.048-2.898 2.47a.44.44 0 0 1-.295.103.442.442 0 0 1-.437-.447.44.44 0 0 1 .102-.278h.007z"
+                      fill="#fff" />
+            </svg>
+        </div>
+    </div>
+    <div class="contact-info-container" type="button" @onclick="MessageOnClickHandler">
+        <div class="display-contact-name">@Contact.Name</div>
+        <div class="display-last-message">@Contact.LastMessage</div>
+    </div>
+    <div class="contact-other-info-container">
+        @if (!contactOptionsShow)
+        {
+            <div class="contact-other-info">
+                <div class="contact-last-update-date">@Contact.LastUpdate.TimeSpanToString()</div>
+                <div class="contact-message-status">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="message-read" width="16px" height="16px" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z" />
+                    </svg>
+                    <div class="message-unread">3</div>
+                </div>
+            </div>
+        }
+        @if (contactOptionsShow)
+        {
+            <div class="contact-option-container">
+                <div class="option-button" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                        <g id="c42395ac" transform="translate(-2 -4)">
+                            <path id="Path_1" data-name="Path 1" d="M8.527,8.706a.791.791,0,0,0-.56,1.353l6.422,6.42a.794.794,0,0,0,1.35-.56V12.694L18.532,9.9l.5.5a1,1,0,0,0,1.416,0,.946.946,0,0,0,.119-.143,1.107,1.107,0,0,0-.149-1.3l-4.93-4.923a1.035,1.035,0,0,0-1.305-.154,1,1,0,0,0-.261,1.39.946.946,0,0,0,.119.143l.5.5L11.735,8.706ZM4.9,18.484,9.1,13.57l1.779,1.779L5.957,19.541a.754.754,0,0,1-1.069-1.056H4.9Z" transform="translate(-2.714 0.283)" fill-rule="evenodd" />
+                            <circle id="Ellipse_1" data-name="Ellipse 1" cx="8" cy="8" r="8" transform="translate(2 4)" fill="none" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="option-button" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                        <g id="Group_1" data-name="Group 1" transform="translate(-106 -70)">
+                            <rect id="Rectangle_1" data-name="Rectangle 1" width="16" height="16" transform="translate(106 70)" fill="none" />
+                            <path id="md-trash" d="M4.333,16.227A1.781,1.781,0,0,0,6.111,18h7.111A1.781,1.781,0,0,0,15,16.227V6H4.333Zm12-12.893H13L11.884,2H7.449L6.333,3.333H3V4.667H16.333Z" transform="translate(104 68)" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="option-button" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="black">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z" />
+                    </svg>
+                </div>
+            </div>
+        }
+    </div>
+</div>

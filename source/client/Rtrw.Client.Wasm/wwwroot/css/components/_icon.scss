@@ -1,0 +1,60 @@
+$icon-color: $black;
+$icon-size: 18px;
+
+$icon-sizes: (
+  "16px": 16px,
+  "20px": 20px,
+  "24px": 24px,
+  "28x": 28px,
+  "32px": 32px,
+  "36px": 36px,
+  "40px": 40px,
+  "44px": 44px,
+  "48px": 48px,
+  "52px": 52px,
+);
+
+@mixin make-icon-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: $gray-400;
+  }
+
+  &.#{$prefix}icon-svg-custom-color {
+    fill: currentColor;
+  }
+}
+
+.#{$prefix}icon {
+  @include make-icon-root();
+}
+
+@each $size,
+$value in $icon-sizes {
+  .#{$prefix}icon-size-#{$size} {
+    height: $value;
+    width: $value;
+  }
+}
+
+.#{$prefix}icon-size-custom {
+  --#{$prefix}icon-size: #{$icon-size};
+  width: var(--#{$prefix}icon-size, 18px);
+  height: var(--#{$prefix}icon-size, 18px);
+}

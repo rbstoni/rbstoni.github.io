@@ -1,0 +1,18 @@
+﻿@using Rtrw.Client.Wasm.Services
+@using Rtrw.Client.Wasm.Svgs
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject IWindowHistoryService HistoryService
+
+<div class="not-found-container">
+    <RtrwSvgHorizontalLogo />
+    @Body
+    <RtrwButton OnClick="@(()=>NavigationManager.NavigateTo(""))"
+                Type="Components.Enums.ButtonType.Button">
+        Beranda
+    </RtrwButton>
+    <RtrwButton OnClick="@(()=>HistoryService.Back())"
+                Type="Components.Enums.ButtonType.Button">
+        Kembali
+    </RtrwButton>
+</div>

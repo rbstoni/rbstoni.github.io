@@ -1,0 +1,166 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Enums
+@using Rtrw.Client.Wasm.ViewModels
+<div class="register-form-title">Buat Akun #wargaRTRW</div>
+<RtrwForm Model="Register">
+    <DataAnnotationsValidator />
+    <RtrwTextField T="string"
+                   @bind-Value=Register.FullName
+                   For="@(()=>Register.FullName)"
+                   InputType="InputType.Text"
+                   Label="Nama Depan"
+                   Clearable
+                   Immediate
+                   Variant="Variant.Outlined">
+    </RtrwTextField>
+    <div class="rtrw-inline-flex rtrw-justify-content-between rtrw-gap-col-8px rtrw-width-100">
+        <RtrwTextField T="DateTime"
+                       @bind-Value=Register.DateOfBirth
+                       For="@(()=>Register.DateOfBirth)"
+                       InputType="InputType.Date"
+                       Label="Tanggal Lahir"
+                       Clearable
+                       Immediate
+                       Variant="Variant.Outlined">
+        </RtrwTextField>
+        <RtrwTextField T="Gender"
+                       @bind-Value=Register.Gender
+                       For="@(()=>Register.Gender)"
+                       Label="Laki-laki/Perempuan"
+                       InputType="InputType.Text"
+                       Clearable
+                       Immediate
+                       Variant="Variant.Outlined">
+        </RtrwTextField>
+    </div>
+    <div class="rtrw-inline-flex rtrw-justify-content-between rtrw-align-items-center rtrw-gap-col-8px">
+        <RtrwButton Class="rtrw-inline-flex rtrw-gap-col-4px"
+                    Style="border-radius: 12px"
+                    Variant=Variant.Filled
+                    Color=@(mainContact=="email" ? ThemeColor.Primary : ThemeColor.Secondary)
+                    OnClick="@(()=>SetMainContact("email"))">
+            <RtrwSvgAlternateEmail />
+            Email
+        </RtrwButton>
+        <span style="font-size: 14px; color:#716464;">Atau</span>
+        <RtrwButton Class="rtrw-inline-flex rtrw-gap-col-4px"
+                    Style="border-radius: 12px"
+                    Variant=Variant.Filled
+                    Color=@(mainContact=="phone" ? ThemeColor.Primary : ThemeColor.Secondary)
+                    OnClick="@(()=>SetMainContact("phone"))">
+            <RtrwSvgMobilePhone />
+            Phone
+        </RtrwButton>
+        <RtrwIcon><RtrwSvgLock /></RtrwIcon>
+        <span style="font-size: 12px; color: rgba(113, 100, 100, 0.69);">
+            Identitas Anda terenkripsi/aman di jaringan RTRW
+        </span>
+    </div>
+    @if (mainContact is "email")
+    {
+        <RtrwTextField T="string"
+                   Label="Email (digunakan untuk masuk RTRW)"
+                   @bind-Value=Register.Email
+                   For="@(()=>Register.Email)"
+                   InputType="InputType.Email"
+                   Variant="Variant.Outlined">
+        </RtrwTextField>
+    }
+    else
+    {
+        <RtrwTextField T="string"
+                   Label="No. Telp (digunakan untuk masuk RTRW)"
+                   Clearable
+                   Immediate
+                   @bind-Value=Register.Phone
+                   For="@(()=>Register.Phone)"
+                   InputType="InputType.Telephone"
+                   Variant="Variant.Outlined">
+        </RtrwTextField>
+    }
+    <RtrwTextField T="string"
+                   Label="Kata Sandi"
+                   Clearable
+                   Immediate
+                   @bind-Value="@Register.Password"
+                   For="@(()=>Register.Password)"
+                   InputType="@(passwordVisible?InputType.Text:InputType.Password)"
+                   Adornment="Adornment.End"
+                   Variant="Variant.Outlined"
+                   OnAdornmentClick="@ShowPassword">
+        <AdornmentSvg>
+            @if (passwordVisible)
+            {
+                <RtrwSvgEyeOpen />
+            }
+            else
+            {
+                <RtrwSvgEyeClosed />
+            }
+        </AdornmentSvg>
+    </RtrwTextField>
+    <RtrwTextField T="string"
+                   Label="Ulangi Kata Sandi"
+                   Clearable
+                   Immediate
+                   @bind-Value="@Register.ConfirmPassword"
+                   For="@(()=>Register.ConfirmPassword)"
+                   InputType="@(passwordVisible?InputType.Text:InputType.Password)"
+                   Adornment="Adornment.End"
+                   Variant="Variant.Outlined"
+                   OnAdornmentClick="@ShowConfirmPassword">
+        <AdornmentSvg>
+            @if (confirmPasswordVisible)
+            {
+                <RtrwSvgEyeOpen />
+            }
+            else
+            {
+                <RtrwSvgEyeClosed />
+            }
+        </AdornmentSvg>
+    </RtrwTextField>
+
+    @if (validated)
+    {
+        <div class="rtrw-text-center rtrw-margin-top-32px">
+            <RtrwButton Type=ButtonType.Button
+                    Color=ThemeColor.Primary
+                    Variant=Variant.Filled
+                    Style="border-radius: 9999px; min-width:300px"
+                    OnClick="OnClick">
+                Lanjutkan
+            </RtrwButton>
+        </div>
+    }
+</RtrwForm>
+
+@code {
+    [Parameter] public RegisterRequest Register { get; set; } = new();
+    [Parameter] public EventCallback OnClick { get; set; }
+    private bool passwordVisible;
+    private bool confirmPasswordVisible;
+    bool validated = true;
+    string mainContact = "email";
+    void SetMainContact(string contact)
+    {
+        if (!string.IsNullOrEmpty(contact))
+        {
+            mainContact = contact;
+        }
+    }
+    void ShowPassword()
+    {
+        passwordVisible = !passwordVisible;
+        StateHasChanged();
+    }
+    void ShowConfirmPassword()
+    {
+        confirmPasswordVisible = !confirmPasswordVisible;
+        StateHasChanged();
+    }
+    void OnValidSubmitHandler()
+    {
+        return;
+    }
+}

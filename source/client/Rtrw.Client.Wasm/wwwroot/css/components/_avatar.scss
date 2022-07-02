@@ -1,0 +1,95 @@
+@use "sass:math";
+
+$avatar-size: 24px;
+$avatar-color: $white;
+$avatar-bg-color: $primary;
+$avatar-font-size: 16px;
+
+@mixin make-avatar-bg-color($color) {
+  @if $color == null {
+    background-color: $white;
+  } @else {
+    background-color: $color;
+  }
+}
+
+$avatar-sizes: (
+  "16px": 16px,
+  "20px": 20px,
+  "24px": 24px,
+  "28px": 28px,
+  "32px": 32px,
+  "36px": 36px,
+  "40px": 40px,
+  "44px": 44px,
+  "48px": 48px,
+  "52px": 52px,
+  "56px": 56px,
+  "60px": 60px,
+  "64px": 64px,
+  "68px": 68px,
+  "72px": 72px,
+  "76px": 76px,
+  "80px": 80px,
+  "84px": 84px,
+  "88px": 88px,
+  "92px": 92px,
+  "96px": 96px,
+  "100px": 100px,
+  "104px": 104px,
+  "108px": 108px,
+  "112px": 112px,
+  "116px": 116px,
+  "120px": 120px,
+  "124px": 124px,
+  "128px": 128px,
+);
+
+.#{$prefix}avatar {
+  --#{$prefix}avatar-size: #{$avatar-size};
+  --#{$prefix}avatar-color: #{$avatar-color};
+  --#{$prefix}avatar-bg-color: #{$avatar-bg-color};
+  --#{$prefix}avatar-font-size: #{$avatar-font-size};
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 1;
+  user-select: none;
+  border-radius: 50%;
+  color: var(--#{$prefix}avatar-color);
+  background-color: var(--#{$prefix}avatar-bg-color);
+  font-size: var(--#{$prefix}avatar-font-size);
+  @include gradient-directional(
+    $warning,
+    var(--#{$prefix}avatar-bg-color),
+    0deg
+  );
+  &[type="button"] {
+    cursor: pointer;
+  }
+  & img {
+    object-fit: scale-down;
+    object-position: center;
+  }
+}
+
+@each $size, $value in $avatar-sizes {
+  .#{$prefix}avatar.#{$prefix}avatar-#{$size} {
+    $font-factor: 0.75;
+    font-family: "Roboto", sans-serif;
+    width: $value;
+    height: $value;
+    font-weight: bold;
+    font-size: math.round($font-factor * $value);
+  }
+}
+
+button.#{$prefix}avatar,
+a.#{$prefix}avatar {
+  cursor: pointer;
+}

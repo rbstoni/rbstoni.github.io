@@ -1,0 +1,36 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+@implements IDisposable
+
+@if (IsVisible)
+{
+    <div @attributes="UserAttributes" class="@Classname" style="@Style">
+        @ChildContent
+    </div>
+}
+
+@code {
+    private bool disposed = false;
+    [CascadingParameter] protected internal RtrwBaseItemsControl<RtrwCarouselItem> Parent { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    public bool IsVisible => Parent != null && (Parent.LastContainer == this || Parent.SelectedIndex == Parent.Items.IndexOf(this));
+    protected string Classname =>
+        new CssBuilder("rtrw-carousel-item")
+            .AddClass("rtrw-carousel-item-exit", !disposed && Parent.LastContainer == this)
+            .AddClass("rtrw-carousel-transition-slide-next-enter", !disposed && Parent.SelectedContainer == this && Parent.moveNext)
+            .AddClass("rtrw-carousel-transition-slide-next-exit", !disposed && Parent.LastContainer == this && Parent.moveNext)
+            .AddClass("rtrw-carousel-transition-slide-prev-enter", !disposed && Parent.SelectedContainer == this && !Parent.moveNext)
+            .AddClass("rtrw-carousel-transition-slide-prev-exit", !disposed && Parent.LastContainer == this && !Parent.moveNext)
+            .Build();
+
+    public void Dispose()
+    {
+        disposed = true;
+        Parent?.Items.Remove(this);
+    }
+    protected override Task OnInitializedAsync()
+    {
+        Parent?.AddItem(this);
+        return Task.CompletedTask;
+    }
+}

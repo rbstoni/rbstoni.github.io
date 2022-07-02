@@ -1,0 +1,29 @@
+// Shorthand
+
+.#{$prefix}fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: $zindex-fixed;
+}
+
+.#{$prefix}fixed-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-fixed;
+}
+
+.#{$prefix}sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: $zindex-sticky;
+}
+
+.#{$prefix}sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: $zindex-sticky;
+}

@@ -1,0 +1,46 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+@inject NavigationManager NavigationManager
+
+<header @attributes="UserAttributes" class="@Classname" style="@Style">
+    <div class="rtrw-container rtrw-inline-flex rtrw-align-items-center">
+        <div class="rtrw-flex rtrw-align-items-center rtrw-justify-content-start">
+            @if (StartBarContent is null)
+            {
+                <div class="rtrw-inline-flex rtrw-align-items-center rtrw-justify-content-start" type="button" @onclick="NavigateToHome">
+                    <RtrwSvgHorizontalLogo Style="height: 24px"/>
+                </div>
+            }
+            @if (StartBarContent is not null)
+            {
+                <div class="@StartBarContentClasname">@StartBarContent</div>
+            }
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <div class="rtrw-margin-start-32px rtrw-margin-end-auto @TitleClassname">@Title</div>
+            }
+        </div>
+        @if (EndBarContent is not null)
+        {
+            <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center rtrw-margin-start-auto">@EndBarContent</div>
+        }
+    </div>
+</header>
+
+@code {
+    protected string Classname 
+        =>new CssBuilder("rtrw-appbar")
+            .AddClass($"rtrw-appbar-{Position}", !string.IsNullOrEmpty(Position))
+            .AddClass(Class)
+            .Build();
+    [Parameter] public string? TitleClassname { get; set; }
+    [Parameter] public string? StartBarContentClasname { get; set; }
+    [Parameter] public string? EndBarContentClasname { get; set; }
+    [Parameter] public string? Styles { get; set; }
+    [Parameter] public RenderFragment? EndBarContent { get; set; }
+    [Parameter] public string? Position { get; set; }
+    [Parameter] public RenderFragment? StartBarContent { get; set; }
+    [Parameter] public string? Title { get; set; }
+
+    void NavigateToHome() => NavigationManager.NavigateTo("/");
+}

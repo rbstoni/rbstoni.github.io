@@ -1,0 +1,19 @@
+.#{$prefix}type-title {
+  display: inline;
+  font-family: var(--#{$prefix}font-alegreya-sans);
+  font-weight: 500;
+  font-size: 24px;
+  color: #716464;
+  flex-basis: 0;
+  vertical-align: middle;
+}
+
+.#{$prefix}type-sub-title {
+  display: inline;
+  font-family: var(--#{$prefix}font-alegreya-sans);
+  font-weight: 500;
+  font-size: 15px;
+  text-align: left;
+  color: #716464;
+  vertical-align: middle;
+}

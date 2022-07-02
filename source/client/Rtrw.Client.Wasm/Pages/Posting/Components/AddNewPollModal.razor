@@ -1,0 +1,67 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Models
+<RtrwModal>
+    <ModalContent>
+        <EditForm Model="Poll">
+            <RtrwFluentValidationValidator />
+            <div class="poll-modal-textarea-container">
+                <RtrwTextField T="string"
+                               Label="Pertanyaan yang diajukan:"
+                               @bind-Value="@Poll.Question"
+                               For="@(()=>Poll.Question)"
+                               Variant="Variant.Filled"
+                               MaxLength="160"
+                               Required
+                               Clearable>
+                </RtrwTextField>
+            </div>
+            <div class="rtrw-typography-h6 rtrw-margin-y-8px">Opsi Jawaban: </div>
+            <div class="rtrw-flex rtrw-flex-col">
+                @foreach (var (answer, idx) in @Poll.Answers.Select((answer, idx) => (answer, idx)))
+                {
+                    <RtrwTextField T="string"
+                               Label="Jawaban"
+                               @bind-Value="@answer.Answer"
+                               For="@(()=>answer.Answer)"
+                               Variant="Variant.Filled"
+                               MaxLength="160"
+                               Required
+                               Clearable>
+                    </RtrwTextField>
+                }
+                <RtrwButton Type=ButtonType.Button
+                            Variant=Variant.Outlined
+                            OnClick="AddNewPollAnswer"
+                            Disabled="buttonDisabled"
+                            FullWidth="false">
+                    Tambahkan pilihan
+                </RtrwButton>
+            </div>
+        </EditForm>
+    </ModalContent>
+    <FooterContent>
+        <RtrwButton Type=ButtonType.Button OnClick="Submit" Variant=Variant.Filled Color=ThemeColor.Primary>Buat</RtrwButton>
+    </FooterContent>
+</RtrwModal>
+
+@code {
+    [CascadingParameter] public RtrwModalInstance? ModalInstance { get; set; }
+    [Parameter] public Poll Poll { get; set; } = new();
+    bool buttonDisabled => Poll.Answers.Count > 4;
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        while (Poll.Answers.Count() < 3)
+        {
+            Poll.Answers.Add(new PollAnswer());
+        }
+    }
+    private void AddNewPollAnswer()
+    {
+        if (Poll.Answers.Count < 5)
+        {
+            Poll.Answers.Add(new PollAnswer());
+        }
+    }
+    void Submit() => ModalInstance.Close(ModalResult.Ok(Poll));
+}

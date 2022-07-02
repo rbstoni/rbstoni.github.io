@@ -1,0 +1,83 @@
+.#{$prefix}overlay {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto !important;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s cubic-bezier(0.25, 0.8, 0.5, 1), z-index 1ms;
+    z-index: 5;
+
+    // Ini membuat #{$prefix}overlaynya jadi memiliki maximum width
+    @media screen and (min-device-width: 600px) {
+        max-width: 600px;
+    }
+
+    & .#{$prefix}overlay-absolute {
+        position: absolute;
+    }
+
+    & .#{$prefix}overlay-scrim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: inherit;
+        border-color: transparent;
+        background-color: transparent;
+        height: 100%;
+        width: 100%;
+        -webkit-animation: #{$prefix}fade-in ease 0.15s;
+        animation: #{$prefix}fade-in ease 0.15s;
+
+        &.#{$prefix}overlay-dark {
+            border-color: var(--#{$prefix}overlay-dark);
+            background-color: var(--#{$prefix}overlay-dark);
+        }
+
+        &.#{$prefix}overlay-light {
+            border-color: var(--#{$prefix}overlay-light);
+            background-color: var(--#{$prefix}overlay-light);
+        }
+
+        &:hover {
+            cursor: default;
+        }
+    }
+
+    & .#{$prefix}overly-content {
+        position: relative;
+    }
+    
+    &.#{$prefix}overlay-modal {
+        z-index: calc(var(--#{$prefix}zindex-modal) + 1);
+    }
+
+    &.#{$prefix}overlay-drawer {
+        z-index: calc(var(--#{$prefix}zindex-appbar) + 1); //<-- Yes this is correct we want to display it on top of the Appbar
+    }
+}
+
+@-webkit-keyframes #{$prefix}fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes #{$prefix}fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

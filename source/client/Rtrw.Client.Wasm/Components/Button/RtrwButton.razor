@@ -1,0 +1,30 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwBaseButton
+
+<RtrwElement @bind-Ref="@elementReference"
+             HtmlTag="@HtmlTag"
+             Class="@Classname"
+             Style="@Style"
+             @attributes="UserAttributes"
+             @onclick="OnClickHandler"
+             type="@Type"
+             href="@Href"
+             target="@Target"
+             rel="@(Target=="_blank"?"noopener":null)"
+             disabled="@Disabled">
+    @ChildContent
+</RtrwElement>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public ThemeColor Color { get; set; } = ThemeColor.Default;
+    [Parameter] public bool FullWidth { get; set; }
+    [Parameter] public Variant Variant { get; set; } = Variant.Text;
+    protected string Classname =>
+        new CssBuilder("rtrw-button-root rtrw-button")
+            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}")
+            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}-{Color.EnumToDescriptionString()}")
+            .AddClass($"rtrw-button-full-width", FullWidth)
+            .AddClass(Class)
+            .Build();
+}
