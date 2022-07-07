@@ -1,7 +1,7 @@
-﻿@using Rtrw.Client.Wasm.Components.Extensions
+﻿@*@using Rtrw.Client.Wasm.Components.Extensions
 <div class="contact-item-container" @ontouchstart="OnTouchStartHandler" @ontouchend="OnTouchEndHandler">
     <div class="contact-avatar-container" @onclick="AvatarOnClickHandler">
-        @if (!string.IsNullOrEmpty(@Contact.ImageUrl))
+        @if (!string.IsNullOrEmpty(@Contact.MessageHistories.Last())
         {
             <div class="rtrw-avatar rtrw-avatar-40">@Contact.ImageUrl</div>
         }
@@ -71,4 +71,4 @@
             </div>
         }
     </div>
-</div>
+</div>*@

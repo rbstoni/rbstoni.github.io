@@ -16,7 +16,7 @@
 </RtrwElement>
 
 @code {
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public ThemeColor Color { get; set; } = ThemeColor.Default;
     [Parameter] public bool FullWidth { get; set; }
     [Parameter] public Variant Variant { get; set; } = Variant.Text;

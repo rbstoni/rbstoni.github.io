@@ -9,6 +9,7 @@ using Rtrw.Client.Wasm.FakeData.Authentication;
 using Rtrw.Client.Wasm.FakeData.Database;
 using Rtrw.Client.Wasm.FakeData.Services;
 using Rtrw.Client.Wasm.Services;
+using Rtrw.Client.Wasm.ViewModels;
 
 namespace Rtrw.Client.Wasm
 {
@@ -22,24 +23,26 @@ namespace Rtrw.Client.Wasm
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            builder.Configuration.GetValue<TokenSettings>("TokenSettings");
+
             builder.Services.AddRtrwModal();
             builder.Services.AddRtrwScrollManager();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddApplicationDbContextFactory<SqliteDbContext>(options => options.UseSqlite("Data Source=rtrw.db"));
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IInitializerService, InitializerService>();
-            builder.Services.AddScoped<IAccountLogic, AccountLogic>();
+            builder.Services.AddScoped<AuthenticationStateProvider, FakeAuthenticationStateProvider>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+            builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IWindowHistoryService, WindowHistoryService>();
+
+            // Authorization
+            builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
 
             var host = builder.Build();
             using (var scope = host.Services.CreateScope())
             {
-                await scope.ServiceProvider.GetRequiredService<IInitializerService>().InitializeFakeRandomWargaAsync();
                 await scope.ServiceProvider.GetRequiredService<IInitializerService>().InitializeFakeRandomPostAsync();
             }
             await host.RunAsync();

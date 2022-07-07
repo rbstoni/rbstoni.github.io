@@ -1,0 +1,39 @@
+﻿@using Rtrw.Client.Wasm.Models
+@inject IModalService Modal
+<div style="border-radius: 14px; background:#ffffff; border:1px solid rgba(#707070, 0.65); margin:8px">
+    <InputTextArea @bind-Value="@Text"
+                   placeholder="@Placeholder"
+                   class="input-textarea"
+                   style="padding: 8px; width: 100%; min-height: 222px; max-height: 444px; outline: none; resize: none"
+                   oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';" />
+    <div style="background-color: rgba(193, 248, 206, 0.28) ; padding: 8px;" type="button" @onclick="OpenChangePostScopeModal">
+        <ScopeDisplay Scope="Scope" />
+    </div>
+</div>
+@Text
+@code {
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public string? Placeholder { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public Scope Scope { get; set; } = new();
+
+    async void OpenChangePostScopeModal()
+    {
+        ModalOptions options = new()
+            {
+                FullScreen = false,
+                CloseButton = false,
+                NoHeader = true
+            };
+        ModalParameters parameters = new();
+        parameters.Add("Scope", Scope);
+        var modal = Modal.Show<ChangePostScopeModal>(string.Empty, parameters, options);
+        var result = await modal.Result;
+        if (!result.Cancelled)
+        {
+            Scope = (Scope)result.Data;
+            StateHasChanged();
+        }
+    }
+}

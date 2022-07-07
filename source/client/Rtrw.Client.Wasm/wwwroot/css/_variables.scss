@@ -44,7 +44,7 @@ $default-hover-color: #e5e5e5;
 $default-border-color: #eff3f4;
 $default-body-color: $white;
 $default-text-color: $black;
-$default-disabled-color: $gray-600;
+$default-disabled-color: #f2f2f2;
 
 // scss-docs-start colors-map
 $colors: (
@@ -58,7 +58,7 @@ $colors: (
 
 // Theme colors
 $primary: #0db201;
-$secondary: #707070;
+$secondary: #F2F2F2;
 $info: hsl(207, 61%,  53%);
 $success: hsl(153, 53%,  53%);
 $warning: hsl(44,  100%, 77%);

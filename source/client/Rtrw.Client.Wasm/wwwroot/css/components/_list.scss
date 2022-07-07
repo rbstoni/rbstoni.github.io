@@ -42,7 +42,7 @@
         background-color: var(--#{$prefix}hover-color);
     }
 
-    &:focus:not(.#{$prefix}-selected-item) {
+    &:focus:not(.#{$prefix}selected-item) {
         background-color: var(--#{$prefix}hover-color);
     }
 }

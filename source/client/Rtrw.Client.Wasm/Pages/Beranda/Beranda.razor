@@ -21,10 +21,13 @@
 </RtrwAppBar>
 
 <main class="body-layout">
-    @foreach (var post in Posts)
+    <Virtualize Items="@Posts" Context="post">
+        <RtrwPostItem PostId="@post.Id" @key="@post.Id"/>
+    </Virtualize>
+@*    @foreach (var post in Posts)
    {
        <RtrwPostItem PostId="@post.Id" @key="@post.Id"/>
-   }
+   }*@
 </main>
 
 <RtrwNavBar NotificationNumber="notificationNumber"/>

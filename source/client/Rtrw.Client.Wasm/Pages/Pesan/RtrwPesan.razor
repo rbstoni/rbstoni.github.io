@@ -1,62 +1,30 @@
 ﻿@page "/pesan"
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Svgs
 @inject NavigationManager NavigationManager
 
-<div class="animate">
-    <RtrwTopAppBar>
-        <StartToolbar>
-            <div type="button" onclick="@(()=>NavigationManager.NavigateTo("/"))">
-                <svg xmlns="http://www.w3.org/2000/svg" width="84.545" height="21.25"
-                     class="rtrw rtrw-horizontal-logo" viewBox="0 0 84.545 21.25">
-                    <g id="RtrwHorizontalLogo" transform="translate(0.75 0.75)">
-                        <path id="Path_2320" data-name="Path 2320"
-                              d="M-199.562,1474.5l-4.671-11.389L-208.9,1474.5h-1.323l-8.094-19.75h1.452l7.33,17.9,4.612-11.221-.059-.145-2.676-6.53h1.478l7.307,17.9,7.354-17.9h1.375l-8.094,19.75Zm-22.1,0-4.726-6.6a12.97,12.97,0,0,1-1.9.134h-5.642v6.462h-1.438v-19.75h7.08a10.444,10.444,0,0,1,4.259.79,6.111,6.111,0,0,1,2.735,2.271,6.564,6.564,0,0,1,.958,3.6,6.372,6.372,0,0,1-.958,3.542,6.2,6.2,0,0,1-2.735,2.284,8.214,8.214,0,0,1-.944.355l4.95,6.909Zm-12.274-7.732h5.642a7.252,7.252,0,0,0,4.838-1.412,4.892,4.892,0,0,0,1.65-3.95,4.9,4.9,0,0,0-1.65-3.963,7.306,7.306,0,0,0-4.838-1.4h-5.642Z"
-                              transform="translate(272.822 -1454.749)" fill="#0db201" stroke="#0db201"
-                              stroke-linecap="round" stroke-width="1.5" />
-                        <path id="Path_2319" data-name="Path 2319"
-                              d="M-209.631,1474.5v-18.453h-7.11v-1.3h15.658v1.3h-7.11V1474.5Zm-10.391,0h-1.636l-4.726-6.6a12.97,12.97,0,0,1-1.9.134h-5.642v6.462h-1.438v-19.75h7.083a10.451,10.451,0,0,1,4.26.79,6.111,6.111,0,0,1,2.735,2.271,6.564,6.564,0,0,1,.958,3.6,6.371,6.371,0,0,1-.958,3.542,6.2,6.2,0,0,1-2.735,2.284,8.166,8.166,0,0,1-.945.355l4.951,6.909Zm-13.907-7.732h5.642a7.256,7.256,0,0,0,4.838-1.412,4.894,4.894,0,0,0,1.649-3.95,4.907,4.907,0,0,0-1.649-3.963,7.309,7.309,0,0,0-4.838-1.4h-5.642Z"
-                              transform="translate(235.367 -1454.749)" fill="#ffcd43" stroke="#ffcd43"
-                              stroke-linecap="round" stroke-width="1.5" />
-                    </g>
-                </svg>
-            </div>
-        </StartToolbar>
-        <EndToolbar>
-            <div type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="30" viewBox="0 0 35 30">
-                    <g id="Group_889" data-name="Group 889" transform="translate(-379 -54)">
-                        <g id="Group_827" data-name="Group 827" transform="translate(-117 40)">
-                            <path id="Path_2399" data-name="Path 2399" d="M7,0H28a7,7,0,0,1,7,7V23a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V7A7,7,0,0,1,7,0Z" transform="translate(496 14)" fill="#0db201" />
-                        </g>
-                        <g id="Group_855" data-name="Group 855" transform="translate(40.025 0.125)">
-                            <path id="path38" d="M2241.265-2153.035h-15.731a1.461,1.461,0,0,0-1.353,1.549v10.9a1.461,1.461,0,0,0,1.353,1.549h4.408l-1.056,4.461c-.055.234.189.407.347.246l4.626-4.707h7.405a1.461,1.461,0,0,0,1.353-1.549v-10.9a1.461,1.461,0,0,0-1.353-1.549" transform="translate(-1876.643 2213.642)" fill="none" stroke="#fff" stroke-width="2" />
-                            <path id="Path_2417" data-name="Path 2417" d="M-7791.257-251.852v-1.33h11.063v1.33Zm0-2.718V-255.9h11.063v1.332Z" transform="translate(8142.482 321.845)" fill="#fff" />
-                        </g>
-                    </g>
-                </svg>
-            </div>
-        </EndToolbar>
-    </RtrwTopAppBar>
+<RtrwAppBar Position="sticky-top" Style="filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.16));">
+    <EndBarContent>
+        <RtrwIconButton Href="search">
+            <RtrwSvgSearch />
+        </RtrwIconButton>
+        <RtrwIconButton Href="pesan">
+            <RtrwSvgChat />
+        </RtrwIconButton>
+        <RtrwIconButton Href="new-post" Style="margin-right: -12px">
+            <RtrwSvgNewPost />
+        </RtrwIconButton>
+    </EndBarContent>
+</RtrwAppBar>
 
-    <div class="rtrw-layout-body">
-        <div class="rtrw-container">
-            <div class="pesan-section-title">Kotak Pesan</div>
-            <RtrwContact Contact="@Contact" />
-        </div>
+<main class="body-layout">
+    <div class="rtrw-container">
+        <div class="pesan-section-title">Kotak Pesan</div>
+        <RtrwContact Contact="@Contact" />
     </div>
-</div>
+</main>
 
 @code {
     [Parameter]
-    public ContactResponse Contact { get; set; } = new ContactResponse
-        {
-            Id = "kontak-1",
-            CreatedAt = DateTime.Now,
-            CreatedBy = "Toni",
-            ImageUrl = "",
-            LastMessage = "auh auh auhauh auh auhauh auh auhauh auh auhauh auh auhauh auh auhauh auh auh",
-            LastModified = DateTime.Now,
-            LastUpdate = DateTime.Now,
-            Name = "Ribassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-            Type = ContactType.Personal,
-        };
+    public Contact Contact { get; set; } = new();
 }

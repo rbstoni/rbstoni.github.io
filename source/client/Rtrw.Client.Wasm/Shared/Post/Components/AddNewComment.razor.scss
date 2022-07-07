@@ -1,0 +1,55 @@
+﻿.comment-wrapper {
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+    align-items: flex-end;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 4px 16px 4px 16px;
+    background-color: Var(--rtrw-white);
+
+    @media screen and (min-device-width: 600px) {
+        max-width: 600px;
+        padding: 8px 24px 8px 24px;
+    }
+
+    color: var(--rtrw-body-color);
+    background-color: var(--rtrw-body-bg);
+}
+
+
+.comment-container {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+}
+
+::deep .comment-button {
+    padding: 8px;
+    align-self: flex-end;
+}
+
+.input-control {
+    display: flex;
+    margin-left: 4px;
+    width: 100%;
+    background-color: var(--rtrw-secondary);
+    border-radius: 14px;
+
+    .input-textarea {
+        width: 100%;
+        min-height: 36px;
+        max-height: 200px;
+        resize: none;
+        padding: 12px 8px;
+        border-radius: 8px;
+        outline: none;
+    }
+}

@@ -5,7 +5,8 @@
   --#{$prefix}text-color: #{$black};
 
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   padding: 4px 16px;
 
   gap: 8px;
@@ -25,28 +26,6 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
 }
 
-.post-detail-container {
-  --#{$prefix}post-color: #{$black};
-
-  position: relative;
-  display: block;
-  padding: 0 16px;
-  font-size: 14px;
-
-  @media screen and (min-device-width: 428px) {
-    padding: 0 24px;
-    font-size: 16ppx;
-  }
-
-  font-family: $font-family-roboto;
-  font-size: 15px;
-  font-weight: normal;
-
-  color: var(--#{$prefix}post-color);
-  background-color: $white;
-  text-decoration: none;
-  user-select: none;
-}
 
 // Post
 .post-header {

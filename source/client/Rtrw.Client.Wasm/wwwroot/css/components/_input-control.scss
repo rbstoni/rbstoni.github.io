@@ -10,9 +10,15 @@
     vertical-align: top;
     margin-top: 6px;
 
-    margin-top: 16px;
-    margin-bottom: 8px;
+    &.#{$prefix}input-control-margin-normal {
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
 
+    &.#{$prefix}input-control-margin-dense {
+        margin-top: 3px;
+        margin-bottom: 2px;
+    }
 
     &.#{$prefix}input-control-full-width {
         width: 100%;
@@ -27,10 +33,6 @@
             &.#{$prefix}input.#{$prefix}input-text {
                 margin-top: 16px;
             }
-
-            &.#{$prefix}input.#{$prefix}input-filled {}
-
-            &.#{$prefix}input.#{$prefix}input-outlined {}
         }
     }
 
@@ -156,6 +158,9 @@
     color: var(--#{$prefix}danger) !important;
 }
 
+.#{$prefix}input-helper-text-margin-dense {
+    margin-top: 4px;
+}
 
 .#{$prefix}input-helper-text-contained {
     margin-left: 14px;

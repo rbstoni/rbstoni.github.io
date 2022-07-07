@@ -1,0 +1,15 @@
+.scope-name {
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: left;
+  color: #716464;
+}
+
+.scope-desc {
+  font-family: Roboto;
+  font-weight: normal;
+  font-size: 15px;
+  text-align: left;
+  color: #716464;
+}

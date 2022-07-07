@@ -1,0 +1,39 @@
+﻿@page "/account/profile/{Id?}"
+@page "/{userName?}"
+
+<RtrwAppBar StartBarContentClasname="rtrw-flex rtrw-align-items-center">
+    <StartBarContent>
+        <RtrwIconButton Style="margin-left: -12px">
+            <RtrwSvgChevronLeft Style="width: 24px; height: 24px" />
+        </RtrwIconButton>
+        @if (show)
+        {
+            <div class="rtrw-margin-start-24px">
+                Tai Kuda
+            </div>
+        }
+    </StartBarContent>
+    <EndBarContent>
+        @if (show)
+        {
+            <RtrwIconButton>
+                <RtrwSvgMessage />
+            </RtrwIconButton>
+        }
+        <RtrwIconButton Style="margin-right: -12px">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="#000000" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+            </svg>
+        </RtrwIconButton>
+    </EndBarContent>
+</RtrwAppBar>
+<WargaCard></WargaCard>
+
+@code {
+    bool show = true;
+    string userName;
+    [Parameter] public Warga Warga { get; set; } = new();
+    [Parameter] public string Id { get; set; }
+
+}

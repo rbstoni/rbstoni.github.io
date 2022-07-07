@@ -5,7 +5,7 @@
 @using Rtrw.Client.Wasm.ViewModels
 @attribute [AllowAnonymous]
 @layout AuthBaseLayout
-@inject IAuthenticationService AuthenticationService
+@inject IAccountService AccountService
 
 <div class="login-container" tabindex="-1">
     <div class="login-title">Selamat Datang Kembali!</div>
@@ -51,7 +51,10 @@
                 }
             </AdornmentSvg>
         </RtrwTextField>
-        <div class="lupa-kata-sandi" type="button" @onclick="LupaKataSandi">Lupa kata sandi?</div>
+        <div class="rtrw-inline-flex rtrw-justify-content-between rtrw-align-items-center rtrw-width-100">
+            <div class="rtrw-margin-end-auto lupa-kata-sandi" type="button" @onclick="LupaKataSandi">Lupa kata sandi?</div>
+            <div class="rtrw-margin-start-auto" style="font-size: 14px; color: var(--rtrw-info)" type="button" @onclick="LoginAsToni">Login as Toni</div>
+        </div>
         <div class="rtrw-flex rtrw-justify-content-center">
             <RtrwButton Type=ButtonType.Button
                         OnClick="@OnValidSubmitHandler"
@@ -68,7 +71,6 @@
                 else
                 {
                     @buttonLabel
-                    ;
                 }
             </RtrwButton>
         </div>
@@ -98,7 +100,7 @@
     }
     async void OnValidSubmitHandler()
     {
-        var login = await AuthenticationService.LoginAsync(loginRequest);
+        var login = await AccountService.LoginAsync(loginRequest);
         if (login)
         {
             NavigationManager.NavigateTo(ReturnUrl);
@@ -111,7 +113,7 @@
 
     async Task<bool> CheckIfEmailExistOnDatabase(string email)
     {
-        emailExist = await AuthenticationService.CheckIfEmailExistOnDatabase(email);
+        emailExist = await AccountService.CheckIfEmailExistOnDatabase(email);
         return emailExist;
     }
 
@@ -120,5 +122,11 @@
     void LupaKataSandi()
     {
         return;
+    }
+
+    void LoginAsToni()
+    {
+        loginRequest.Email = "toni@rtrw.app";
+        loginRequest.Password = "p4ssw0rd";
     }
 }

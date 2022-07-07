@@ -29,6 +29,7 @@ namespace Rtrw.Client.Wasm.Components
 
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public RenderFragment AdornmentContent { get; set; }
+        [Parameter] public RenderFragment AdornmentSvg { get; set; }
         [Parameter] public bool Clearable { get; set; } = false;
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
         [Parameter] public IMask Mask { get => mask; set => SetMask(value); }
@@ -298,14 +299,14 @@ namespace Rtrw.Client.Wasm.Components
             await Update();
             //Console.WriteLine($"OnCut: '{Mask}'");
         }
-        private void SetCaretPosition(int caret, (int, int)? selection = null, bool render = true)
+        private void SetCaretPosition(int _caret, (int, int)? _selection = null, bool render = true)
         {
             if (!isFocused)
                 return;
-            caret = caret;
+            caret = _caret;
             if (caret == 0)
                 caret = 0;
-            selection = selection;
+            selection = _selection;
             //if (selection == null)
             //{
             //    //Console.WriteLine("#Setting Caret Position: " + caret);
@@ -355,9 +356,9 @@ namespace Rtrw.Client.Wasm.Components
         }
         private void UpdateClearable(object value)
         {
-            var showClearable = Clearable && !string.IsNullOrWhiteSpace(Text);
-            if (showClearable != showClearable)
-                showClearable = showClearable;
+            var _showClearable = Clearable && !string.IsNullOrWhiteSpace(Text);
+            if (showClearable != _showClearable)
+                showClearable = _showClearable;
         }
 
     }

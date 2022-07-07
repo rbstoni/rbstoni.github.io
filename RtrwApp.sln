@@ -7,7 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{053C3F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{9ABF6157-579D-401C-84D2-F82EAB1D3202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rtrw.Client.Wasm", "source\client\Rtrw.Client.Wasm\Rtrw.Client.Wasm.csproj", "{012EF176-504A-4868-8284-C51BC6453BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rtrw.Client.Wasm", "source\client\Rtrw.Client.Wasm\Rtrw.Client.Wasm.csproj", "{012EF176-504A-4868-8284-C51BC6453BCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{628234B6-77D8-4BFB-9A66-28D717DECD96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{93C50F58-1686-4959-AC70-D2164F33B67F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rtrw.Server.WebApi", "source\server\Rtrw.Server.WebApi\Rtrw.Server.WebApi.csproj", "{C83BCA41-7B81-4C0D-A6BD-77A1CD347458}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rtrw.Shared", "source\shared\Rtrw.Shared\Rtrw.Shared.csproj", "{9EA7AD8A-F668-44F7-9F8E-1FE5E89B3231}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +27,12 @@ Global
 		{012EF176-504A-4868-8284-C51BC6453BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012EF176-504A-4868-8284-C51BC6453BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012EF176-504A-4868-8284-C51BC6453BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83BCA41-7B81-4C0D-A6BD-77A1CD347458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83BCA41-7B81-4C0D-A6BD-77A1CD347458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83BCA41-7B81-4C0D-A6BD-77A1CD347458}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA7AD8A-F668-44F7-9F8E-1FE5E89B3231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA7AD8A-F668-44F7-9F8E-1FE5E89B3231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA7AD8A-F668-44F7-9F8E-1FE5E89B3231}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -26,6 +40,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9ABF6157-579D-401C-84D2-F82EAB1D3202} = {053C3FD4-F172-471A-9284-714EC6290C41}
 		{012EF176-504A-4868-8284-C51BC6453BCC} = {9ABF6157-579D-401C-84D2-F82EAB1D3202}
+		{628234B6-77D8-4BFB-9A66-28D717DECD96} = {053C3FD4-F172-471A-9284-714EC6290C41}
+		{93C50F58-1686-4959-AC70-D2164F33B67F} = {053C3FD4-F172-471A-9284-714EC6290C41}
+		{C83BCA41-7B81-4C0D-A6BD-77A1CD347458} = {628234B6-77D8-4BFB-9A66-28D717DECD96}
+		{9EA7AD8A-F668-44F7-9F8E-1FE5E89B3231} = {93C50F58-1686-4959-AC70-D2164F33B67F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76CB4B21-82C6-4472-A0AC-F9803CED5F61}

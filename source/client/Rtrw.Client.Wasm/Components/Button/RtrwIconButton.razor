@@ -17,10 +17,10 @@
 </RtrwElement>
 
 @code {
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public ThemeColor Color { get; set; }
-    [Parameter] public Edge Tepian { get; set; }
-    [Parameter] public string Title { get; set; }
+    [Parameter] public Edge Edge { get; set; }
+    [Parameter] public string? Title { get; set; }
     [Parameter] public Variant Variant { get; set; } = Variant.Text;
     protected bool AsButton => Variant != Variant.Text;
     protected string Classname =>
@@ -29,7 +29,7 @@
             .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text hover:rtrw-{Color.EnumToDescriptionString}-hover", !AsButton && Color != ThemeColor.Default)
             .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}", AsButton)
             .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}-{Color.EnumToDescriptionString()}", AsButton)
-            .AddClass($"rtrw-icon-button-tepian-{Tepian.EnumToDescriptionString()}", when: () => Tepian != Edge.False)
+            .AddClass($"rtrw-icon-button-tepian-{Edge.EnumToDescriptionString()}", when: () => Edge != Edge.False)
             .AddClass(Class)
             .Build();
 }

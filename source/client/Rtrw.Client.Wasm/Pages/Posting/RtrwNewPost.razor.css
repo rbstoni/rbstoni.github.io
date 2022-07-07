@@ -3,6 +3,8 @@
   display: grid;
   grid-template-rows: 56px 1fr 56px;
   height: 100vh;
+  max-width: 100%;
+  overflow: auto;
 }
 
 .page-header {
@@ -26,16 +28,11 @@
   text-align: center;
   color: #716464;
 }
-.page-header .rtrw-button-filled {
-  background-color: var(--rtrw-primary);
-}
-.page-header .rtrw-button-filled:disabled {
-  background-color: var(--rtrw-gray-400);
-}
 
 ::deep .page-body {
   margin: 16px 0;
   padding: 0 16px;
+  overflow: auto;
 }
 @media screen and (min-device-width: 600px) {
   ::deep .page-body {
@@ -47,7 +44,6 @@
   border-radius: 14px;
   background: rgba(185, 177, 177, 0.15);
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
-  padding: 8px;
 }
 
 ::deep .page-body-input-container {
@@ -166,39 +162,4 @@
   ::deep .page-footer {
     padding: 0 24px;
   }
-}
-
-::deep .polling-result-container {
-  border-radius: 14px;
-  background: #fff;
-  border: 1px solid rgba(112, 112, 112, 0.25);
-  margin: 8px 16px;
-  padding: 8px;
-  -webkit-animation: rtrw-slide-up 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-          animation: rtrw-slide-up 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-}
-
-::deep .polling-result-item {
-  margin: 4px;
-  border-radius: 14px;
-  padding: 8px;
-  border: 1px solid rgba(112, 112, 112, 0.25);
-}
-
-::deep .polling-result-title-container {
-  position: relative;
-  display: flex;
-  flex-grow: 0;
-  flex-shrink: 0;
-  justify-content: space-between;
-  padding: 4px 8px;
-}
-
-::deep .polling-result-title {
-  font-family: Roboto;
-  font-weight: normal;
-  font-size: 15px;
-  text-align: left;
-  color: #716464;
-  flex-grow: 0;
 }

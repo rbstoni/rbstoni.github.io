@@ -2,15 +2,16 @@
 {
     public interface IMask
     {
-        string Mask { get; }
-        string Text { get; }
-        string GetCleanText() => Text;
         int CaretPos { get; set; }
+        string Mask { get; }
         (int, int)? Selection { get; set; }
-        void Insert(string input);
-        void Delete();
+        string Text { get; }
+
         void Backspace();
         void Clear();
+        void Delete();
+        string GetCleanText() => Text;
+        void Insert(string input);
         void SetText(string text);
         void UpdateFrom(IMask other);
     }

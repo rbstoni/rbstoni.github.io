@@ -1,0 +1,67 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Components.Extensions
+@using Rtrw.Client.Wasm.Models
+
+<RtrwModal Class="rtrw-flex rtrw-flex-col rtrw-gap-row-8px">
+    <ModalContent>
+        <div style="font-weight:bold; font-size:17px; color#716464">Post akan terlihat oleh:</div>
+        <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-center rtrw-gap-4px">
+            <img src="media/scope/Scope_Semua_Warga_RTRW.png" />
+            <div class="scope-info" style="margin-right: auto">
+                <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+            </div>
+            <RtrwButton Type=ButtonType.Button
+                        Variant=Variant.Filled
+                        Style="border-radius: 13px"
+                        Color="@(Scope==Scope.SemuaWargaRtrw ? ThemeColor.Primary:ThemeColor.Secondary)"
+                        OnClick="@(()=>ChangeScopeHandler(Scope.SemuaWargaRtrw))">
+                Pilih
+            </RtrwButton>
+        </div>
+
+        <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-center rtrw-gap-4px">
+            <img src="media/scope/Scope_Warga_Lebih_luas.png" style="border-radius:50%;" />
+            <div class="scope-info" style="margin-right: auto">
+                <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+            </div>
+            <RtrwButton Type=ButtonType.Button
+                        Variant=Variant.Filled
+                        Style="border-radius: 13px"
+                        Color="@(Scope==Scope.WargaLebihLuas ? ThemeColor.Primary:ThemeColor.Secondary)"
+                        OnClick="@(()=>ChangeScopeHandler(Scope.WargaLebihLuas))">
+                Pilih
+            </RtrwButton>
+        </div>
+
+        <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-center rtrw-gap-4px">
+            <img src="media/scope/Scope_Warga_Sekitar.png" />
+            <div class="scope-info" style="margin-right: auto">
+                <div class="scope-name">@Audience.SemuaWargaRtrw.Name</div>
+                <div class="scope-desc">@Audience.SemuaWargaRtrw.Description</div>
+            </div>
+            <RtrwButton Type=ButtonType.Button
+                        Variant=Variant.Filled
+                        Style="border-radius: 13px"
+                        Color="@(Scope==Scope.WargaSekitar ? ThemeColor.Primary:ThemeColor.Secondary)"
+                        OnClick="@(()=>ChangeScopeHandler(Scope.WargaSekitar))">
+                Pilih
+            </RtrwButton>
+        </div>
+    </ModalContent>
+</RtrwModal>
+
+@code {
+    [CascadingParameter]
+    public RtrwModalInstance RtrwModalInstance { get; set; }
+
+    [Parameter]
+    public Scope Scope { get; set; } = new();
+
+    void ChangeScopeHandler(Scope scope)
+    {
+        Scope = scope;
+        RtrwModalInstance.Close(ModalResult.Ok(Scope));
+    }
+}

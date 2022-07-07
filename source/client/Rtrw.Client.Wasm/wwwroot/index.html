@@ -8,6 +8,8 @@
     <base href="/" />
 
     <!-- Rtrw main style -->
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/loader.css" rel="stylesheet"/>
     <link href="css/rtrw.css" rel="stylesheet" />
 
     <!-- Blazor css isolation -->
@@ -32,7 +34,11 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="location-indicator-container">
+            <div class="location-indicator"></div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.

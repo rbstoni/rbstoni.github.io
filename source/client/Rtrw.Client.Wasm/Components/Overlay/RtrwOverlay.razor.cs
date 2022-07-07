@@ -28,13 +28,9 @@ namespace Rtrw.Client.Wasm.Components
             .AddStyle(Style)
             .Build();
 
-        [Inject] public IScrollManager ScrollManager { get; set; }
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        [Parameter]
-        public EventCallback<bool> VisibleChanged { get; set; }
-
+        [Inject] public IScrollManager? ScrollManager { get; set; }
+        [Parameter] public RenderFragment? ChildContent { get; set; }
+        [Parameter] public EventCallback<bool> VisibleChanged { get; set; }
         [Parameter]
         public bool Visible
         {
@@ -47,23 +43,14 @@ namespace Rtrw.Client.Wasm.Components
                 VisibleChanged.InvokeAsync(visible);
             }
         }
-        [Parameter]
-        public bool AutoClose { get; set; }
-        [Parameter]
-        public bool LockScroll { get; set; } = true;
-        [Parameter]
-        public string LockScrollClass { get; set; } = "scroll-locked";
-        [Parameter]
-        public bool DarkBackground { get; set; }
-        [Parameter]
-        public bool LightBackground { get; set; }
-        [Parameter]
-        public bool Absolute { get; set; }
-        [Parameter]
-        public int ZIndex { get; set; } = 5;
-
-        [Parameter]
-        public EventCallback<MouseEventArgs> OnClick { get; set; }
+        [Parameter] public bool AutoClose { get; set; }
+        [Parameter] public bool LockScroll { get; set; } = true;
+        [Parameter] public string LockScrollClass { get; set; } = "scroll-locked";
+        [Parameter] public bool DarkBackground { get; set; }
+        [Parameter] public bool LightBackground { get; set; }
+        [Parameter] public bool Absolute { get; set; }
+        [Parameter] public int ZIndex { get; set; } = 5;
+        [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
         protected internal void OnClickHandler(MouseEventArgs ev)
         {
             if (AutoClose)
@@ -71,7 +58,6 @@ namespace Rtrw.Client.Wasm.Components
             OnClick.InvokeAsync(ev);
         }
 
-        //if not visible or CSS `position:absolute`, don't lock scroll
         protected override void OnAfterRender(bool firstTime)
         {
             if (!LockScroll || Absolute)
@@ -81,7 +67,6 @@ namespace Rtrw.Client.Wasm.Components
                 BlockScroll();
             else
                 UnblockScroll();
-
         }
 
         //locks the scroll attaching a CSS class to the specified element, in this case the body

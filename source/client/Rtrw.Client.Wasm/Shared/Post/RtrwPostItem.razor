@@ -1,12 +1,14 @@
 ﻿@using Microsoft.EntityFrameworkCore
 @using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Components.Enums
 @using Rtrw.Client.Wasm.Enums
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Utilities
+@using static Rtrw.Client.Wasm.Shared.Post.Components.AddReaction
 @inherits RtrwComponentBase
 @inject NavigationManager NavigationManager
 @inject IPostService PostService
-@inject ICurrentUser currentUser
+@inject ICurrentUser CurrentUser
 
 <CascadingValue Value="@Post" IsFixed="true">
     <div class="post-container @Class" style="@PostListItemStyle">
@@ -23,7 +25,7 @@
                                 &bull;
                             </span>
                             <div class="display-location" type="button">
-                                @Post.Author.Location?.Alamat
+                                @Post.Author.Location?.Kelurahan
                             </div>
                         </div>
                         <div class="display-date" type="button">
@@ -37,11 +39,7 @@
             </div>
         </div>
 
-        <RtrwCarousel ItemsSource="@Post.Media" @bind-SelectedIndex="selectedIndex" Style="height: 250px">
-            <ItemTemplate>
-                <img src="@context.MediumUrl" style="border-radius: 12px; height: 100%" />
-            </ItemTemplate>
-        </RtrwCarousel>
+        <RtrwConveyer Media="@Post.Media" BorderRadius="12px" Height="250px" />
 
         <div class="post-content" type="button" @onclick="@(()=>NavigationManager.NavigateTo($"post/{Post.Id}"))">
             <TruncateText Text="@Post.Text" />
@@ -56,16 +54,7 @@
                 <LastThreeReaction Reactions="@Post.Reactions" />
             </div>
             <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center">
-                @if (currentUserHasReacted)
-                {
-                    <RtrwButton OnClick="RemoveCurrentUserReaction">
-                        @currentUserReactionName
-                    </RtrwButton>
-                }
-                else if (!currentUserHasReacted)
-                {
-                    <AddReaction AddNewReactionCallback="GetCurrentUserReaction" />
-                }
+                <AddReaction NewReaction="@AddCurrentUserReaction" RemoveReaction="@RemoveCurrentUserReaction"/>
                 <RtrwButton Style="gap: 8px">
                     <RtrwSvgComment />
                     @if (Post.Comments?.Count > 0)
@@ -82,37 +71,36 @@
 </CascadingValue>
 
 @code {
-    [Parameter] public string PostId { get; set; }
+    [Parameter] public string PostId { get; set; } = string.Empty;
     [Parameter] public bool NoPadding { get; set; }
     Post Post { get; set; } = new();
     int selectedIndex;
-    string currentUserReactionName;
-    bool currentUserHasReacted;
-    Task GetCurrentUserReaction(Emoji emoji)
+
+    async Task AddCurrentUserReaction(Emoji emoji)
     {
-        Reaction reaction = new Reaction() { Reactor = currentUser.Warga, Emoji = emoji };
-        var userHasReacted = Post.Reactions.Any(x => x.Reactor.Id == reaction.Reactor.Id);
+        Reaction reaction = new Reaction() { Reactor = CurrentUser.Warga, Emoji = emoji };
+        var post = await PostService.GetPostByIdAsync(Post.Id);
+        var userHasReacted = post.Reactions.Any(x => x.Reactor.Id == reaction.Reactor.Id);
         if (!userHasReacted)
         {
-            Post.Reactions.Add(reaction);
-            currentUserReactionName = reaction.Emoji.EnumToDescriptionString();
-            currentUserHasReacted = true;
+            post.Reactions.Add(reaction);
+            //await PostService.SavePostAsync(post);
         }
+        Post = post;
         StateHasChanged();
-
-        return Task.CompletedTask;
     }
 
-    Task RemoveCurrentUserReaction()
+    async Task RemoveCurrentUserReaction()
     {
-        var currentUserReaction = Post.Reactions.FirstOrDefault(x => x.Reactor.Id == currentUser.Warga.Id);
+        var currentUserReaction = Post.Reactions.FirstOrDefault(x => x.Reactor.Id == CurrentUser.Warga.Id);
         if (currentUserReaction != null)
         {
             Post.Reactions.Remove(currentUserReaction);
-            currentUserHasReacted = false;
+            //await PostService.SaveChangesAsync();
         }
-        return Task.CompletedTask;
+        StateHasChanged();
     }
+
     protected override async Task OnParametersSetAsync()
     {
         Post = await PostService.GetPostByIdAsync(PostId);

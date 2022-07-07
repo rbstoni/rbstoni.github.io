@@ -1,4 +1,5 @@
 ﻿using Rtrw.Client.Wasm.FakeData.Database;
+using Rtrw.Client.Wasm.Models;
 
 namespace Rtrw.Client.Wasm.FakeData.Services
 {
@@ -6,7 +7,6 @@ namespace Rtrw.Client.Wasm.FakeData.Services
     {
         Task InitializeFakeRandomPostAsync();
 
-        Task InitializeFakeRandomWargaAsync();
     }
 
     public class InitializerService : IInitializerService
@@ -20,21 +20,39 @@ namespace Rtrw.Client.Wasm.FakeData.Services
         public async Task InitializeFakeRandomPostAsync()
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            if (dbContext.Posts.Count() == 0)
+            if (!dbContext.Posts.Any())
             {
-                var randomPost = Dummy.FakePost;
-                await dbContext.Posts.AddAsync(randomPost);
+                var randomPost = Dummy.GenerateFakePost().Generate(50);
+                await dbContext.Posts.AddRangeAsync(randomPost);
                 await dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task InitializeFakeRandomWargaAsync()
+        async Task InitializeFakeRandomWargaAsync()
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
             if (dbContext.Warga.Count() == 0)
             {
-                var randomWarga = Dummy.FakeWarga;
-                await dbContext.Warga.AddAsync(randomWarga);
+                Warga newWarga = new()
+                {
+                    DateOfBirth = new DateTime(1985, 5, 28),
+                    FirstName = "Toni",
+                    LastName= "Ribas",
+                    Email = "toni@rtrw.app",
+                    Gender = Enums.Gender.Lakilaki,
+                    Location = new Geocoder()
+                    {
+                        Provinsi = "DKI Jakarta",
+                        KabupatenKota = "Kota Jakarta Utara",
+                        Kecamatan = "Tanjung Priok",
+                        Kelurahan = "Sunter Agung",
+                        KodePos = "14350",
+                        Alamat = "Sunter Muara 1B",
+                        Longitude = "106.85654880943139",
+                        Latitude = "-6.144607199436237",
+                    },
+                };
+                await dbContext.Warga.AddAsync(newWarga);
                 await dbContext.SaveChangesAsync();
             }
         }

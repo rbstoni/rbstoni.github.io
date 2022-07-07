@@ -13,14 +13,12 @@ namespace Rtrw.Client.Wasm.Components
         {
             Entering, Entered, Exiting, Exited
         }
-
         internal double height;
         private int listenerId;
         private bool expanded, isRendered, updateHeight;
         private ElementReference container, wrapper;
         internal CollapseState state = CollapseState.Exited;
         private DotNetObjectReference<RtrwCollapse> dotNetRef;
-
         protected string Stylename =>
             new StyleBuilder()
             .AddStyle("max-height", MaxHeight.ToPx(), MaxHeight != null)
@@ -29,7 +27,6 @@ namespace Rtrw.Client.Wasm.Components
             .AddStyle("animation-duration", $"{CalculatedAnimationDuration.ToString("#.##", CultureInfo.InvariantCulture)}s", state == CollapseState.Entering)
             .AddStyle(Style)
             .Build();
-
         protected string Classname =>
             new CssBuilder("rtrw-collapse-container")
             .AddClass($"rtrw-collapse-entering", state == CollapseState.Entering)
@@ -37,10 +34,6 @@ namespace Rtrw.Client.Wasm.Components
             .AddClass($"rtrw-collapse-exiting", state == CollapseState.Exiting)
             .AddClass(Class)
             .Build();
-
-        /// <summary>
-        /// If true, expands the panel, otherwise collapse it. Setting this prop enables control over the panel.
-        /// </summary>
         [Parameter]
         public bool Expanded
         {
@@ -65,24 +58,10 @@ namespace Rtrw.Client.Wasm.Components
                 _ = ExpandedChanged.InvokeAsync(expanded);
             }
         }
-        /// <summary>
-        /// Explicitly sets the height for the Collapse element to override the css default.
-        /// </summary>
         [Parameter] public int? MaxHeight { get; set; }
-
-        /// <summary>
-        /// Child content of component.
-        /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
-
         [Parameter] public EventCallback OnAnimationEnd { get; set; }
-
         [Parameter] public EventCallback<bool> ExpandedChanged { get; set; }
-
-        /// <summary>
-        /// Modified Animation duration that scales with height parameter.
-        /// Basic implementation for now but should be a math formula to allow it to scale between 0.1s and 1s for the effect to be consistently smooth.
-        /// </summary>
         private double CalculatedAnimationDuration
         {
             get
@@ -98,7 +77,6 @@ namespace Rtrw.Client.Wasm.Components
             }
             set { }
         }
-
         internal async Task UpdateHeight()
         {
             if (disposeCount > 0)
@@ -115,12 +93,10 @@ namespace Rtrw.Client.Wasm.Components
                 height = MaxHeight.Value;
             }
         }
-
         protected override void OnInitialized()
         {
             dotNetRef = DotNetObjectReference.Create(this);
         }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -137,9 +113,7 @@ namespace Rtrw.Client.Wasm.Components
             }
             await base.OnAfterRenderAsync(firstRender);
         }
-
         internal int disposeCount;
-
         protected virtual void Dispose(bool disposing)
         {
             if (Interlocked.Increment(ref disposeCount) == 1)

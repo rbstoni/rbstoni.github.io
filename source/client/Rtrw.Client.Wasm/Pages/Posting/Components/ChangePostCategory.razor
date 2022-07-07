@@ -1,0 +1,43 @@
+﻿@using Rtrw.Client.Wasm.Components.Extensions
+@using Rtrw.Client.Wasm.Models
+<div>
+    <div class="rtrw-position-relative" style="font-family: Railway; font-size: 22px; font-weight: normal; color:#716464" type="button" @onclick="OpenCategory">
+        @Category.EnumToDescriptionString()
+        <svg xmlns="http://www.w3.org/2000/svg" width="14.681" height="8.84" viewBox="0 0 14.681 8.84">
+            <path id="Path_2461" data-name="Path 2461" d="M4436.365-213.923l-5.219-5.219,5.219-5.219" transform="translate(226.482 4438.486) rotate(-90)" fill="none" stroke="#0db201" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+        </svg>
+    </div>
+    @if (showCategory)
+    {
+        <div class="rtrw-position-absolute">
+            @if (Category != PostCategory.SuaraWarga)
+            {
+                <div style="font-family: Railway; font-size: 22px; font-weight: normal; color:#716464" type="button" @onclick="()=>ChangeCategory(PostCategory.SuaraWarga)">Suara</div>
+            }
+            @if (Category != PostCategory.Liputan)
+            {
+                <div style="font-family: Railway; font-size: 22px; font-weight: normal; color:#716464" type="button" @onclick="()=>ChangeCategory(PostCategory.Liputan)">Liputan</div>
+            }
+            @if (Category != PostCategory.Pengumuman)
+            {
+                <div style="font-family: Railway; font-size: 22px; font-weight: normal; color:#716464" type="button" @onclick="()=>ChangeCategory(PostCategory.Pengumuman)">Pengumuman</div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public PostCategory Category { get; set; }
+    [Parameter] public EventCallback<PostCategory> UpdatePostCategory { get; set; }
+    bool showCategory;
+    void OpenCategory()
+    {
+        showCategory = !showCategory;
+    }
+    void ChangeCategory(PostCategory category)
+    {
+        Category = category;
+        showCategory = false;
+        UpdatePostCategory.InvokeAsync(category);
+    }
+}

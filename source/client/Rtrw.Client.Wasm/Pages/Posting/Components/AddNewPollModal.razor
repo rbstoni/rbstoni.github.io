@@ -1,67 +1,91 @@
 ﻿@using Rtrw.Client.Wasm.Components.Enums
 @using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Svgs
+@using Rtrw.Client.Wasm.Validators
 <RtrwModal>
     <ModalContent>
-        <EditForm Model="Poll">
-            <RtrwFluentValidationValidator />
-            <div class="poll-modal-textarea-container">
-                <RtrwTextField T="string"
-                               Label="Pertanyaan yang diajukan:"
-                               @bind-Value="@Poll.Question"
-                               For="@(()=>Poll.Question)"
-                               Variant="Variant.Filled"
-                               MaxLength="160"
-                               Required
-                               Clearable>
-                </RtrwTextField>
-            </div>
-            <div class="rtrw-typography-h6 rtrw-margin-y-8px">Opsi Jawaban: </div>
+        <RtrwForm Model="Poll" @ref="newPollForm" @bind-IsValid="validated" Validation="@(pollFluentValidator.ValidateValue)" ValidationDelay="0">
+            <RtrwTextField T="string"
+                           Lines="2"
+                           Class="rtrw-margin-0px"
+                           @bind-Value="@Poll.Question"
+                           For="@(()=>Poll.Question)"
+                           Label="Pertanyaan yang diajukan:"
+                           Variant="Variant.Outlined"
+                           Margin="Margin.None"
+                           Required
+                           Immediate
+                           MaxLength="160"
+                           Clearable>
+            </RtrwTextField>
+            <div class="rtrw-typography-h6 rtrw-margin-y-4px">Opsi Jawaban: </div>
             <div class="rtrw-flex rtrw-flex-col">
                 @foreach (var (answer, idx) in @Poll.Answers.Select((answer, idx) => (answer, idx)))
                 {
                     <RtrwTextField T="string"
-                               Label="Jawaban"
                                @bind-Value="@answer.Answer"
                                For="@(()=>answer.Answer)"
-                               Variant="Variant.Filled"
-                               MaxLength="160"
+                               Label="@($"Jawaban {idx+1}")"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.None"
+                               Adornment="Adornment.End"
+                               OnAdornmentClick="@(e=>RemovePollAnswer(answer))"
                                Required
+                               Immediate
+                               MaxLength="160"
                                Clearable>
+                        <AdornmentSvg>
+                            @if (Poll.Answers.Count > 3)
+                            {
+                                <RtrwSvgRemoveCircle />
+                            }
+                        </AdornmentSvg>
                     </RtrwTextField>
                 }
                 <RtrwButton Type=ButtonType.Button
+                            Class="rtrw-margin-top-8px"
                             Variant=Variant.Outlined
-                            OnClick="AddNewPollAnswer"
+                            OnClick=" AddNewPollAnswer"
                             Disabled="buttonDisabled"
                             FullWidth="false">
                     Tambahkan pilihan
                 </RtrwButton>
             </div>
-        </EditForm>
+        </RtrwForm>
     </ModalContent>
     <FooterContent>
-        <RtrwButton Type=ButtonType.Button OnClick="Submit" Variant=Variant.Filled Color=ThemeColor.Primary>Buat</RtrwButton>
+        <RtrwButton Type=ButtonType.Button
+                    OnClick="SubmitNewPoll"
+                    Variant=Variant.Filled
+                    Color=ThemeColor.Primary
+                    Disabled="@(!validated)">
+            Buat
+        </RtrwButton>
     </FooterContent>
 </RtrwModal>
 
 @code {
     [CascadingParameter] public RtrwModalInstance? ModalInstance { get; set; }
     [Parameter] public Poll Poll { get; set; } = new();
+    RtrwForm newPollForm;
+    PollFluentValidator pollFluentValidator = new();
+    bool validated;
     bool buttonDisabled => Poll.Answers.Count > 4;
+
+    void RemovePollAnswer(PollAnswer pollAnswer) => Poll.Answers.Remove(pollAnswer);
     protected override void OnParametersSet()
     {
-        base.OnParametersSet();
         while (Poll.Answers.Count() < 3)
         {
             Poll.Answers.Add(new PollAnswer());
         }
     }
-    private void AddNewPollAnswer()
+    void AddNewPollAnswer()
     {
         if (Poll.Answers.Count < 5)
         {
             Poll.Answers.Add(new PollAnswer());
         }
     }
-    void Submit() => ModalInstance.Close(ModalResult.Ok(Poll));
+    void SubmitNewPoll() => ModalInstance.Close(ModalResult.Ok(Poll));
 }

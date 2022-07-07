@@ -1,0 +1,25 @@
+﻿@using Rtrw.Client.Wasm.Models
+@if (Scope == Scope.SemuaWargaRtrw)
+{
+    <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-8px rtrw-width-100" style="margin-right: auto">
+        <img src="media/scope/Scope_Semua_Warga_RTRW.png" style="width:43px" />
+        <div style="font-weight: normal; font-size:13px">@Audience.SemuaWargaRtrw.Name</div>
+    </div>
+}
+@if (Scope == Scope.WargaLebihLuas)
+{
+    <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-8px rtrw-width-100" style="margin-right: auto">
+        <img src="media/scope/Scope_Warga_Lebih_luas.png" style="width:43px" />
+        <div style="font-weight: normal; font-size:13px">@Audience.WargaLebihLuas.Name</div>
+    </div>
+}
+@if (Scope == Scope.WargaSekitar)
+{
+    <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-8px rtrw-width-100" style="margin-right: auto">
+        <img src="media/scope/Scope_Warga_Sekitar.png" style="width:43px" />
+        <div style="font-weight: normal; font-size:13px">@Audience.WargaSekitar.Name</div>
+    </div>
+}
+@code {
+    [Parameter] public Scope Scope { get; set; }
+}

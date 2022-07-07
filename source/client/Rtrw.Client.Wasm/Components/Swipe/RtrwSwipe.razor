@@ -14,7 +14,6 @@
     (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
     (TouchPoint ReferencePoint, DateTime StartTime) endPoint;
     private void OnTouchStartHandler(TouchEventArgs touch) => startPoint = (touch.TargetTouches[0], DateTime.Now);
-
     private void OnTouchEndHandler(TouchEventArgs touch)
     {
         endPoint = (touch.ChangedTouches[0], DateTime.Now);

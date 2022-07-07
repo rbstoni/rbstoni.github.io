@@ -2,7 +2,8 @@
   --rtrw-post-color: #0f1419;
   --rtrw-text-color: #0f1419;
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   padding: 4px 16px;
   gap: 8px;
   font-size: 14px;
@@ -18,30 +19,6 @@
   .post-container {
     padding: 8px 24px;
     font-size: 16px;
-  }
-}
-
-.post-detail-container {
-  --rtrw-post-color: #0f1419;
-  position: relative;
-  display: block;
-  padding: 0 16px;
-  font-size: 14px;
-  font-family: "Roboto", sans-serif;
-  font-size: 15px;
-  font-weight: normal;
-  color: var(--rtrw-post-color);
-  background-color: #ffffff;
-  text-decoration: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-@media screen and (min-device-width: 428px) {
-  .post-detail-container {
-    padding: 0 24px;
-    font-size: 16ppx;
   }
 }
 

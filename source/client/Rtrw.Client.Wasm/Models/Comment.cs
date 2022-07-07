@@ -7,8 +7,8 @@ namespace Rtrw.Client.Wasm.Models
     {
         public string Id { get; set; } = $"comment-{Guid.NewGuid().ToString("N")}";
         public Warga Commenter { get; set; }
-        public CommentOption Option { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public CommentOption? Option { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime EditedAt { get; set; }
         public string? CommentUrl { get; set; }
         public string Text { get; set; }

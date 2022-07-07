@@ -6,12 +6,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<WasmBuildNative>true</WasmBuildNative>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+		<Authors>Rantoni Pasaribu</Authors>
+		<Company>IKT</Company>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
 		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="FluentValidation" Version="11.1.0" />
+		<PackageReference Include="JWT" Version="9.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.6" PrivateAssets="all" />
@@ -22,6 +25,14 @@
 
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Shared\Post\Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Components\Conveyor\RtrwConveyer.razor" />
 	</ItemGroup>
 
 </Project>

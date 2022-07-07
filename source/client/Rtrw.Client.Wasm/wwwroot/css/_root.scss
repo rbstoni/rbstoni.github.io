@@ -79,7 +79,7 @@ $headings-color: null !default;
   --#{$prefix}body-text-align: left;
   --#{$prefix}body-color: #{$black};
   --#{$prefix}body-bg: #{$body-bg};
-  --#{$prefix}disabled-bg: #0000001e;
+  --#{$prefix}disabled-bg: $default-disabled-color;
   --#{$prefix}disabled-color: #00000042;
 
   --#{$prefix}border-width: #{$border-width};

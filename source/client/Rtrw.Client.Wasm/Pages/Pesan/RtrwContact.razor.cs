@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Rtrw.Client.Wasm.Models;
 using System.ComponentModel;
 
 namespace Rtrw.Client.Wasm.Pages.Pesan
@@ -10,11 +11,10 @@ namespace Rtrw.Client.Wasm.Pages.Pesan
         bool contactOptionsShow;
         bool avatarClick;
         bool settingClick;
-        string message = "start touching";
         string direction;
         (TouchPoint ReferencePoint, DateTime StartTime) startPoint;
 
-        [Parameter] public ContactResponse Contact { get; set; } = new();
+        [Parameter] public Contact Contact { get; set; } = new();
 
         void OnTouchStartHandler(TouchEventArgs touch)
         {
@@ -50,28 +50,5 @@ namespace Rtrw.Client.Wasm.Pages.Pesan
         void AvatarOnClickHandler()
         {
         }
-    }
-
-    public class ContactResponse
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string LastMessage { get; set; }
-        public DateTime LastUpdate { get; set; }
-        public bool IsPinned { get; set; }
-        public string ImageUrl { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public ContactType Type { get; set; }
-        public DateTime LastModified { get; set; }
-    }
-
-    public enum ContactType
-    {
-        [Description("Personal")]
-        Personal,
-
-        [Description("Group")]
-        Group
     }
 }

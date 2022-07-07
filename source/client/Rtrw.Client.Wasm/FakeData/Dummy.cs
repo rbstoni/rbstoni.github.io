@@ -7,149 +7,160 @@ namespace Rtrw.Client.Wasm.FakeData
 {
     public class Dummy
     {
-        public Comment FakeComment => GenerateFakeComment();
-        public Medium FakeImage => GenerateFakeImage();
-        public Geocoder FakeLocation => GenerateFakeAddress();
-        public Post FakePost => GenerateFakePost();
-        public Reaction FakeReaction => GenerateFakeReaction();
-        public Comment FakeReply => GenerateFakeReply();
-        public Warga FakeWarga => GenerateFakeWarga();
+
+        private List<string> KecamatanKotaJakartaUtara = new() { "Cilincing", "Kelapa Gading", "Koja", "Pademangan", "Penjaringan", "Tanjung Priok" };
+        private List<string> KelurahanCilincing = new() { "Cilincing", "Kalibaru", "Marunda", "Rorotan", "Semper Barat", "Semper Timur", "Sukapura" };
+        private List<string> KelurahanKelapaGading = new() { "Kelapa Gading Barat", "Kelapa Gading Timur", "Pegangsaan Dua" };
+        private List<string> KelurahanKoja = new() { "Koja", "Lagoa", "Rawa Badak Selatan", "Rawa Badak Utara", "Tugu Selatan", "Tugu Utara" };
+        private List<string> KelurahanPademangan = new() { "Ancol", "Pademangan Barat", "Pademangan Timur" };
+        private List<string> KelurahanPenjaringan = new() { "Kamal Muara", "Kapuk Muara", "Pejagalan", "Penjaringan", "Pluit" };
+        private List<string> KelurahanTanjungPriok = new() { "Kebon Bawang", "Papanggo", "Sungai Bambu", "Sunter Agung", "Sunter Jaya", "Tanjung Priok", "Warakas" };
+
         string DummyText => Lorem.Paragraph(50);
         Lorem Lorem => new(locale: "id_ID");
 
-        Faker<Geocoder> GenerateFakeAddress()
+        public Faker<Geocoder> GenerateFakeAddress()
         {
             return new Faker<Geocoder>("id_ID")
-                .RuleFor(a=> a.Provinsi,"DKI Jakarta")
-                .RuleFor(a=> a.KabupatenKota,"Kota Jakarta Utara")
-                .RuleFor(a=> a.Kecamatan,"Pademangan")
-                .RuleFor(a=> a.Kelurahan,"Pademangan Barat")
-                .RuleFor(a=> a.Alamat,f=> f.Address.StreetAddress())
-                .RuleFor(a=> a.KodePos,f=> f.Address.ZipCode())
-                .RuleFor(a=> a.Longitude,GetRandomNumber(-180, 180).ToString())
-                .RuleFor(a=> a.Latitude,GetRandomNumber(-90, 90).ToString());
+                .RuleFor(a => a.Provinsi, "DKI Jakarta")
+                .RuleFor(a => a.KabupatenKota, "Kota Jakarta Utara")
+                .RuleFor(a => a.Kecamatan, f => f.PickRandom(KecamatanKotaJakartaUtara))
+                .RuleFor(a => a.Kelurahan, (f, x) => PickRandomKelurahan(x.Kecamatan.ToString()))
+                .RuleFor(a => a.KodePos, (f, x) => SetKodeposKelurahan(x.Kelurahan.ToString()))
+                .RuleFor(a => a.Alamat, f => f.Address.StreetAddress())
+                .RuleFor(a => a.Longitude, GetRandomNumber(-180, 180).ToString())
+                .RuleFor(a => a.Latitude, GetRandomNumber(-90, 90).ToString());
         }
-
-        Faker<Comment> GenerateFakeComment() => new Faker<Comment>("id_ID")
-            .RuleFor(x=> x.CreatedAt,f=> f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
-            .RuleFor(x=> x.Commenter,GenerateFakeWarga())
-            .RuleFor(x=> x.Media,f=> GenerateFakeImage().GenerateBetween(0, 5))
-            .RuleFor(x=> x.Text,Lorem.Paragraph(10))
-            .RuleFor(x=> x.Reactions,GenerateFakeReaction().GenerateBetween(0, 100))
-            .RuleFor(x=> x.Replies,GenerateFakeReply().GenerateBetween(0, 100));
-
-        Faker<Medium> GenerateFakeImage() => new Faker<Medium>("id_ID")
-            .RuleFor(x=> x.CreatedAt,DateTime.Now)
-            .RuleFor(x=> x.Type,"Image")
-            .RuleFor(x=> x.MediumUrl,f=> f.Image.PicsumUrl());
-
-        Faker<Post> GenerateFakePost() => new Faker<Post>("id_ID")
-            .RuleFor(x=> x.CreatedAt,f=> f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+        public Faker<Comment> GenerateFakeComment() => new Faker<Comment>("id_ID")
+            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+            .RuleFor(x => x.Commenter, GenerateFakeWarga())
+            .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
+            .RuleFor(x => x.Text, Lorem.Paragraph(10))
+            .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(0, 100))
+            .RuleFor(x => x.Replies, GenerateFakeReply().GenerateBetween(0, 100));
+        public Faker<Medium> GenerateFakeImage() => new Faker<Medium>("id_ID")
+            .RuleFor(x => x.CreatedAt, DateTime.Now)
+            .RuleFor(x => x.FileUrl, f => f.Image.PicsumUrl());
+        public Faker<Post> GenerateFakePost() => new Faker<Post>("id_ID")
+            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
             //.RuleFor(x => x.Category, f => f.PickRandom<PostCategory>())
-            .RuleFor(x=> x.Author,GenerateFakeWarga())
-            .RuleFor(x=> x.Scope,f=> f.PickRandom<Scope>())
-            .RuleFor(x=> x.PostLocation,GenerateFakeAddress())
-            .RuleFor(x=> x.Text,Lorem.Paragraph(10))
-            .RuleFor(
-                x
-                    => x.Media,
-                f
-                    => GenerateFakeImage().GenerateBetween(0, 5))
-            .RuleFor(
-                x
-                    => x.Comments,
-                f
-                    => GenerateFakeComment().GenerateBetween(0, 100))
-            .RuleFor(
-                x
-                    => x.Reactions,
-                f
-                    => GenerateFakeReaction().GenerateBetween(0, 100));
-
-        Faker<Reaction> GenerateFakeReaction() => new Faker<Reaction>()
-            .RuleFor(
-                x
-                    => x.CreatedAt,
-                DateTime.Now)
-            .RuleFor(
-                x
-                    => x.Reactor,
-                GenerateFakeWarga())
-            .RuleFor(
-                x
-                    => x.Emoji,
-                f
-                    => f.PickRandom<Emoji>());
-
-        Faker<Comment> GenerateFakeReply() => new Faker<Comment>("id_ID")
-            .RuleFor(
-                x
-                    => x.CreatedAt,
-                f
-                    => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
-            .RuleFor(
-                x
-                    => x.Commenter,
-                GenerateFakeWarga())
-            .RuleFor(
-                x
-                    => x.Text,
-                Lorem.Paragraph(10))
-            .RuleFor(
-                x
-                    => x.Reactions,
-                GenerateFakeReaction().GenerateBetween(0, 100));
-
-        Faker<Warga> GenerateFakeWarga() => new Faker<Warga>("id_ID")
-            .RuleFor(
-                x
-                    => x.FirstName,
-                (f, x)
-                    => f.Person.FirstName)
-            .RuleFor(
-                x
-                    => x.LastName,
-                (f, x)
-                    => f.Person.LastName)
-            .RuleFor(
-                x
-                    => x.Gender,
-                f
-                    => f.PickRandom<Gender>())
-            .RuleFor(
-                x
-                    => x.Email,
-                f
-                    => f.Person.Email)
-            .RuleFor(
-                x
-                    => x.ProfileUrl,
-                (f, x)
-                    => $"profile/{x.Id}")
-            .RuleFor(
-                x
-                    => x.DateOfBirth,
-                f
-                    => f.Person.DateOfBirth)
-            .RuleFor(
-                x
-                    => x.PhoneNumber,
-                f
-                    => f.Person.Phone)
-            .RuleFor(
-                x
-                    => x.AvatarUrl,
-                f
-                    => f.Internet.Avatar())
-            .RuleFor(
-                x
-                    => x.Location,
-                GenerateFakeAddress());
-
-        private double GetRandomNumber(int minimum, int maximum)
+            .RuleFor(x => x.Author, GenerateFakeWarga())
+            .RuleFor(x => x.Scope, f => f.PickRandom<Scope>())
+            .RuleFor(x => x.PostLocation, GenerateFakeAddress())
+            .RuleFor(x => x.Text, Lorem.Paragraph(10))
+            .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
+            .RuleFor(x => x.Comments, f => GenerateFakeComment().GenerateBetween(0, 100))
+            .RuleFor(x => x.Reactions, f => GenerateFakeReaction().GenerateBetween(0, 100));
+        public Faker<Reaction> GenerateFakeReaction() => new Faker<Reaction>()
+            .RuleFor(x => x.CreatedAt, DateTime.Now)
+            .RuleFor(x => x.Reactor, GenerateFakeWarga())
+            .RuleFor(x => x.Emoji, f => f.PickRandom<Emoji>());
+        public Faker<Comment> GenerateFakeReply() => new Faker<Comment>("id_ID")
+            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+            .RuleFor(x => x.Commenter, GenerateFakeWarga())
+            .RuleFor(x => x.Text, Lorem.Paragraph(25))
+            .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(1, 100));
+        public Faker<Warga> GenerateFakeWarga() => new Faker<Warga>("id_ID")
+            .RuleFor(x => x.FirstName, (f, x) => f.Person.FirstName)
+            .RuleFor(x => x.LastName, (f, x) => f.Person.LastName)
+            .RuleFor(x => x.Gender, f => f.PickRandom<Gender>())
+            .RuleFor(x => x.Email, (f, x) => x.FirstName.ToLower() + "_" + x.LastName?.ToLower() + "@rtrw.app")
+            .RuleFor(x => x.ProfileUrl, (f, x) => $"profile/{x.Id}")
+            .RuleFor(x => x.DateOfBirth, f => f.Person.DateOfBirth)
+            .RuleFor(x => x.PhoneNumber, f => f.Person.Phone)
+            .RuleFor(x => x.AvatarUrl, f => f.Internet.Avatar())
+            .RuleFor(x => x.Location, GenerateFakeAddress());
+        double GetRandomNumber(int minimum, int maximum)
         {
             var random = new Random();
             return random.NextDouble() * (maximum - minimum) + minimum;
+        }
+        string PickRandomKelurahan(string kecamatan)
+        {
+            var faker = new Faker();
+            if (kecamatan == "Cilincing")
+                return faker.PickRandom(KelurahanCilincing);
+            if (kecamatan == "Kelapa Gading")
+                return faker.PickRandom(KelurahanKelapaGading);
+            if (kecamatan == "Koja")
+                return faker.PickRandom(KelurahanKoja);
+            if (kecamatan == "Pademangan")
+                return faker.PickRandom(KelurahanPademangan);
+            if (kecamatan == "Penjaringan")
+                return faker.PickRandom(KelurahanPenjaringan);
+            if (kecamatan == "Tanjung Priok")
+                return faker.PickRandom(KelurahanTanjungPriok);
+            else
+                return string.Empty;
+        }
+        string SetKodeposKelurahan(string kelurahan)
+        {
+            if (kelurahan == "Koja Utara")
+                return "14210";
+            if (kelurahan == "Koja Selatan")
+                return "14220";
+            if (kelurahan == "Rawa Badak Utara")
+                return "14230";
+            if (kelurahan == "Rawa Badak Selatan")
+                return "14230";
+            if (kelurahan == "Tugu Utara")
+                return "14260";
+            if (kelurahan == "Tugu Selatan")
+                return "14260";
+            if (kelurahan == "Lagoa")
+                return "14270";
+            if (kelurahan == "Kelapa Gading Barat")
+                return "14240";
+            if (kelurahan == "Kelapa Gading Timur")
+                return "14240";
+            if (kelurahan == "Pegangsaan Dua")
+                return "14250";
+            if (kelurahan == "Tanjung Priok")
+                return "14310";
+            if (kelurahan == "Kebon Bawang")
+                return "14320";
+            if (kelurahan == "Sungai Bambu")
+                return "14330";
+            if (kelurahan == "Papanggo")
+                return "14340";
+            if (kelurahan == "Warakas")
+                return "14340";
+            if (kelurahan == "Sunter Agung")
+                return "14350";
+            if (kelurahan == "Sunter Jaya")
+                return "14350";
+            if (kelurahan == "Pademangan Barat")
+                return "14420";
+            if (kelurahan == "Pademangan Timur")
+                return "14410";
+            if (kelurahan == "Penjaringan")
+                return "14430";
+            if (kelurahan == "Kali Baru")
+                return "14110";
+            if (kelurahan == "Pluit")
+                return "14440";
+            if (kelurahan == "Cilincing")
+                return "14120";
+            if (kelurahan == "Kapuk Muara ")
+                return "14460";
+            if (kelurahan == "Kamal Muara")
+                return "14470";
+            if (kelurahan == "Semper Barat")
+                return "14130";
+            if (kelurahan == "Semper Timur")
+                return "14130";
+            if (kelurahan == "Pejagalan")
+                return "14450";
+            if (kelurahan == "Ancol")
+                return "14430";
+            if (kelurahan == "Sukapura")
+                return "14140";
+            if (kelurahan == "Marunda")
+                return "14150";
+            if (kelurahan == "Rorotan")
+                return "14140";
+            else
+                return string.Empty;
         }
     }
 }

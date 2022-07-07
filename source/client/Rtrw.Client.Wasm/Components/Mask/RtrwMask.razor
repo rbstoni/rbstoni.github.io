@@ -6,7 +6,7 @@
 <div id="@elementId" class="@Classname" style="@Style">
     @if (Adornment == Adornment.Start)
     {
-        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="AdornmentContent" />
+        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="AdornmentContent"  AdornmentSvg="@AdornmentSvg"/>
     }
 
     <input class="@InputClassname"
@@ -49,13 +49,13 @@
     @if (showClearable && !Disabled)
     {
         <RtrwIconButton Class="@ClearButtonClassname" Color=ThemeColor.Inherit OnClick="@HandleClearButton">
-            <ClearXSvg />
+            <RtrwSvgClearX />
         </RtrwIconButton>
     }
 
     @if (Adornment == Adornment.End)
     {
-        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="@AdornmentContent" />
+        <RtrwInputAdornment Class="@AdornmentClassname" AdornmentClick="@OnAdornmentClick" AdornmentContent="@AdornmentContent" AdornmentSvg="@AdornmentSvg"/>
     }
 
     @if (Variant == Variant.Outlined)

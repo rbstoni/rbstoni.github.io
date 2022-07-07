@@ -1,0 +1,123 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@using Rtrw.Client.Wasm.FakeData
+@using Rtrw.Client.Wasm.Models
+<CascadingValue Value="this">
+    <div @attributes="@Attributes" class="conveyer">
+        @if (ShowIndicators && Items?.Count > 1)
+        {
+            <div class="conveyer-indicators" style="@IndicatorStyle">
+                @for (var i = 0; i < Items.Count; i++)
+                {
+                    int currentIndex = i;
+                    <div class="conveyer-indicator-bullet @(ItemIndex(CurrentItem)==i ? "active" :"")" @onclick="()=>MoveTo(currentIndex)"></div>
+                }
+            </div>
+        }
+        <RtrwSwipe OnSwipe="OnSwipe">
+            <div>
+                @if (Media != null)
+                {
+                    @foreach (var media in Media)
+                    {
+                        <ConveyerItem ImageUrl="@media.FileUrl"
+                              MinHeight="@MinHeight"
+                              ObjectFit="@ObjectFit"
+                              ObjectPosition="@ObjectPosition"
+                              Height="@Height"
+                              BorderRadius="@BorderRadius"
+                              Attributes="@ItemAttributes" />
+                    }
+                }
+            </div>
+        </RtrwSwipe>
+
+        @*Controls*@
+        <div class="conveyer-controls">
+            @*Left Arrow*@
+            @if (ShowControls && Items?.Count() > 1)
+            {
+                <RtrwIconButton tabindex="1" aria-label="Go to previous" Style="z-index:3; padding: 6px" OnClick="Previous">
+                    <RtrwSvgChevronLeft />
+                </RtrwIconButton>
+            }
+
+            @*Right Arrow*@
+            @if (ShowControls && Items?.Count() > 1)
+            {
+                <RtrwIconButton tabindex="2" aria-label="Go to next" Style="z-index:3; padding:6px" OnClick="Next">
+                    <RtrwSvgChevronRight />
+                </RtrwIconButton>
+            }
+        </div>
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public Dictionary<string, object> Attributes { get; set; } = new();
+    [Parameter] public string Height { get; set; } = string.Empty;
+    [Parameter] public string BorderRadius { get; set; } = string.Empty;
+    [Parameter] public Dictionary<string, object> ItemAttributes { get; set; } = new();
+
+    public bool ShowIndicators { get; set; } = true;
+    public bool ShowControls { get; set; } = true;
+
+    [Parameter] public List<Medium> Media { get; set; } = new();
+    [Parameter] public string MinHeight { get; set; } = string.Empty;
+    [Parameter] public ObjectFit ObjectFit { get; set; } = ObjectFit.None;
+    [Parameter] public ObjectPosition ObjectPosition { get; set; } = ObjectPosition.Center;
+    public string IndicatorStyle { get; set; } = string.Empty;
+
+    List<ConveyerItem> Items { get; set; } = new();
+    public ConveyerItem CurrentItem { get; set; } = new();
+    int currentItemIndex;
+
+    private Dummy Dummy { get; set; } = new();
+
+    private void OnSwipe(SwipeDirection direction)
+    {
+        switch (direction)
+        {
+            case SwipeDirection.LeftToRight:
+                Previous();
+                break;
+
+            case SwipeDirection.RightToLeft:
+                Next();
+                break;
+        }
+    }
+
+    void Next()
+    {
+        if (ItemIndex(CurrentItem) == Items.Count - 1)
+            CurrentItem = Items[0];
+        else
+            CurrentItem = Items[ItemIndex(CurrentItem) + 1];
+    }
+
+    void Previous()
+    {
+        if (ItemIndex(CurrentItem) == 0)
+            CurrentItem = Items[Items.Count - 1];
+        else
+            CurrentItem = Items[ItemIndex(CurrentItem) - 1];
+    }
+
+    void MoveTo(int indexItem)
+    {
+        CurrentItem = Items[indexItem];
+    }
+    int ItemIndex(ConveyerItem item) => Items.IndexOf(item);
+    internal void AddItem(ConveyerItem item) => Items.Add(item);
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (Items != null && Items.Count != 0)
+            {
+                CurrentItem = Items[0];
+                StateHasChanged();
+            }
+        }
+    }
+}

@@ -1,8 +1,18 @@
 ﻿@using Rtrw.Client.Wasm.Enums
 @*@using RtRw.Client.UI.Shared.Components.Icons.Post;*@
-<RtrwButton OnClick="TogglePopOver" Class="reaction-popover-anchor-origin">
-    <RtrwSvgAddRection />
-    @if (show)
+@inject ICurrentUser CurrentUser
+@inject IPostService PostService
+
+<RtrwButton OnClick="ToggleReactionList" Class="reaction-popover-anchor-origin">
+    @if (!currentUserHasReacted)
+    {
+        <RtrwSvgAddRection />
+    }
+    @if (currentUserHasReacted)
+    {
+        <span style="color:var(--rtrw-primary)">@currentUserEmoji.EnumToDescriptionString()</span>
+    }
+    @if (showReactionList)
     {
         <div class="reaction-popover-wrapper show">
             <div class="reaction-popover-container">
@@ -47,18 +57,43 @@
         </div>
     }
 </RtrwButton>
+<RtrwOverlay LightBackground OnClick="OnOverlayClick" />
 
 @code {
-    private bool show = false;
+    bool showReactionList;
+    bool currentUserHasReacted;
+    Emoji currentUserEmoji;
 
-    [Parameter] public EventCallback<Emoji> AddNewReactionCallback { get; set; } = new();
+    [Parameter] public EventCallback<Emoji> NewReaction { get; set; } = new();
+    [Parameter] public EventCallback RemoveReaction { get; set; }
 
     async Task AddNewReaction(Emoji emoji)
     {
-        await AddNewReactionCallback.InvokeAsync(emoji);
+        currentUserHasReacted = true;
+        currentUserEmoji = emoji;
+        await NewReaction.InvokeAsync(emoji);
     }
-    private void TogglePopOver()
+
+    async Task RemoveCurrentReaction()
     {
-        show = !show;
+        currentUserHasReacted = false;
+        await RemoveReaction.InvokeAsync();
+    }
+
+    void ToggleReactionList()
+    {
+        if (currentUserHasReacted)
+        {
+            RemoveReaction.InvokeAsync();
+        }
+        else
+        {
+            showReactionList = !showReactionList;
+        }
+    }
+
+    void OnOverlayClick()
+    {
+        showReactionList = false;
     }
 }

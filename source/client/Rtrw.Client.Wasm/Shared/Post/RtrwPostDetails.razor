@@ -30,19 +30,11 @@
                         <AvatarWarga Id="@Post.Author.Id" FullName="@Post.Author.FullName" AvatarUrl="@Post.Author.AvatarUrl" />
                         <div class="rtrw-flex rtrw-flex-col">
                             <div class="rtrw-inline-flex rtrw-align-items-center rtrw-gap-col-8px">
-                                <div class="display-name" type="button">
-                                    @Post.Author.FullName
-                                </div>
-                                <span style="color:black">
-                                    &bull;
-                                </span>
-                                <div class="display-location" type="button">
-                                    @Post.Author.Location?.Kelurahan
-                                </div>
+                                <div class="display-name" type="button">@Post.Author.FullName</div>
+                                <span style="color:black">&bull;</span>
+                                <div class="display-location" type="button">@Post.Author.Location?.Kelurahan</div>
                             </div>
-                            <div class="display-date" type="button">
-                                @Post.CreatedAt.TimeSpanToString()
-                            </div>
+                            <div class="display-date" type="button">@Post.CreatedAt.TimeSpanToString()</div>
                         </div>
                     </div>
                     <div class="rtrw-margin-start-auto">
@@ -51,9 +43,9 @@
                 </div>
             </div>
 
-            <RtrwCarousel ItemsSource="@Post.Media" @bind-SelectedIndex="carouselItemSelectedIndex" Style="height: 250px">
+            <RtrwCarousel ItemsSource="@Post.Media" @bind-SelectedIndex="carouselItemSelectedIndex" Style="height: 100%">
                 <ItemTemplate>
-                    <img src="@context.MediumUrl" />
+                    <img src="@context.FileUrl" style="height: 100%" />
                 </ItemTemplate>
             </RtrwCarousel>
 
@@ -98,7 +90,7 @@
             <hr />
             @foreach (var comment in Post.Comments)
             {
-                <RtrwComment CommentId="@comment.Id"></RtrwComment>
+                <RtrwCommentItem CommentId="@comment.Id"></RtrwCommentItem>
             }
         </div>
     }
@@ -106,6 +98,7 @@
     {
         <RtrwOverlay Visible="true" DarkBackground="true" Absolute="true"></RtrwOverlay>
     }
+    <AddNewComment PostNewComment="PostNewComment"></AddNewComment>
 </CascadingValue>
 
 @code {
@@ -116,6 +109,12 @@
     bool currentUserHasReacted;
     int carouselItemSelectedIndex;
     bool dataLoaded = false;
+    void PostNewComment(Comment comment)
+    {
+        Post.Comments.Add(comment);
+        PostService.SavePostAsync(Post);
+        StateHasChanged();
+    }
 
     protected string PostListItemStyle
     => new StyleBuilder()

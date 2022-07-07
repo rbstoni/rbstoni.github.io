@@ -16,25 +16,15 @@ namespace Rtrw.Client.Wasm.FakeData.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Warga>()
-                .HasKey(
-                    x
-                        => x.Id);
+                .HasKey(x => x.Id);
             modelBuilder.Entity<Warga>()
-                .HasMany(
-                    x
-                        => x.Posts);
+                .HasMany(x => x.Posts);
             modelBuilder.Entity<Post>()
-                .HasOne(
-                    x
-                        => x.Author);
+                .HasOne(x => x.Author);
             modelBuilder.Entity<Post>()
-                .HasMany(
-                    x
-                        => x.Mentions);
+                .HasMany(x => x.Mentions);
             modelBuilder.Entity<Post>()
-                .HasMany(
-                    x
-                        => x.Comments);
+                .HasMany(x => x.Comments);
         }
     }
 }

@@ -11,60 +11,30 @@ namespace Rtrw.Client.Wasm.Components.Mask
             Mask = mask;
         }
 
-        /// <summary>
-        /// If set, the mask will print placeholders for all non-delimiters that haven't yet been typed.
-        /// For instance a mask "000-000" with input "1" will show "1__-___" as Text.
-        /// </summary>
+        public bool CleanDelimiters { get; set; }
         public char? Placeholder { get; set; }
-
-        /// <summary>
-        /// A function for changing input characters after they were typed, i.e. lower-case to upper-case, etc.
-        /// </summary>
         public Func<char, char> Transformation { get; set; }
 
-        /// <summary>
-        /// Inserts given text at caret position
-        /// </summary>
-        /// <param name="input">One or multiple characters of input</param>
-        public override void Insert(string input)
+        public override void Backspace()
         {
             Init();
-            DeleteSelection(align: false);
-            var text = Text ?? "";
-            var pos = ConsolidateCaret(text, CaretPos);
-            (var beforeText, var afterText) = SplitAt(text, pos);
-            var alignedBefore = AlignAgainstMask(beforeText, 0);
-            CaretPos = pos = alignedBefore.Length;
-            var alignedInput = AlignAgainstMask(input, pos);
-            CaretPos = pos += alignedInput.Length;
-            if (Placeholder != null)
+            if (Selection != null)
             {
-                var p = Placeholder.Value;
-                if (afterText.Take(alignedInput.Length).All(c => IsDelimiter(c) || c == p))
-                    afterText = new string(afterText.Skip(alignedInput.Length).ToArray());
-            }
-            var alignedAfter = AlignAgainstMask(afterText, pos);
-            UpdateText(FillWithPlaceholder(alignedBefore + alignedInput + alignedAfter));
-        }
-
-        protected override void DeleteSelection(bool align)
-        {
-            ConsolidateSelection();
-            if (Selection == null)
+                DeleteSelection(align: true);
                 return;
-            var sel = Selection.Value;
-            (var s1, _, var s3) = SplitSelection(Text, sel);
-            Selection = null;
-            CaretPos = sel.Item1;
-            if (!align)
-                UpdateText(s1 + s3);
-            else
-                UpdateText(FillWithPlaceholder(s1 + AlignAgainstMask(s3, CaretPos)));
+            }
+            var text = Text ?? "";
+            var pos = CaretPos = ConsolidateCaret(text, CaretPos);
+            if (pos == 0)
+                return;
+            (var beforeText, var afterText) = SplitAt(text, pos);
+            // backspace as many delimiters as there are plus one char
+            var restText = new string(beforeText.Reverse().SkipWhile(IsDelimiter).Skip(1).Reverse().ToArray());
+            var numDeleted = beforeText.Length - restText.Length;
+            CaretPos -= numDeleted;
+            var alignedAfter = AlignAgainstMask(afterText, CaretPos);
+            UpdateText(FillWithPlaceholder(restText + alignedAfter));
         }
-
-        /// <summary>
-        /// Implements the effect of the Del key at the current cursor position
-        /// </summary>
         public override void Delete()
         {
             Init();
@@ -90,63 +60,50 @@ namespace Rtrw.Client.Wasm.Components.Mask
             }
             UpdateText(FillWithPlaceholder(beforeText + alignedAfter));
         }
-
-        /// <summary>
-        /// Implements the effect of the Backspace key at the current cursor position
-        /// </summary>
-        public override void Backspace()
+        public override string GetCleanText()
         {
             Init();
-            if (Selection != null)
-            {
-                DeleteSelection(align: true);
-                return;
-            }
-            var text = Text ?? "";
-            var pos = CaretPos = ConsolidateCaret(text, CaretPos);
-            if (pos == 0)
-                return;
-            (var beforeText, var afterText) = SplitAt(text, pos);
-            // backspace as many delimiters as there are plus one char
-            var restText = new string(beforeText.Reverse().SkipWhile(IsDelimiter).Skip(1).Reverse().ToArray());
-            var numDeleted = beforeText.Length - restText.Length;
-            CaretPos -= numDeleted;
-            var alignedAfter = AlignAgainstMask(afterText, CaretPos);
-            UpdateText(FillWithPlaceholder(restText + alignedAfter));
+            var cleanText = Text;
+            if (string.IsNullOrEmpty(cleanText))
+                return cleanText;
+            if (CleanDelimiters)
+                cleanText = new string(cleanText.Where((c, i) => _maskDict.ContainsKey(Mask[i])).ToArray());
+            if (Placeholder != null)
+                cleanText = cleanText.Replace(Placeholder.Value.ToString(), "");
+            return cleanText;
         }
-
-        /// <summary>
-        /// Fill the rest of the text with Placeholder but only if it is set
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        protected virtual string FillWithPlaceholder(string text)
+        public override void Insert(string input)
         {
-            if (Placeholder == null)
-                return text;
-            // fill the rest with placeholder
-            // don't fill if text is still empty
-            var filledText = text;
-            var len = text.Length;
-            var mask = Mask ?? "";
-            if (len == 0 || len >= mask.Length)
-                return text;
-            for (var maskIndex = len; maskIndex < mask.Length; maskIndex++)
+            Init();
+            DeleteSelection(align: false);
+            var text = Text ?? "";
+            var pos = ConsolidateCaret(text, CaretPos);
+            (var beforeText, var afterText) = SplitAt(text, pos);
+            var alignedBefore = AlignAgainstMask(beforeText, 0);
+            CaretPos = pos = alignedBefore.Length;
+            var alignedInput = AlignAgainstMask(input, pos);
+            CaretPos = pos += alignedInput.Length;
+            if (Placeholder != null)
             {
-                var maskChar = mask[maskIndex];
-                if (IsDelimiter(maskChar))
-                    filledText += maskChar;
-                else
-                    filledText += Placeholder.Value;
+                var p = Placeholder.Value;
+                if (afterText.Take(alignedInput.Length).All(c => IsDelimiter(c) || c == p))
+                    afterText = new string(afterText.Skip(alignedInput.Length).ToArray());
             }
-            return filledText;
+            var alignedAfter = AlignAgainstMask(afterText, pos);
+            UpdateText(FillWithPlaceholder(alignedBefore + alignedInput + alignedAfter));
         }
-
-        /// <summary>
-        /// Applies the mask to the given text starting at the given offset and returns the masked text. 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="maskOffset"></param>
+        public override void UpdateFrom(IMask other)
+        {
+            base.UpdateFrom(other);
+            var o = other as PatternMask;
+            if (o == null)
+                return;
+            Placeholder = o.Placeholder;
+            CleanDelimiters = o.CleanDelimiters;
+            Transformation = o.Transformation;
+            _initialized = false;
+            Refresh();
+        }
         protected virtual string AlignAgainstMask(string text, int maskOffset = 0)
         {
             text ??= "";
@@ -187,49 +144,61 @@ namespace Rtrw.Client.Wasm.Components.Mask
             }
             return alignedText;
         }
-
-        protected virtual void ModifyPartiallyAlignedMask(string mask, string text, int maskOffset, ref int textIndex, ref int maskIndex, ref string alignedText)
+        protected override void DeleteSelection(bool align)
         {
-            /* this is an override hook for more specialized mask implementations deriving from this*/
+            ConsolidateSelection();
+            if (Selection == null)
+                return;
+            var sel = Selection.Value;
+            (var s1, _, var s3) = SplitSelection(Text, sel);
+            Selection = null;
+            CaretPos = sel.Item1;
+            if (!align)
+                UpdateText(s1 + s3);
+            else
+                UpdateText(FillWithPlaceholder(s1 + AlignAgainstMask(s3, CaretPos)));
         }
-
-        protected virtual bool IsMatch(char maskChar, char textChar)
+        protected virtual string FillWithPlaceholder(string text)
         {
-            var maskDef = _maskDict[maskChar];
-            return Regex.IsMatch(textChar.ToString(), maskDef.Regex);
+            if (Placeholder == null)
+                return text;
+            // fill the rest with placeholder
+            // don't fill if text is still empty
+            var filledText = text;
+            var len = text.Length;
+            var mask = Mask ?? "";
+            if (len == 0 || len >= mask.Length)
+                return text;
+            for (var maskIndex = len; maskIndex < mask.Length; maskIndex++)
+            {
+                var maskChar = mask[maskIndex];
+                if (IsDelimiter(maskChar))
+                    filledText += maskChar;
+                else
+                    filledText += Placeholder.Value;
+            }
+            return filledText;
         }
-
-        /// <summary>
-        /// If true, all characters which are not defined in the mask (delimiters) are stripped
-        /// from text. 
-        /// </summary>
-        public bool CleanDelimiters { get; set; }
-
-        /// <summary>
-        /// Return the Text without Placeholders. If CleanDelimiters is enabled, then also strip all
-        /// undefined characters. For instance, for a mask "0000 0000 0000 0000" the space would be
-        /// an undefined character (a delimiter) unless it were defined as a mask character in MaskChars.
-        /// </summary>
-        public override string GetCleanText()
-        {
-            Init();
-            var cleanText = Text;
-            if (string.IsNullOrEmpty(cleanText))
-                return cleanText;
-            if (CleanDelimiters)
-                cleanText = new string(cleanText.Where((c, i) => _maskDict.ContainsKey(Mask[i])).ToArray());
-            if (Placeholder != null)
-                cleanText = cleanText.Replace(Placeholder.Value.ToString(), "");
-            return cleanText;
-        }
-
         protected override void InitInternals()
         {
             base.InitInternals();
             if (Placeholder != null)
                 _delimiters.Add(Placeholder.Value);
         }
-
+        protected virtual bool IsMatch(char maskChar, char textChar)
+        {
+            var maskDef = _maskDict[maskChar];
+            return Regex.IsMatch(textChar.ToString(), maskDef.Regex);
+        }
+        protected virtual string ModifyFinalText(string text)
+        {
+            /* this  can be overridden in derived classes to apply any necessary changes to the resulting text */
+            return text;
+        }
+        protected virtual void ModifyPartiallyAlignedMask(string mask, string text, int maskOffset, ref int textIndex, ref int maskIndex, ref string alignedText)
+        {
+            /* this is an override hook for more specialized mask implementations deriving from this*/
+        }
         protected override void UpdateText(string text)
         {
             // don't show a text consisting only of delimiters and placeholders (no actual input)
@@ -243,23 +212,5 @@ namespace Rtrw.Client.Wasm.Components.Mask
             CaretPos = ConsolidateCaret(Text, CaretPos);
         }
 
-        protected virtual string ModifyFinalText(string text)
-        {
-            /* this  can be overridden in derived classes to apply any necessary changes to the resulting text */
-            return text;
-        }
-
-        public override void UpdateFrom(IMask other)
-        {
-            base.UpdateFrom(other);
-            var o = other as PatternMask;
-            if (o == null)
-                return;
-            Placeholder = o.Placeholder;
-            CleanDelimiters = o.CleanDelimiters;
-            Transformation = o.Transformation;
-            _initialized = false;
-            Refresh();
-        }
     }
 }

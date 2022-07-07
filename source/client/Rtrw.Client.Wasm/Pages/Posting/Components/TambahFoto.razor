@@ -1,0 +1,64 @@
+﻿@using Rtrw.Client.Wasm.Models
+<InputFile id="uploadImage" OnChange="UploadImages" accept=".png, .jpg, .jpeg" hidden capture />
+@if (Media.Count > 0)
+{
+    <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-8px">
+        <label for="uploadImage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 75 75">
+                <g id="Group_555" data-name="Group 555" transform="translate(-160 -552)">
+                    <g id="Rectangle_696" data-name="Rectangle 696" transform="translate(160 552)" fill="#fff" stroke="#707070" stroke-width="0.1">
+                        <rect width="75" height="75" rx="15" stroke="none" />
+                        <rect x="0.05" y="0.05" width="74.9" height="74.9" rx="14.95" fill="none" />
+                    </g>
+                    <text id="_" data-name="+" transform="translate(189 600)" fill="#716464" font-size="35" font-family="AlegreyaSans-Medium, Alegreya Sans" font-weight="500"><tspan x="0" y="0">+</tspan></text>
+                </g>
+            </svg>
+        </label>
+        @foreach (var image in Media)
+        {
+            <div style="position: relative; display:flex; flex-wrap:nowrap; flex: 0 0 auto; justify-content:center; align-items: center; width:100px; height:75px; ">
+                <img src="@image.FileUrl" style="max-width:100%; max-height:100%; border-radius:13px; object-fit:fill;">
+                <div class="image-close-button" typeof="button" @onclick="@((e)=>RemoveFile(image))">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17">
+                        <path id="cancel_FILL0_wght400_GRAD0_opsz48" d="M15.688,16.58,12.5,13.393,9.312,16.58l-.892-.892L11.607,12.5,8.42,9.313l.892-.892L12.5,11.608,15.688,8.42l.892.892L13.392,12.5l3.188,3.188ZM12.5,21a8.621,8.621,0,0,0,3.358-.648,8.227,8.227,0,0,0,4.494-4.494A8.621,8.621,0,0,0,21,12.5a8.566,8.566,0,0,0-.648-3.336,8.3,8.3,0,0,0-1.8-2.7A8.474,8.474,0,0,0,12.5,4,8.432,8.432,0,0,0,4,12.5a8.474,8.474,0,0,0,2.465,6.056,8.3,8.3,0,0,0,2.7,1.8A8.566,8.566,0,0,0,12.5,21Zm0-8.5Zm0,7.225A6.955,6.955,0,0,1,7.4,17.6a6.955,6.955,0,0,1-2.125-5.1A6.955,6.955,0,0,1,7.4,7.4a6.955,6.955,0,0,1,5.1-2.125A6.955,6.955,0,0,1,17.6,7.4a6.955,6.955,0,0,1,2.125,5.1A6.955,6.955,0,0,1,17.6,17.6,6.955,6.955,0,0,1,12.5,19.725Z" transform="translate(-4 -4)" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <label class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-8px" for="uploadImage">
+        <svg id="image_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path id="Path_2151" data-name="Path 2151" d="M0,0H24V24H0Z" fill="none" />
+            <path id="Path_2152" data-name="Path 2152" d="M19,5V19H5V5H19m0-2H5A2.006,2.006,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V5A2.006,2.006,0,0,0,19,3Zm-4.86,8.86-3,3.87L9,13.14,6,17H18l-3.86-5.14Z" fill="#0db201" />
+        </svg>
+        <span style="color:#716464; font-size:14px">Tambah foto</span>
+    </label>
+}
+@code {
+    [Parameter] public List<Medium> Media { get; set; } = new();
+    async void UploadImages(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var medium = new Medium();
+            var buffers = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffers);
+            medium.FileBytes = buffers;
+            medium.FileName = file.Name;
+            medium.FileSize = file.Size;
+            medium.FileType = file.ContentType;
+            medium.FileUrl = "data:" + e.File.ContentType + ";base64," + Convert.ToBase64String(buffers);
+            Media.Add(medium);
+        }
+        StateHasChanged();
+    }
+
+    void RemoveFile(Medium medium)
+    {
+        Media.Remove(medium);
+        StateHasChanged();
+    }
+}

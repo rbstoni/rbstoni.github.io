@@ -1,0 +1,100 @@
+/*
+* Rtrw v1.0.0 (https://rtrw.app/)
+* Copyright 2022 The Rtrw Authors
+*/
+.location-indicator-container {
+  position: absolute;
+  top: 25%;
+  bottom: 50%;
+  left: 50%;
+  right: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.location-indicator {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.location-indicator:before,
+.location-indicator:after {
+  position: absolute;
+  content: "";
+}
+
+.location-indicator:before {
+  width: 24px;
+  height: 24px;
+  border-radius: 100% 100% 100% 0;
+  box-shadow: 0px 0px 0px 3px #0db201;
+  -webkit-animation: jumping 1s linear infinite;
+  animation: jumping 1s linear infinite;
+  transform: rotate(-45deg);
+}
+
+.location-indicator:after {
+  width: 24px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: #FFCE43;
+  z-index: -1;
+  top: 36px;
+  -webkit-animation: sizingUp 1s linear infinite;
+  animation: sizingUp 1s linear infinite;
+}
+
+@-webkit-keyframes jumping {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -6px;
+  }
+  100% {
+    top: 0;
+  }
+}
+@keyframes jumping {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -6px;
+  }
+  100% {
+    top: 0;
+  }
+}
+@-webkit-keyframes sizingUp {
+  0% {
+    width: 24px;
+    height: 12px;
+  }
+  50% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 24px;
+    height: 12px;
+  }
+}
+@keyframes sizingUp {
+  0% {
+    width: 24px;
+    height: 12px;
+  }
+  50% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 24px;
+    height: 12px;
+  }
+}

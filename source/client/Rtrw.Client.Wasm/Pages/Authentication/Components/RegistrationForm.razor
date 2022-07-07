@@ -2,13 +2,14 @@
 @using Rtrw.Client.Wasm.Enums
 @using Rtrw.Client.Wasm.ViewModels
 <div class="register-form-title">Buat Akun #wargaRTRW</div>
-<RtrwForm Model="Register">
-    <DataAnnotationsValidator />
+<RtrwForm Model="Register" @bind-IsValid="validated">
     <RtrwTextField T="string"
                    @bind-Value=Register.FullName
                    For="@(()=>Register.FullName)"
                    InputType="InputType.Text"
                    Label="Nama Depan"
+                   Required
+                   RequiredError="Tidak boleh kosong"
                    Clearable
                    Immediate
                    Variant="Variant.Outlined">
@@ -18,16 +19,27 @@
                        @bind-Value=Register.DateOfBirth
                        For="@(()=>Register.DateOfBirth)"
                        InputType="InputType.Date"
+                       Format="DD MMM YYYY"
                        Label="Tanggal Lahir"
+                       Required
+                       RequiredError="Tidak boleh kosong"
                        Clearable
                        Immediate
                        Variant="Variant.Outlined">
         </RtrwTextField>
+
+        <InputSelect TValue="@Gender" @bind-Value="@Register.Gender">
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Laki-laki">Laki-laki</option>
+        </InputSelect>
+
         <RtrwTextField T="Gender"
                        @bind-Value=Register.Gender
                        For="@(()=>Register.Gender)"
                        Label="Laki-laki/Perempuan"
                        InputType="InputType.Text"
+                       Required
+                       RequiredError="Tidak boleh kosong"
                        Clearable
                        Immediate
                        Variant="Variant.Outlined">
@@ -39,6 +51,8 @@
                     Variant=Variant.Filled
                     Color=@(mainContact=="email" ? ThemeColor.Primary : ThemeColor.Secondary)
                     OnClick="@(()=>SetMainContact("email"))">
+            Required
+            RequiredError="Tidak boleh kosong"
             <RtrwSvgAlternateEmail />
             Email
         </RtrwButton>
@@ -61,6 +75,8 @@
         <RtrwTextField T="string"
                    Label="Email (digunakan untuk masuk RTRW)"
                    @bind-Value=Register.Email
+                   Required
+                   RequiredError="Tidak boleh kosong"
                    For="@(()=>Register.Email)"
                    InputType="InputType.Email"
                    Variant="Variant.Outlined">
@@ -71,6 +87,8 @@
         <RtrwTextField T="string"
                    Label="No. Telp (digunakan untuk masuk RTRW)"
                    Clearable
+                   Required
+                   RequiredError="Tidak boleh kosong"
                    Immediate
                    @bind-Value=Register.Phone
                    For="@(()=>Register.Phone)"
@@ -81,6 +99,8 @@
     <RtrwTextField T="string"
                    Label="Kata Sandi"
                    Clearable
+                   Required
+                   RequiredError="Tidak boleh kosong"
                    Immediate
                    @bind-Value="@Register.Password"
                    For="@(()=>Register.Password)"
@@ -102,6 +122,8 @@
     <RtrwTextField T="string"
                    Label="Ulangi Kata Sandi"
                    Clearable
+                   Required
+                   RequiredError="Tidak boleh kosong"
                    Immediate
                    @bind-Value="@Register.ConfirmPassword"
                    For="@(()=>Register.ConfirmPassword)"
@@ -121,18 +143,16 @@
         </AdornmentSvg>
     </RtrwTextField>
 
-    @if (validated)
-    {
-        <div class="rtrw-text-center rtrw-margin-top-32px">
-            <RtrwButton Type=ButtonType.Button
+    <div class="rtrw-text-center rtrw-margin-top-32px">
+        <RtrwButton Type=ButtonType.Button
                     Color=ThemeColor.Primary
                     Variant=Variant.Filled
                     Style="border-radius: 9999px; min-width:300px"
+                    Disabled="@(!validated)"
                     OnClick="OnClick">
-                Lanjutkan
-            </RtrwButton>
-        </div>
-    }
+            Lanjutkan
+        </RtrwButton>
+    </div>
 </RtrwForm>
 
 @code {

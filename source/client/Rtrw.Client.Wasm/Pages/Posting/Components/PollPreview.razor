@@ -19,7 +19,7 @@
 </div>
 
 @code {
-    [Parameter] public Poll Poll { get; set; }
+    [Parameter] public Poll Poll { get; set; } = new();
     [Parameter] public EventCallback OnPollDelete { get; set; }
     void DeletePoll()
     {
