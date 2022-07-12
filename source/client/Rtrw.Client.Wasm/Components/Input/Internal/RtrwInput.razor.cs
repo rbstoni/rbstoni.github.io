@@ -11,17 +11,17 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
     public partial class RtrwInput<T> : RtrwBaseInput<T>
     {
         private ElementReference elementReference1;
-        private string internalText;
+        private string? internalText;
         private bool showClearable;
 
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public RenderFragment? ChildContent { get; set; }
         [Parameter] public bool Clearable { get; set; } = false;
         public ElementReference ElementReference { get; private set; }
         [Parameter] public bool HideSpinButtons { get; set; } = true;
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
-        [Parameter] public RenderFragment AdornmentContent { get; set; }
-        [Parameter] public RenderFragment AdornmentSvg { get; set; }
+        [Parameter] public RenderFragment? AdornmentContent { get; set; }
+        [Parameter] public RenderFragment? AdornmentSvg { get; set; }
         [Parameter] public EventCallback OnDecrement { get; set; }
         //public override ValueTask SelectAsync()
         //{
@@ -34,19 +34,19 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
         [Parameter] public EventCallback OnIncrement { get; set; }
         [Parameter] public EventCallback<WheelEventArgs> OnMouseWheel { get; set; }
         protected string AdornmentClassname => RtrwInputCssHelper.GetAdornmentClassname(this);
-        protected string Classname => RtrwInputCssHelper.GetClassname(
-            this,
-            ()
-                => HasNativeHtmlPlaceholder() ||
-                !string.IsNullOrEmpty(Text) ||
-                Adornment == Adornment.Start ||
-                !string.IsNullOrWhiteSpace(Placeholder));
-        protected string ClearButtonClassname => new CssBuilder()
-                    .AddClass("rtrw-margin-end-4px", Adornment == Adornment.End && HideSpinButtons == false)
-            .AddClass("rtrw-icon-button-edge-end", Adornment == Adornment.End && HideSpinButtons == true)
-            .AddClass("rtrw-margin-end-24px", Adornment != Adornment.End && HideSpinButtons == false)
-            .AddClass("rtrw-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons == true)
-            .Build();
+        protected string Classname 
+            => RtrwInputCssHelper.GetClassname(this,
+                () => HasNativeHtmlPlaceholder() ||
+                        !string.IsNullOrEmpty(Text) ||
+                        Adornment == Adornment.Start ||
+                        !string.IsNullOrWhiteSpace(Placeholder));
+        protected string ClearButtonClassname
+            => new CssBuilder()
+                .AddClass("rtrw-margin-end-4px", Adornment == Adornment.End && HideSpinButtons == false)
+                .AddClass("rtrw-icon-button-edge-end", Adornment == Adornment.End && HideSpinButtons == true)
+                .AddClass("rtrw-margin-end-24px", Adornment != Adornment.End && HideSpinButtons == false)
+                .AddClass("rtrw-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons == true)
+                .Build();
         protected string InputClassname => RtrwInputCssHelper.GetInputClassname(this);
         protected string InputTypeString => InputType.EnumToDescriptionString();
 
@@ -54,11 +54,12 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
         {
             try
             {
-                if(InputType == InputType.Hidden && ChildContent != null)
+                if (InputType == InputType.Hidden && ChildContent != null)
                     await elementReference1.FocusAsync();
                 else
                     await ElementReference.FocusAsync();
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("RtrwInput.FocusAsync: " + e.Message);
             }
@@ -69,13 +70,14 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
             await base.SetParametersAsync(parameters);
             //if (!isFocused || forceTextUpdate)
             //    internalText = Text;
-            if(RuntimeLocation.IsServerSide && TextUpdateSuppression)
+            if (RuntimeLocation.IsServerSide && TextUpdateSuppression)
             {
                 // Text update suppression, only in BSS (not in WASM).
                 // This is a fix for #1012
-                if(!isFocused || forceTextUpdate)
+                if (!isFocused || forceTextUpdate)
                     internalText = Text;
-            } else
+            }
+            else
             {
                 // in WASM (or in BSS with TextUpdateSuppression==false) we always update
                 internalText = Text;
@@ -101,7 +103,7 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
         {
             internalText = args?.Value as string;
             await OnInternalInputChanged.InvokeAsync(args);
-            if(!Immediate)
+            if (!Immediate)
             {
                 await SetTextAsync(args?.Value as string);
             }
@@ -109,7 +111,7 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
 
         protected Task OnInput(ChangeEventArgs args)
         {
-            if(!Immediate)
+            if (!Immediate)
                 return Task.CompletedTask;
             isFocused = true;
             return SetTextAsync(args?.Value as string);
@@ -124,14 +126,14 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
         protected override async Task UpdateTextPropertyAsync(bool updateValue)
         {
             await base.UpdateTextPropertyAsync(updateValue);
-            if(Clearable)
+            if (Clearable)
                 UpdateClearable(Text);
         }
 
         protected override async Task UpdateValuePropertyAsync(bool updateText)
         {
             await base.UpdateValuePropertyAsync(updateText);
-            if(Clearable)
+            if (Clearable)
                 UpdateClearable(Value);
         }
 
@@ -146,12 +148,10 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
             var _showClearable = Clearable &&
                 ((value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) ||
                     (value is not string && value is not null));
-            if(showClearable != _showClearable)
+            if (showClearable != _showClearable)
                 showClearable = _showClearable;
         }
     }
 
-    public class RtrwInputString : RtrwInput<string>
-    {
-    }
+    public class RtrwInputString : RtrwInput<string>{}
 }

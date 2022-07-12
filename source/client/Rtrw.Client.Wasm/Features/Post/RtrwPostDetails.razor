@@ -1,0 +1,158 @@
+﻿@page "/post/{PostId?}"
+@inject IPostService PostService
+@inject ICurrentUser currentUser
+@using Rtrw.Client.Wasm.Enums
+@using Rtrw.Client.Wasm.Extensions
+@using Rtrw.Client.Wasm.Features.Post.Components
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Services
+@using Rtrw.Client.Wasm.Utilities
+
+<RtrwAppBar Position="sticky-top" Style="filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.16));">
+    <EndBarContent>
+        <RtrwIconButton Href="search">
+            <RtrwSvgSearch />
+        </RtrwIconButton>
+        <RtrwIconButton Href="pesan">
+            <RtrwSvgChat />
+        </RtrwIconButton>
+        <RtrwIconButton Href="new-post" Style="margin-right: -12px">
+            <RtrwSvgNewPost />
+        </RtrwIconButton>
+    </EndBarContent>
+</RtrwAppBar>
+
+<CascadingValue Value="@Post">
+    @if (dataLoaded)
+    {
+        <div class="post-container" style="@PostListItemStyle">
+            <div class="rtrw-flex rtrw-flex-col rtrw-gap-col-8px">
+                <div class="post-header rtrw-flex rtrw-justify-content-between rtrw-align-items-start">
+                    <div class="rtrw-flex rtrw-gap-col-8px">
+                        <AvatarWarga Id="@Post.Author.Id" FullName="@Post.Author.FullName" AvatarUrl="@Post.Author.AvatarUrl" />
+                        <div class="rtrw-flex rtrw-flex-col">
+                            <div class="rtrw-inline-flex rtrw-align-items-center rtrw-gap-col-8px">
+                                <div class="display-name" type="button">@Post.Author.FullName</div>
+                                <span style="color:black">&bull;</span>
+                                <div class="display-location" type="button">@Post.Author.Geocoder?.Kelurahan</div>
+                            </div>
+                            <div class="display-date" type="button">@Post.CreatedAt.TimeSpanToString()</div>
+                        </div>
+                    </div>
+                    <div class="rtrw-margin-start-auto">
+                        <PostOptions />
+                    </div>
+                </div>
+            </div>
+
+            <RtrwCarousel ItemsSource="@Post.Media" @bind-SelectedIndex="carouselItemSelectedIndex" Style="height: 100%">
+                <ItemTemplate>
+                    <img src="@context.FileUrl" style="height: 100%" />
+                </ItemTemplate>
+            </RtrwCarousel>
+
+            <div class="post-body-container rtrw-flex rtrw-flex-col rtrw-gap-4px" tabindex="0">
+                <div class="post-content">
+                    @Post.Text
+                </div>
+                <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-col-4px" type="button">
+                    <RtrwSvgGeoTag />
+                    <span class="display-post-location rtrw-margin-start-8px"> @Post.PostGeocoder?.Alamat</span>
+                </div>
+            </div>
+
+            <div class="post-footer">
+                <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center">
+                    <LastThreeReaction Reactions="@Post.Reactions" />
+                </div>
+                <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center">
+                    @if (currentUserHasReacted)
+                    {
+                        <RtrwButton OnClick="RemoveCurrentUserReaction">
+                            @currentUserReactionName
+                        </RtrwButton>
+                    }
+                    else if (!currentUserHasReacted)
+                    {
+                        <AddReaction AddNewReactionCallback="GetCurrentUserReaction" />
+                    }
+
+                    <RtrwButton Style="gap: 8px">
+                        <RtrwSvgComment />
+                        @if (Post.Comments?.Count > 0)
+                        {
+                            <span class="message-count-label">@Post.Comments?.Count</span>
+                        }
+                    </RtrwButton>
+                    <RtrwButton>
+                        <RtrwSvgShare />
+                    </RtrwButton>
+                </div>
+            </div>
+            <hr />
+            @foreach (var comment in Post.Comments)
+            {
+                <RtrwCommentItem CommentId="@comment.Id"></RtrwCommentItem>
+            }
+        </div>
+    }
+    else
+    {
+        <RtrwOverlay Visible="true" DarkBackground="true" Absolute="true"></RtrwOverlay>
+    }
+    <AddNewComment PostNewComment="PostNewComment"></AddNewComment>
+</CascadingValue>
+
+@code {
+    [Parameter] public bool NoPadding { get; set; } = false;
+    [Parameter] public string? PostId { get; set; }
+    Post Post { get; set; } = new();
+    string? currentUserReactionName;
+    bool currentUserHasReacted;
+    int carouselItemSelectedIndex;
+    bool dataLoaded = false;
+    void PostNewComment(Comment comment)
+    {
+        Post.Comments.Add(comment);
+        PostService.SavePostAsync(Post);
+        StateHasChanged();
+    }
+
+    protected string PostListItemStyle
+    => new StyleBuilder()
+           .AddStyle("padding", "0", NoPadding)
+           .Build();
+
+    Task GetCurrentUserReaction(Emoji emoji)
+    {
+        Reaction reaction = new Reaction() { Reactor = currentUser.Warga, Emoji = emoji };
+        var userHasReacted = Post.Reactions.Any(x => x.Reactor.Id == reaction.Reactor.Id);
+        if (!userHasReacted)
+        {
+            Post.Reactions.Add(reaction);
+            currentUserReactionName = reaction.Emoji.EnumToDescriptionString();
+            currentUserHasReacted = true;
+        }
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+    Task RemoveCurrentUserReaction()
+    {
+        var currentUserReaction = Post.Reactions.FirstOrDefault(x => x.Reactor.Id == currentUser.Warga.Id);
+        if (currentUserReaction != null)
+        {
+            Post.Reactions.Remove(currentUserReaction);
+            currentUserHasReacted = false;
+        }
+        return Task.CompletedTask;
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Post = await PostService.GetPostByIdAsync(PostId);
+        dataLoaded = true;
+        StateHasChanged();
+    }
+}

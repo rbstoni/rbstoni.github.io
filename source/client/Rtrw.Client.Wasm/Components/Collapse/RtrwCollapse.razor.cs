@@ -85,7 +85,7 @@ namespace Rtrw.Client.Wasm.Components
             }
             else
             {
-                height = (await wrapper.MudGetBoundingClientRectAsync())?.Height ?? 0;
+                height = (await wrapper.RtrwGetBoundingClientRectAsync())?.Height ?? 0;
             }
 
             if (MaxHeight != null && height > MaxHeight)

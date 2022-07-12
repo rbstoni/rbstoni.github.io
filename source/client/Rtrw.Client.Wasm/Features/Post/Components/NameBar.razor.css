@@ -1,0 +1,24 @@
+.namebar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: auto;
+  gap: 4px;
+  flex-wrap: nowrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.text-firstname {
+  font-weight: bold;
+  font-size: 15px;
+  text-align: left;
+  color: #0f1419;
+}
+
+.text-kelurahan {
+  font-weight: normal;
+  font-size: 15px;
+  text-align: center;
+  color: #0f1419;
+}

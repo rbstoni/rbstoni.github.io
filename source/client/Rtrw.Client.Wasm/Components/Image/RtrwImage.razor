@@ -1,0 +1,28 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<img @attributes="UserAttributes" src="@Source" class="@ClassName" style="@StyleName" width="@Width" height="@Height" />
+
+@code {
+    [Parameter] public string? Source { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public int? Height { get; set; }
+    [Parameter] public int? BorderRadius { get; set; } 
+    [Parameter] public bool Fluid { get; set; }
+    [Parameter] public bool Absolute { get; set; } = false;
+    [Parameter] public ObjectFit ObjectFit { get; set; } = ObjectFit.Cover;
+    [Parameter] public ObjectPosition ObjectPosition { get; set; } = ObjectPosition.Center;
+    protected string ClassName
+        => new CssBuilder("rtrw-image")
+            .AddClass("rtrw-image-fluid", Fluid)
+            .AddClass("rtrw-position-absolute", Absolute)
+            .AddClass($"rtrw-object-fit-{ObjectFit.EnumToDescriptionString()}")
+            .AddClass($"rtrw-object-position-{ObjectPosition.EnumToDescriptionString()}")
+            .AddClass(Class)
+            .Build();
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle("border-radius", BorderRadius.ToPx(), BorderRadius >= 0)
+            .AddStyle(Style)
+            .Build();
+}

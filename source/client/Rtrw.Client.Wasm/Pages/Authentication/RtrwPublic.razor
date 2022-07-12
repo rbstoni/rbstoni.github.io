@@ -5,18 +5,20 @@
 
 <div class="public-page-background"></div>
 <div class="public-page-container">
-    <div class="welcome-info-container">
-        <RtrwSvgHorizontalLogo />
-        <div class="welcome-info-text"> Informasi Relevan, Terkini, Reliabel dari dan untuk Warga </div>
-    </div>
-    <div class="auth-container">
-        <div class="login-container">
-            <div class="text">Belum punya akun?</div>
-            <div class="login-button" type="button" @onclick="OnClickRegister">Gabung RTRW</div>
+    <div class="public-page-wrapper">
+        <div class="welcome-info-container">
+            <RtrwSvgHorizontalLogo />
+            <div class="welcome-info-text"> Informasi Relevan, Terkini, Reliabel dari dan untuk Warga </div>
         </div>
-        <div class="register-container">
-            <div class="text">Sudah gabung? Masuk di sini</div>
-            <div class="register-button" type="button" @onclick="OnClickLogin">Masuk RTRW</div>
+        <div class="auth-container">
+            <div class="login-container">
+                <div class="text">Belum punya akun?</div>
+                <div class="login-button" type="button" @onclick="OnClickRegister">Gabung RTRW</div>
+            </div>
+            <div class="register-container">
+                <div class="text">Sudah gabung? Masuk di sini</div>
+                <div class="register-button" type="button" @onclick="OnClickLogin">Masuk RTRW</div>
+            </div>
         </div>
     </div>
 </div>

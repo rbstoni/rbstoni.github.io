@@ -2,7 +2,7 @@
 @inherits RtrwComponentBase
 @inject NavigationManager NavigationManager
 
-<header @attributes="UserAttributes" class="@Classname" style="@Style">
+<header @attributes="UserAttributes" class="@ClassName" style="@Style">
     <div class="rtrw-container rtrw-inline-flex rtrw-align-items-center">
         <div class="rtrw-flex rtrw-align-items-center rtrw-justify-content-start">
             @if (StartBarContent is null)
@@ -17,7 +17,7 @@
             }
             @if (!string.IsNullOrEmpty(Title))
             {
-                <div class="rtrw-margin-start-32px rtrw-margin-end-auto @TitleClassname">@Title</div>
+                <div class="rtrw-margin-start-32px rtrw-margin-end-auto @TitleClassName">@Title</div>
             }
         </div>
         @if (EndBarContent is not null)
@@ -28,12 +28,12 @@
 </header>
 
 @code {
-    protected string Classname 
+    protected string ClassName 
         =>new CssBuilder("rtrw-appbar")
             .AddClass($"rtrw-appbar-{Position}", !string.IsNullOrEmpty(Position))
             .AddClass(Class)
             .Build();
-    [Parameter] public string? TitleClassname { get; set; }
+    [Parameter] public string? TitleClassName { get; set; }
     [Parameter] public string? StartBarContentClasname { get; set; }
     [Parameter] public string? EndBarContentClasname { get; set; }
     [Parameter] public string? Styles { get; set; }

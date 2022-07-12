@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Components.Web;
 using Rtrw.Client.Wasm.Components.Enums;
 using Rtrw.Client.Wasm.Components.Input.Base;
 using Rtrw.Client.Wasm.Components.Input.Internal;
-using Rtrw.Client.Wasm.Components.Interfaces;
+using Rtrw.Client.Wasm.Components.Mask.MaskAlgorithms;
 using Rtrw.Client.Wasm.Utilities;
 
 namespace Rtrw.Client.Wasm.Components
 {
     public partial class RtrwTextField<T> : RtrwBaseInput<T>
     {
-        private IMask mask = null;
-        private RtrwMask maskReference;
+        private IMask? mask = null;
+        private RtrwMask? maskReference;
 
         [Parameter] public bool Clearable { get; set; } = false;
-        public RtrwInput<string> InputReference { get; private set; }
+        public RtrwInput<string>? InputReference { get; private set; }
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
-        [Parameter] public RenderFragment AdornmentContent { get; set; }
-        [Parameter] public RenderFragment AdornmentSvg { get; set; }
+        [Parameter] public RenderFragment? AdornmentContent { get; set; }
+        [Parameter] public RenderFragment? AdornmentSvg { get; set; }
         [Parameter]
         public IMask Mask
         {
@@ -25,9 +25,10 @@ namespace Rtrw.Client.Wasm.Components
             set { mask = value; }
         }
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
-        protected string Classname => new CssBuilder("rtrw-input-input-control")
-           .AddClass(Class)
-            .Build();
+        protected string Classname 
+            => new CssBuilder("rtrw-input-input-control")
+                .AddClass(Class)
+                .Build();
 
         public Task Clear()
         {
@@ -112,6 +113,6 @@ namespace Rtrw.Client.Wasm.Components
                 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}")
                 : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
 
-        private async Task OnMaskedValueChanged(string s) { await SetTextAsync(s); }
+        private async Task OnMaskedValueChanged(string str) { await SetTextAsync(str); }
     }
 }

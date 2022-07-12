@@ -1,5 +1,4 @@
 ﻿@page "/account/profile/{Id?}"
-@page "/{userName?}"
 
 <RtrwAppBar StartBarContentClasname="rtrw-flex rtrw-align-items-center">
     <StartBarContent>
@@ -32,7 +31,6 @@
 
 @code {
     bool show = true;
-    string userName;
     [Parameter] public Warga Warga { get; set; } = new();
     [Parameter] public string Id { get; set; }
 

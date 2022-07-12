@@ -1,0 +1,8 @@
+.container {
+  padding: 0 16px;
+}
+@media screen and (min-device-width: 600px) {
+  .container {
+    padding: 0 24px;
+  }
+}

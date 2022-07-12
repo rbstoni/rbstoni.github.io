@@ -20,8 +20,7 @@ namespace Rtrw.Client.Wasm.FakeData
         Lorem Lorem => new(locale: "id_ID");
 
         public Faker<Geocoder> GenerateFakeAddress()
-        {
-            return new Faker<Geocoder>("id_ID")
+            => new Faker<Geocoder>("id_ID")
                 .RuleFor(a => a.Provinsi, "DKI Jakarta")
                 .RuleFor(a => a.KabupatenKota, "Kota Jakarta Utara")
                 .RuleFor(a => a.Kecamatan, f => f.PickRandom(KecamatanKotaJakartaUtara))
@@ -30,47 +29,54 @@ namespace Rtrw.Client.Wasm.FakeData
                 .RuleFor(a => a.Alamat, f => f.Address.StreetAddress())
                 .RuleFor(a => a.Longitude, GetRandomNumber(-180, 180).ToString())
                 .RuleFor(a => a.Latitude, GetRandomNumber(-90, 90).ToString());
-        }
-        public Faker<Comment> GenerateFakeComment() => new Faker<Comment>("id_ID")
-            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
-            .RuleFor(x => x.Commenter, GenerateFakeWarga())
-            .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
-            .RuleFor(x => x.Text, Lorem.Paragraph(10))
-            .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(0, 100))
-            .RuleFor(x => x.Replies, GenerateFakeReply().GenerateBetween(0, 100));
-        public Faker<Medium> GenerateFakeImage() => new Faker<Medium>("id_ID")
-            .RuleFor(x => x.CreatedAt, DateTime.Now)
-            .RuleFor(x => x.FileUrl, f => f.Image.PicsumUrl());
-        public Faker<Post> GenerateFakePost() => new Faker<Post>("id_ID")
-            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
-            //.RuleFor(x => x.Category, f => f.PickRandom<PostCategory>())
-            .RuleFor(x => x.Author, GenerateFakeWarga())
-            .RuleFor(x => x.Scope, f => f.PickRandom<Scope>())
-            .RuleFor(x => x.PostLocation, GenerateFakeAddress())
-            .RuleFor(x => x.Text, Lorem.Paragraph(10))
-            .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
-            .RuleFor(x => x.Comments, f => GenerateFakeComment().GenerateBetween(0, 100))
-            .RuleFor(x => x.Reactions, f => GenerateFakeReaction().GenerateBetween(0, 100));
-        public Faker<Reaction> GenerateFakeReaction() => new Faker<Reaction>()
-            .RuleFor(x => x.CreatedAt, DateTime.Now)
-            .RuleFor(x => x.Reactor, GenerateFakeWarga())
-            .RuleFor(x => x.Emoji, f => f.PickRandom<Emoji>());
-        public Faker<Comment> GenerateFakeReply() => new Faker<Comment>("id_ID")
-            .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
-            .RuleFor(x => x.Commenter, GenerateFakeWarga())
-            .RuleFor(x => x.Text, Lorem.Paragraph(25))
-            .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(1, 100));
-        public Faker<Warga> GenerateFakeWarga() => new Faker<Warga>("id_ID")
-            .RuleFor(x => x.FirstName, (f, x) => f.Person.FirstName)
-            .RuleFor(x => x.LastName, (f, x) => f.Person.LastName)
-            .RuleFor(x => x.Gender, f => f.PickRandom<Gender>())
-            .RuleFor(x => x.Email, (f, x) => x.FirstName.ToLower() + "_" + x.LastName?.ToLower() + "@rtrw.app")
-            .RuleFor(x => x.ProfileUrl, (f, x) => $"profile/{x.Id}")
-            .RuleFor(x => x.DateOfBirth, f => f.Person.DateOfBirth)
-            .RuleFor(x => x.PhoneNumber, f => f.Person.Phone)
-            .RuleFor(x => x.AvatarUrl, f => f.Internet.Avatar())
-            .RuleFor(x => x.Location, GenerateFakeAddress());
-        double GetRandomNumber(int minimum, int maximum)
+        public Faker<Warga> GenerateFakeWarga()
+            => new Faker<Warga>("id_ID")
+                .RuleFor(x => x.FirstName, (f, x) => f.Person.FirstName)
+                .RuleFor(x => x.LastName, (f, x) => f.Person.LastName)
+                .RuleFor(x => x.Gender, f => f.PickRandom<Gender>())
+                .RuleFor(x => x.Email, (f, x) => x.FirstName.ToLower() + "_" + x.LastName?.ToLower() + "@rtrw.app")
+                .RuleFor(x => x.ProfileUrl, (f, x) => $"profile/{x.Id}")
+                .RuleFor(x => x.DateOfBirth, f => f.Person.DateOfBirth)
+                .RuleFor(x => x.Phone, f => f.Person.Phone)
+                .RuleFor(x => x.AvatarUrl, f => f.Internet.Avatar())
+                .RuleFor(x => x.Geocoder, GenerateFakeAddress().Generate());
+
+        public Faker<Post> GenerateFakePost()
+            => new Faker<Post>("id_ID")
+                .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+                .RuleFor(x => x.Author, f => GenerateFakeWarga().Generate())
+                .RuleFor(x => x.Scope, f => f.PickRandom<Scope>())
+                .RuleFor(x => x.PostGeocoder, GenerateFakeAddress().Generate())
+                .RuleFor(x => x.Text, Lorem.Paragraph(10))
+                .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
+                .RuleFor(x => x.Comments, f => GenerateFakeComment().GenerateBetween(0, 10))
+                .RuleFor(x => x.Reactions, f => GenerateFakeReaction().GenerateBetween(0, 10));
+        public Faker<Comment> GenerateFakeComment()
+            => new Faker<Comment>("id_ID")
+                .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+                .RuleFor(x => x.Commenter, f => GenerateFakeWarga().Generate())
+                .RuleFor(x => x.Media, f => GenerateFakeImage().GenerateBetween(0, 5))
+                .RuleFor(x => x.Text, Lorem.Paragraph(10))
+                .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(0, 10))
+                .RuleFor(x => x.Replies, GenerateFakeReply().GenerateBetween(0, 10));
+        public Faker<Comment> GenerateFakeReply()
+            => new Faker<Comment>("id_ID")
+                .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
+                .RuleFor(x => x.Commenter, f => GenerateFakeWarga().Generate())
+                .RuleFor(x => x.Text, Lorem.Paragraph(25))
+                .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(1, 100));
+        public Faker<Reaction> GenerateFakeReaction()
+            => new Faker<Reaction>("id_ID")
+                .RuleFor(x => x.CreatedAt, DateTime.Now)
+                .RuleFor(x => x.Reactor, f => GenerateFakeWarga().Generate())
+                .RuleFor(x => x.Emoji, f => f.PickRandom<Emoji>());
+
+        public static Faker<Medium> GenerateFakeImage()
+            => new Faker<Medium>("id_ID")
+                .RuleFor(x => x.CreatedAt, DateTime.Now)
+                .RuleFor(x => x.FileUrl, f => f.Image.PicsumUrl());
+
+        static double GetRandomNumber(int minimum, int maximum)
         {
             var random = new Random();
             return random.NextDouble() * (maximum - minimum) + minimum;
@@ -93,7 +99,8 @@ namespace Rtrw.Client.Wasm.FakeData
             else
                 return string.Empty;
         }
-        string SetKodeposKelurahan(string kelurahan)
+
+        static string SetKodeposKelurahan(string kelurahan)
         {
             if (kelurahan == "Koja Utara")
                 return "14210";

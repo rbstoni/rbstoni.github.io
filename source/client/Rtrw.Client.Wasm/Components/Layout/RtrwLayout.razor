@@ -1,0 +1,16 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwDrawerContainer
+
+<div @attributes="@UserAttributes" class="@ClassName" style="@StyleName">
+    <CascadingValue IsFixed="true" Value="@this">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code{
+    protected override string ClassName => new CssBuilder("rtrw-layout").AddClass(base.ClassName).Build();
+    public RtrwLayout()
+    {
+        Fixed = true;
+    }
+}

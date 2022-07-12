@@ -1,0 +1,70 @@
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+@using Rtrw.Client.Wasm.JsInterop
+@using Rtrw.Client.Wasm.Utilities
+@using System.Text.Json
+
+<div @ref="mapboxRef" @attributes="@Attributes" class="@Classname" style="@StyleName"></div>
+
+@code {
+    private ElementReference mapboxRef;
+    [CascadingParameter] protected MapboxFeatureProperties? FeatureProperties { get; set; } 
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public EventCallback<MapboxFeatureProperties> OnKelurahanChange { get; set; }
+    IJSObjectReference? mapJsModule, mapInstance, mapControl;
+    protected string Classname
+        => new CssBuilder("mapbox")
+            .AddClass(Class)
+            .Build();
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle(Style)
+            .Build();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            mapJsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./js/mapboxComponent.js");
+            mapInstance = await mapJsModule.InvokeAsync<IJSObjectReference>(
+                "addMapToElement", mapboxRef);
+            await mapJsModule.InvokeVoidAsync("addMapControl", mapInstance);
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await mapJsModule.InvokeAsync<string>("getMapFeatures", mapInstance, dotNetReference);
+        }
+    }
+
+    [JSInvokable("GetFeatureProperties")]
+    public async void AddFeaturePropertiesToElement(string result)
+    {
+        var deserializedObject = JsonSerializer.Deserialize<MapboxFeatureProperties>(result);
+        FeatureProperties = deserializedObject;
+        await OnKelurahanChange.InvokeAsync(FeatureProperties);
+        StateHasChanged();
+    }
+
+    async Task ShowAsync(double latitude, double longitude)
+    {
+        if (mapJsModule is not null && mapInstance is not null)
+        {
+            await mapJsModule.InvokeVoidAsync("setMapCenter", mapInstance,
+                latitude, longitude).AsTask();
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (mapInstance is not null)
+        {
+            await mapInstance.DisposeAsync();
+        }
+
+        if (mapJsModule is not null)
+        {
+            await mapJsModule.DisposeAsync();
+        }
+    }
+}

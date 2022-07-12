@@ -5,8 +5,8 @@
 </label>
 
 @code {
-    protected string Classname =>
-        new CssBuilder()
+    protected string Classname 
+        => new CssBuilder()
             .AddClass("rtrw-input-label")
             .AddClass("rtrw-input-label-animated")
             .AddClass($"rtrw-input-label-{Variant.EnumToDescriptionString()}")
@@ -15,6 +15,7 @@
             .AddClass("rtrw-input-error", Error)
             .AddClass(Class)
             .Build();
+
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool Disabled { get; set; }
     [Parameter] public bool Error { get; set; }

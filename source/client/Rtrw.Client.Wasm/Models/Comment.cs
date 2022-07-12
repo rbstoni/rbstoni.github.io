@@ -7,7 +7,6 @@ namespace Rtrw.Client.Wasm.Models
     {
         public string Id { get; set; } = $"comment-{Guid.NewGuid().ToString("N")}";
         public Warga Commenter { get; set; }
-        public CommentOption? Option { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime EditedAt { get; set; }
         public string? CommentUrl { get; set; }
@@ -17,5 +16,6 @@ namespace Rtrw.Client.Wasm.Models
         public List<Reaction>? Reactions { get; set; } = new();
         public List<Warga>? Mentions { get; set; } = new();
         public List<Comment>? Replies { get; set; } = new();
+        public CommentOption? Option { get; set; }
     }
 }

@@ -1,0 +1,46 @@
+﻿@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Services
+@inherits LayoutComponentBase
+@inject ICurrentUser currentUser
+@inject IPostService PostService
+@inject NavigationManager Nagivation
+@inject IModalService Modal
+
+
+<RtrwModalProvider />
+<RtrwLayout>
+    <CascadingValue Value="@CurrentUser" IsFixed="true">
+        @Body
+    </CascadingValue>
+</RtrwLayout>
+
+@code {
+    Warga CurrentUser => currentUser.Warga;
+    //bool UserHasChoice { get; set; } = false;
+    //protected override async void OnAfterRender(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        var posts = await PostService.GetPostsAsync();
+    //        if (posts == null || posts.Count == 0)
+    //        {
+    //            ModalOptions modalOptions = new()
+    //                {
+    //                    DisableBackdropClick = true,
+    //                    CloseButton = false,
+    //                    FullScreen = false,
+    //                    NoHeader = true,
+    //                };
+
+    //            var modal = Modal.Show<WelcomeModal>(string.Empty, modalOptions);
+    //            var result = await modal.Result;
+    //            if (!result.Cancelled)
+    //            {
+    //                await Modal.Show<GenerateDataModal>(string.Empty, modalOptions).Result;
+    //            }
+    //            UserHasChoice = true;
+    //            StateHasChanged();
+    //        }
+    //    }
+    //}
+}

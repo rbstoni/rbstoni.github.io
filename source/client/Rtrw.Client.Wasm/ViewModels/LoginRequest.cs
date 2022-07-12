@@ -1,10 +1,12 @@
-﻿namespace Rtrw.Client.Wasm.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Rtrw.Client.Wasm.ViewModels
 {
     public class LoginRequest
     {
-        public string Email { get; set; }
+        [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        public bool RememberMe { get; set; }
     }
 }

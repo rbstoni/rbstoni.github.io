@@ -1,0 +1,21 @@
+﻿<div @attributes="@Attributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+
+    protected string ClassName
+        => new CssBuilder()
+            .AddClass("container")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle(Style)
+            .Build();
+}

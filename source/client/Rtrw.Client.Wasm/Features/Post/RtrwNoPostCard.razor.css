@@ -1,0 +1,19 @@
+.no-post-card {
+  align-self: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.35);
+  background-color: var(--rtrw-body-bg);
+}
+
+::deep .no-post-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+  justify-content: space-around;
+  align-items: center;
+}

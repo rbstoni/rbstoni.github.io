@@ -1,0 +1,21 @@
+.map-feed {
+  padding: 8px 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: var(--rtrw-body-bg);
+}
+
+.section-header-content .header-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+  padding: 4px 0;
+  cursor: pointer;
+}

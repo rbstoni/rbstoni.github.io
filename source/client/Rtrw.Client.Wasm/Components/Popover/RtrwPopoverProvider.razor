@@ -1,0 +1,62 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@implements IDisposable
+
+@if (IsEnabled)
+{
+    <div class="rtrw-popover-provider">
+        @foreach (var handler in Service.Handlers)
+        {
+            <RtrwRender @ref="handler.ElementReference" @key="handler.Id">
+                <div id="@($"popovercontent-{handler.Id}")" data-ticks="@(handler.ActivationDate?.Ticks ?? 0)" @attributes="@handler.UserAttributes" class="@handler.Class" style="@handler.Style">
+                    @if (handler.ShowContent == true)
+                    {
+                        @handler.Fragment
+                    }
+                </div>
+            </RtrwRender>
+        }
+    </div>
+}
+
+@code {
+    private bool isConnectedToService = false;
+
+    [CascadingParameter(Name = "UsePopoverProvider")]
+    public bool IsEnabled { get; set; } = true;
+    [Inject] public IRtrwPopoverService Service { get; set; }
+
+    public void Dispose()
+    {
+        Service.FragmentsChanged -= Service_FragmentsChanged;
+    }
+    protected override void OnInitialized()
+    {
+        if (IsEnabled == false)
+        {
+            return;
+        }
+
+        Service.FragmentsChanged += Service_FragmentsChanged;
+        isConnectedToService = true;
+    }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (IsEnabled == false && isConnectedToService == true)
+        {
+            Service.FragmentsChanged -= Service_FragmentsChanged;
+            isConnectedToService = false;
+        }
+        else if (IsEnabled == true && isConnectedToService == false)
+        {
+            Service.FragmentsChanged -= Service_FragmentsChanged; // make sure to avoid multiple registration
+            Service.FragmentsChanged += Service_FragmentsChanged;
+            isConnectedToService = true;
+        }
+    }
+    private void Service_FragmentsChanged(object sender, EventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+}

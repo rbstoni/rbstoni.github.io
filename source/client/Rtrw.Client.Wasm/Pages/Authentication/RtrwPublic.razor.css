@@ -22,27 +22,43 @@
 .public-page-container {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: auto;
   height: 100%;
-  justify-content: center;
-  z-index: 1;
   width: 100%;
+  z-index: 1;
 }
-.public-page-container .welcome-info-text {
-  font-family: "Alegreya Sans";
-  font-weight: 300;
-  font-size: 20px;
+
+.public-page-wrapper {
+  position: absolute;
+  bottom: 20%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  flex-wrap: 0;
+  background-color: var(--rtrw-white);
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.35);
+  gap: 16px;
+}
+.public-page-wrapper .welcome-info-container .welcome-info-text {
+  margin-top: 8px;
+  font-family: Raleway;
+  font-weight: normal;
+  font-size: 17px;
   text-align: left;
   color: #716464;
-  max-width: 200px;
 }
 
 .auth-container {
-  align-self: flex-end;
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  gap: 8px;
+  gap: 24px;
 }
 .auth-container .login-container .login-button {
   display: flex;
@@ -58,6 +74,7 @@
   font-size: 16px;
   text-align: left;
   color: #fff;
+  min-height: 84px;
 }
 .auth-container .register-container .register-button {
   display: flex;
@@ -65,14 +82,14 @@
   align-items: center;
   height: 40px;
   border-radius: 10px;
-  color: #fff;
-  background-color: #716464;
+  color: #0db201;
+  border: 2px solid #0db201;
 }
 
 .text {
-  font-family: "Alegreya Sans";
-  font-weight: 300;
-  font-size: 12px;
+  font-family: Raleway;
+  font-weight: normal;
+  font-size: 10px;
   text-align: left;
   color: #716464;
 }

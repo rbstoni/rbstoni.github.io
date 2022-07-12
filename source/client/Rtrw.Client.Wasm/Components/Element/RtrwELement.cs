@@ -8,12 +8,9 @@ namespace Rtrw.Client.Wasm.Components
     public class RtrwElement : RtrwComponentBase
     {
 
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-        [Parameter]
-        public string HtmlTag { get; set; } = "div";
-        [Parameter]
-        public ElementReference? Ref { get; set; }
+        [Parameter] public RenderFragment? ChildContent { get; set; }
+        [Parameter] public string HtmlTag { get; set; } = "div";
+        [Parameter] public ElementReference? Ref { get; set; }
         [Parameter] public EventCallback<ElementReference> RefChanged { get; set; }
 
         public void Refresh() => StateHasChanged();
@@ -37,6 +34,5 @@ namespace Rtrw.Client.Wasm.Components
             builder.AddContent(10, ChildContent);
             builder.CloseElement();
         }
-
     }
 }

@@ -1,0 +1,15 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="@UserAttributes" class="@ClassName" style="@Style">
+    @ChildContent
+</div>
+
+@code {
+    protected string ClassName
+            => new CssBuilder("rtrw-main-content")
+                .AddClass(Class)
+                .Build();
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

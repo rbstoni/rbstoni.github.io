@@ -20,7 +20,7 @@ namespace Rtrw.Client.Wasm.Components.Extensions
             return (IJSRuntime)jsRuntimeProperty.GetValue(context);
         }
 
-        public static ValueTask<BoundingClientRect> MudGetBoundingClientRectAsync(this ElementReference elementReference)
+        public static ValueTask<BoundingClientRect> RtrwGetBoundingClientRectAsync(this ElementReference elementReference)
         {
             return elementReference
                 .GetJSRuntime()?

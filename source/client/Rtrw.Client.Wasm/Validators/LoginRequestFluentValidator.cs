@@ -7,10 +7,9 @@ namespace Rtrw.Client.Wasm.Validators
     {
         public LoginRequestFluentValidator()
         {
-            RuleFor(x => x.Email)
+            RuleFor(x => x.Phone)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithName("Email").WithMessage("Email tidak boleh kosong")
-                .EmailAddress();
+                .NotEmpty().WithName("Ponsel").WithMessage("Nomor ponsel tidak boleh kosong");
             RuleFor(x => x.Password)
                 .NotEmpty().WithName("Kata Sandi").WithMessage("Kata sandi tidak boleh kosong");
         }

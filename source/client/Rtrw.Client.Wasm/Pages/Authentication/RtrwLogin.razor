@@ -1,23 +1,25 @@
 ﻿@page "/auth/login/{returnUrl?}"
 @using Rtrw.Client.Wasm.Components.Enums
-@using Rtrw.Client.Wasm.FakeData.Services
+@using Rtrw.Client.Wasm.Components.Mask
+@using Rtrw.Client.Wasm.Services
 @using Rtrw.Client.Wasm.Validators
 @using Rtrw.Client.Wasm.ViewModels
 @attribute [AllowAnonymous]
 @layout AuthBaseLayout
+@inject NavigationManager NavigationManager
 @inject IAccountService AccountService
 
 <div class="login-container" tabindex="-1">
     <div class="login-title">Selamat Datang Kembali!</div>
     <RtrwForm Model="loginRequest" @ref="loginForm" Validation="@(loginRequestFluentValidator.ValidateValue)" @bind-IsValid="@validated">
+        @*Phone number field*@
         <RtrwTextField T="string"
-                       @bind-Value="loginRequest.Email"
-                       Validation="@(new Func<string, Task<bool>>(CheckIfEmailExistOnDatabase))"
-                       For="@(()=>loginRequest.Email)"
+                       @bind-Value="loginRequest.Phone"
+                       For="@(()=>loginRequest.Phone)"
+                       Label="No. Telp"
                        Variant="Variant.Outlined"
-                       Label="Email atau No. Telp"
-                       Immediate
                        Adornment="Adornment.End"
+                       Immediate
                        Required
                        Clearable
                        MaxLength="100">
@@ -28,16 +30,18 @@
                 }
             </AdornmentContent>
         </RtrwTextField>
+
+        @*Password field*@
         <RtrwTextField T="string"
                        InputType="@(passwordVisible? InputType.Text:InputType.Password)"
                        @bind-Value="loginRequest.Password"
                        For="@(()=>loginRequest.Password)"
                        Variant="Variant.Outlined"
                        Label="Kata Sandi"
+                       Adornment="Adornment.End"
                        Immediate
                        Required
                        Clearable
-                       Adornment="Adornment.End"
                        OnAdornmentClick="ChangePasswordVisibility"
                        MaxLength="100">
             <AdornmentSvg>
@@ -51,19 +55,21 @@
                 }
             </AdornmentSvg>
         </RtrwTextField>
-        <div class="rtrw-inline-flex rtrw-justify-content-between rtrw-align-items-center rtrw-width-100">
-            <div class="rtrw-margin-end-auto lupa-kata-sandi" type="button" @onclick="LupaKataSandi">Lupa kata sandi?</div>
+
+        <div class="rtrw-margin-end-auto lupa-kata-sandi" type="button" @onclick="@(()=>NavigationManager.NavigateTo("/account/forgot-password"))">Lupa kata sandi?</div>
+        @*<div class="rtrw-inline-flex rtrw-justify-content-between rtrw-align-items-center rtrw-width-100">
             <div class="rtrw-margin-start-auto" style="font-size: 14px; color: var(--rtrw-info)" type="button" @onclick="LoginAsToni">Login as Toni</div>
-        </div>
+        </div>*@
+
+        @*Login button*@
         <div class="rtrw-flex rtrw-justify-content-center">
             <RtrwButton Type=ButtonType.Button
-                        OnClick="@OnValidSubmitHandler"
                         Variant=Variant.Filled
                         Color=ThemeColor.Primary
                         Disabled="@(!validated)"
                         FullWidth="false"
                         Class="rtrw-align-self-center"
-                        Style="align-self:center; border-radius: 22px; min-width:300px">
+                        Style="align-self:center; border-radius: 22px; min-height: 44px; min-width:300px">
                 @if (submitted)
                 {
                     <RtrwSpinner Color="ThemeColor.Primary" Indeterminate />
@@ -89,7 +95,6 @@
     RtrwForm loginForm;
     LoginRequestFluentValidator loginRequestFluentValidator = new();
     [Parameter] public string? ReturnUrl { get; set; }
-    [Inject] NavigationManager NavigationManager { get; set; }
     [CascadingParameter] AuthBaseLayout Parent { get; set; }
     protected override void OnInitialized()
     {
@@ -117,16 +122,15 @@
         return emailExist;
     }
 
+    async Task<bool> CheckIfPhoneExistOnDatabase(string email)
+    {
+        return await AccountService.CheckIfEmailExistOnDatabase(email);
+    }
+
     void ChangePasswordVisibility() => passwordVisible = !passwordVisible;
 
     void LupaKataSandi()
     {
         return;
-    }
-
-    void LoginAsToni()
-    {
-        loginRequest.Email = "toni@rtrw.app";
-        loginRequest.Password = "p4ssw0rd";
     }
 }

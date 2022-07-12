@@ -1,0 +1,80 @@
+﻿@namespace Rtrw.Client.Wasm.Features
+@using Rtrw.Client.Wasm.Utilities
+
+<div @attributes="@Attributes" class="@ClassName" style="@Style">
+    <RtrwImage Source="@Source"
+               Height="@Height"
+               Width="@Width"
+               BorderRadius="12"
+               Fluid />
+    <div class="image-control">
+        @if (SharesCount > 0)
+        {
+            <div class="rtrw-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="37.404" height="35.289" viewBox="0 0 37.404 35.289">
+                    <defs>
+                        <filter id="Path_3128" x="0" y="0" width="37.404" height="35.289" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Path_3128)">
+                        <path id="Path_3128-2" data-name="Path 3128" d="M13.636,9.077V5L20.4,12.135,13.636,19.27V15.091c-4.835,0-8.219,1.631-10.636,5.2C3.967,15.193,6.868,10.1,13.636,9.077Z" transform="translate(7 5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </g>
+                </svg>
+                <span class="text-label">@SharesCount</span>
+            </div>
+        }
+        @if (ViewsCount > 0)
+        {
+            <div class="rtrw-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36.589" height="30.803" viewBox="0 0 36.589 30.803">
+                    <defs>
+                        <filter id="eye-solid" x="6.302" y="3.327" width="23.986" height="23.986" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                        <filter id="visibility_FILL0_wght400_GRAD0_opsz48" x="0" y="0" width="36.589" height="30.803" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur-2" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur-2" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <g id="Group_1400" data-name="Group 1400" transform="translate(10233.772 -8484.25)">
+                        <g transform="matrix(1, 0, 0, 1, -10233.77, 8484.25)" filter="url(#eye-solid)">
+                            <path id="eye-solid-2" data-name="eye-solid" d="M45.414,60.468a2.454,2.454,0,0,1,.262-.012,2.993,2.993,0,1,1-2.993,2.993,2.454,2.454,0,0,1,.012-.262,2.289,2.289,0,0,0,.985.262,2,2,0,0,0,2-2A2.289,2.289,0,0,0,45.414,60.468Z" transform="translate(-27.38 -48.13)" fill="#fff" />
+                        </g>
+                        <g transform="matrix(1, 0, 0, 1, -10233.77, 8484.25)" filter="url(#visibility_FILL0_wght400_GRAD0_opsz48)">
+                            <path id="visibility_FILL0_wght400_GRAD0_opsz48-2" data-name="visibility_FILL0_wght400_GRAD0_opsz48" d="M11.022,20.3a9.19,9.19,0,0,1-5.413-1.7A10.368,10.368,0,0,1,2,14.151,10.368,10.368,0,0,1,5.609,9.7,9.19,9.19,0,0,1,11.022,8a9.19,9.19,0,0,1,5.413,1.7,10.368,10.368,0,0,1,3.609,4.449A10.368,10.368,0,0,1,16.435,18.6,9.19,9.19,0,0,1,11.022,20.3Zm0-6.151Zm0,4.921a8.245,8.245,0,0,0,4.562-1.343,8.715,8.715,0,0,0,3.168-3.578,8.715,8.715,0,0,0-3.168-3.578,8.42,8.42,0,0,0-9.124,0,8.862,8.862,0,0,0-3.188,3.578A8.862,8.862,0,0,0,6.46,17.729,8.245,8.245,0,0,0,11.022,19.072Z" transform="translate(7.27 1.25)" fill="#fff" stroke="#fff" stroke-width="0.5" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="text-label">@ViewsCount</span>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public string? Source { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public int? Height { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public int? SharesCount { get; set; }
+    [Parameter] public int? ViewsCount { get; set; }
+
+    protected string ClassName
+        => new CssBuilder("image-container")
+            .AddClass(Class, !string.IsNullOrEmpty(Class))
+            .Build();
+}

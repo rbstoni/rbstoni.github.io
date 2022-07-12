@@ -40,12 +40,6 @@ $blue: #0d6efd !default;
 $gray: #f2f2f2 !default;
 $link: #3273dc !default;
 
-$default-hover-color: #e5e5e5;
-$default-border-color: #eff3f4;
-$default-body-color: $white;
-$default-text-color: $black;
-$default-disabled-color: #f2f2f2;
-
 // scss-docs-start colors-map
 $colors: (
   "white": $white,
@@ -58,7 +52,7 @@ $colors: (
 
 // Theme colors
 $primary: #0db201;
-$secondary: #F2F2F2;
+$secondary: #716464;
 $info: hsl(207, 61%,  53%);
 $success: hsl(153, 53%,  53%);
 $warning: hsl(44,  100%, 77%);
@@ -66,6 +60,12 @@ $danger: hsl(348, 86%, 61%);
 $light: hsl(0, 0%, 96%);
 $dark: hsl(0, 0%, 21%);
 
+$default-hover-color: #e5e5e5;
+$default-border-color: #eff3f4;
+$default-body-color: $secondary;
+$default-body-bg: $white;
+$default-disabled-color: #00000042;
+$default-disabled-bg: #0000001e;
 // scss-docs-start theme-colors-map
 $theme-colors: (
   "primary": $primary,
@@ -178,8 +178,8 @@ $position-values: (
 // Body
 //
 // Settings for the `<body>` element.
-$body-bg: $default-body-color !default;
-$body-color: $default-text-color !default;
+$body-bg: $default-body-bg !default;
+$body-color: $default-body-color !default;
 $body-text-align: left !default;
 
 // Links

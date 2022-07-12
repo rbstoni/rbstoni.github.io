@@ -1,4 +1,4 @@
-﻿@using Rtrw.Client.Wasm.Components.Enums
+﻿@*@using Rtrw.Client.Wasm.Components.Enums
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Svgs
 @using Rtrw.Client.Wasm.Utilities
@@ -14,7 +14,7 @@
                 </RtrwTextField>
                 <PostInputTextarea Placeholder="Apa yang #terjadi di RTRW kamu, &#64;kelurahan" Text="@Post.Text" />
                 <div style="margin: 4px 16px 4px 16px; ">
-                    <TambahLokasi PostLocation="@Post.PostLocation" />
+                    <TambahLokasi PostLocation="@Post.PostGeocoder" />
                 </div>
 
                 <div style="margin: 4px 16px 4px 16px; overflow-x: scroll; overflow-y: hidden; white-space:nowrap;">
@@ -32,4 +32,4 @@
 
 @code {
     [CascadingParameter] public Post Post { get; set; } = new();
-}
+}*@

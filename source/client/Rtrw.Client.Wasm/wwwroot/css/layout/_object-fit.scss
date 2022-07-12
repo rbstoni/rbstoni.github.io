@@ -1,0 +1,19 @@
+.#{$prefix}object-fit-none {
+    object-fit: none;
+}
+
+.#{$prefix}object-fit-cover {
+    object-fit: cover;
+}
+
+.#{$prefix}object-fit-contain {
+    object-fit: contain;
+}
+
+.#{$prefix}object-fit-fill {
+    object-fit: fill;
+}
+
+.#{$prefix}object-fit-scale-down {
+    object-fit: scale-down;
+}

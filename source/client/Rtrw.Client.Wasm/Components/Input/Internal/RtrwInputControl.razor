@@ -45,8 +45,8 @@
 </div>
 
 @code {
-    protected string Classname =>
-        new CssBuilder("rtrw-input-control")
+    protected string Classname
+        => new CssBuilder("rtrw-input-control")
             .AddClass("rtrw-input-required", when: () => Required)
             .AddClass($"rtrw-input-control-margin-{Margin.EnumToDescriptionString()}", when: () => Margin != Margin.None)
             .AddClass("rtrw-input-control-full-width", FullWidth)
@@ -54,14 +54,14 @@
             .AddClass(Class)
             .Build();
 
-    protected string HelperContainer =>
-        new CssBuilder("rtrw-input-control-helper-container")
-       .AddClass($"rtrw-padding-x-4px", Variant == Variant.Filled)
-       .AddClass($"rtrw-padding-x-8px", Variant == Variant.Outlined)
-       .Build();
+    protected string HelperContainer
+        => new CssBuilder("rtrw-input-control-helper-container")
+            .AddClass($"rtrw-padding-x-4px", Variant == Variant.Filled)
+            .AddClass($"rtrw-padding-x-8px", Variant == Variant.Outlined)
+            .Build();
 
-    protected string HelperClass =>
-        new CssBuilder("rtrw-input-helper-text")
+    protected string HelperClass
+        => new CssBuilder("rtrw-input-helper-text")
             .AddClass("rtrw-input-helper-onfocus", HelperTextOnFocus)
             .AddClass("rtrw-input-error", Error)
             .Build();

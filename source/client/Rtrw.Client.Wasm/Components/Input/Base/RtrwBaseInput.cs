@@ -33,7 +33,6 @@ namespace Rtrw.Client.Wasm.Components.Input.Base
         [Parameter] public bool KeyUpPreventDefault { get; set; }
         [Parameter] public string Label { get; set; }
         [Parameter] public int Lines { get; set; } = 1;
-        [Parameter] public EventCallback<int> LinesChanged { get; set; }
         [Parameter] public Margin Margin { get; set; } = Margin.None;
         [Parameter] public int MaxLength { get; set; } = 524288;
         [Parameter] public EventCallback<MouseEventArgs> OnAdornmentClick { get; set; }
@@ -54,7 +53,7 @@ namespace Rtrw.Client.Wasm.Components.Input.Base
 
         public virtual ValueTask FocusAsync() { return new ValueTask(); }
 
-        public virtual void ForceRender(bool forceTextUpdate)
+        public virtual void ForceRender(bool _forceTextUpdate)
         {
             forceTextUpdate = true;
             UpdateTextPropertyAsync(false).AndForget();
@@ -72,18 +71,14 @@ namespace Rtrw.Client.Wasm.Components.Input.Base
             var hasText = parameters.Contains<string>(nameof(Text));
             var hasValue = parameters.Contains<T>(nameof(Value));
 
-            // Refresh Value from Text
             if(hasText && !hasValue)
                 await UpdateValuePropertyAsync(false);
 
-            // Refresh Text from Value
             if(hasValue && !hasText)
             {
                 var updateText = true;
                 if(isFocused && !forceTextUpdate)
                 {
-                    // Text update suppression, only in BSS (not in WASM).
-                    // This is a fix for #1012
                     if(RuntimeLocation.IsServerSide && TextUpdateSuppression)
                         updateText = false;
                 }
@@ -131,8 +126,6 @@ namespace Rtrw.Client.Wasm.Components.Input.Base
         {
             await base.OnInitializedAsync();
 
-            // Because the way the Value setter is built, it won't cause an update if the incoming Value is
-            // equal to the initial value. This is why we force an update to the Text property here.
             if(typeof(T) != typeof(string))
                 await UpdateTextPropertyAsync(false);
         }

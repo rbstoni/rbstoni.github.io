@@ -13,11 +13,7 @@ namespace Rtrw.Client.Wasm.FakeData
         {
             return AddApplicationDbContextFactory<TContext>(
                 serviceCollection,
-                optionsAction == null
-                    ? null
-                    : (_, oa)
-                        => optionsAction(oa),
-                lifetime);
+                optionsAction == null ? null : (_, oa) => optionsAction(oa), lifetime);
         }
 
         public static IServiceCollection AddApplicationDbContextFactory<TContext>(
@@ -39,12 +35,7 @@ namespace Rtrw.Client.Wasm.FakeData
                     ServiceLifetime.Singleton));
 
             serviceCollection.AddDbContextFactory<TContext>(
-                optionsAction ??
-                    ((s, p)
-                        =>
-                    {
-                    }),
-                lifetime);
+                optionsAction ?? ((s, p) => { }), lifetime);
 
             return serviceCollection;
         }

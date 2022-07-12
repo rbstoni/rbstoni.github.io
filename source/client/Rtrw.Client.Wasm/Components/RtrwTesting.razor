@@ -1,0 +1,69 @@
+﻿@page "/test"
+@using Bogus
+@using Rtrw.Client.Wasm.FakeData
+@using Rtrw.Client.Wasm.Features
+@using Rtrw.Client.Wasm.Features.HorizontalScrollable
+@using Rtrw.Client.Wasm.Models
+
+<h1>Filled Buttons</h1>
+<div class="rtrw-flex rtrw-gap-8px">
+    <RtrwButton Variant="Variant.Filled">Default</RtrwButton>
+    <RtrwButton Variant="Variant.Filled" Color="ThemeColor.Primary">Primary</RtrwButton>
+    <RtrwButton Variant="Variant.Filled" Color="ThemeColor.Secondary">Secondary</RtrwButton>
+    <RtrwButton Variant="Variant.Filled" Disabled>Disabled</RtrwButton>
+</div>
+<hr />
+<h1>Text Buttons</h1>
+<div class="rtrw-flex rtrw-gap-8px">
+    <RtrwButton Variant="Variant.Text">Default</RtrwButton>
+    <RtrwButton Variant="Variant.Text" Color="ThemeColor.Primary">Primary</RtrwButton>
+    <RtrwButton Variant="Variant.Text" Color="ThemeColor.Secondary">Secondary</RtrwButton>
+    <RtrwButton Variant="Variant.Text" Disabled>Disabled</RtrwButton>
+</div>
+<hr />
+<h1>Outlined Buttons</h1>
+<div class="rtrw-flex rtrw-gap-8px">
+    <RtrwButton Variant="Variant.Outlined">Default</RtrwButton>
+    <RtrwButton Variant="Variant.Outlined" Color="ThemeColor.Primary">Primary</RtrwButton>
+    <RtrwButton Variant="Variant.Outlined" Color="ThemeColor.Secondary">Secondary</RtrwButton>
+    <RtrwButton Variant="Variant.Outlined" Disabled>Disabled</RtrwButton>
+</div>
+<hr />
+
+<h1>Full width Buttons</h1>
+<RtrwButton Variant="Variant.Outlined" FullWidth>Default</RtrwButton>
+<RtrwButton Variant="Variant.Outlined" FullWidth Color="ThemeColor.Primary">Primary</RtrwButton>
+<RtrwButton Variant="Variant.Outlined" FullWidth Color="ThemeColor.Secondary">Secondary</RtrwButton>
+<RtrwButton Variant="Variant.Outlined" FullWidth Disabled>Disabled</RtrwButton>
+<hr />
+
+<Image Source="https://statik.tempo.co/data/2022/03/20/id_1096634/1096634_720.jpg" Height="200" SharesCount="100" ViewsCount="100" />
+<Rtrw.Client.Wasm.Features.Post.Components.AvatarWarga Size="45"></Rtrw.Client.Wasm.Features.Post.Components.AvatarWarga>
+<Rtrw.Client.Wasm.Features.Post.Components.NameBar FullName="Toni Ribas" Kelurahan="Kemayoran"></Rtrw.Client.Wasm.Features.Post.Components.NameBar>
+
+@*<RtrwHorizontalScrollable>
+    @foreach (var item in Posts)
+    {
+        <RtrwPostCard AvatarUrl="@item.Author.AvatarUrl"
+                  FullName="@item.Author.FullName"
+                  Kelurahan="@item.Author.Geocoder.Kelurahan"
+                  PostText="@item.Text"
+                  Source="@item.Media?.FirstOrDefault()?.FileUrl"
+                  WargaId="@item.Author.Id" />
+    }
+</RtrwHorizontalScrollable>*@
+
+<RtrwNoPostCard />
+@code {
+    bool open;
+    private Dummy Dummy = new Dummy();
+    Medium Medium
+        => new Faker<Medium>()
+            .RuleFor(x => x.FileUrl, f => f.Image.LoremPixelUrl());
+    //List<Post> Posts => Dummy.GenerateFakePost().Generate(2);
+
+    void TogglePopover()
+    {
+        open = !open;
+    }
+}

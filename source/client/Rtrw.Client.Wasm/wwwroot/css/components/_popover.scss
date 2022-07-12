@@ -1,0 +1,58 @@
+.#{$prefix}popover {
+    outline: 0;
+    z-index: calc(var(--#{$prefix}zindex-popover) + 1);
+    position: absolute;
+    opacity: 0;
+
+    &.#{$prefix}popover-fixed {
+        position: fixed;
+    }
+
+    &.#{$prefix}popover-relative-width {
+        width: 100%;
+    }
+
+    &.#{$prefix}popover-open {
+        opacity: 1;
+        transition: opacity;
+    }
+
+    &:not(.#{$prefix}popover-open ) {
+        pointer-events: none;
+        transition-duration:0ms !important;
+        transition-delay:0ms !important;
+    }
+}
+
+.#{$prefix}appbar {
+    .#{$prefix}popover-cascading-value {
+        z-index: calc(var(--#{$prefix}zindex-appbar) + 2);
+    }
+}
+
+.#{$prefix}drawer {
+    &:not(.#{$prefix}drawer-temporary) {
+        .#{$prefix}popover-cascading-value {
+            z-index: calc(var(--#{$prefix}zindex-drawer) + 2);
+        }
+    }
+
+    &.#{$prefix}drawer-temporary, &.#{$prefix}drawer-responsive {
+        .#{$prefix}popover-cascading-value {
+            z-index: calc(var(--#{$prefix}zindex-appbar) + 4);
+        }
+    }
+}
+
+.#{$prefix}dialog {
+    .#{$prefix}popover-cascading-value {
+        z-index: calc(var(--#{$prefix}zindex-dialog) + 3);
+    }
+}
+
+.#{$prefix}popover {
+    .#{$prefix}list {
+        max-height: inherit;
+        overflow-y: auto;
+    }
+}

@@ -1,0 +1,27 @@
+﻿@if (truncatedView)
+{
+    <div class="truncate-view @Class" style="@Style">
+        @truncatedText
+        <span>&hellip;</span>
+        <span class="truncate-button" type="button" @onclick="OnClickHandler" @onclick:stopPropagation="true">Selengkapnya</span>
+    </div>
+}
+else
+{
+    @Text
+}
+
+@code {
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+
+    string truncatedText => Text?.Length > 160 ? Text.Substring(0, 160) : string.Empty;
+    bool truncatedView;
+    void OnClickHandler() => truncatedView = false;
+
+    protected override void OnInitialized()
+    {
+        truncatedView = !string.IsNullOrEmpty(truncatedText);
+    }
+}

@@ -1,0 +1,77 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+@implements IAsyncDisposable
+@inject IRtrwPopoverService Service
+
+<div id="@($"popover-{popoverHandler!.Id}")" class="rtrw-popover-cascading-value">
+</div>
+
+@code {
+    private RtrwPopoverHandler? popoverHandler;
+
+    [Parameter] public Origin AnchorOrigin { get; set; } = Origin.TopLeft;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public double Delay { get; set; } = 0;
+    [Parameter] public double Duration { get; set; } = 251;
+    [Parameter] public bool Fixed { get; set; }
+    [Parameter] public int? MaxHeight { get; set; } = null;
+    [Parameter] public bool Open { get; set; }
+    [Parameter] public OverflowBehavior OverflowBehavior { get; set; } = OverflowBehavior.FlipOnOpen;
+    [Parameter] public bool Paper { get; set; } = true;
+    [Parameter] public bool RelativeWidth { get; set; } = false;
+    [Parameter] public bool Square { get; set; }
+    [Parameter] public Origin TransformOrigin { get; set; } = Origin.TopLeft;
+
+    protected string PopoverClass
+        => new CssBuilder("rtrw-popover")
+            .AddClass($"rtrw-popover-fixed", Fixed)
+            .AddClass($"rtrw-popover-open", Open)
+            .AddClass($"rtrw-popover-{TransformOrigin.EnumToDescriptionString()}")
+            .AddClass($"rtrw-popover-anchor-{AnchorOrigin.EnumToDescriptionString()}")
+            .AddClass($"rtrw-popover-overflow-{OverflowBehavior.EnumToDescriptionString()}")
+            .AddClass($"rtrw-popover-relative-width", RelativeWidth)
+            .AddClass($"rtrw-paper", Paper)
+            .AddClass($"rtrw-paper-square", Paper && Square)
+            .AddClass($"overflow-y-auto", MaxHeight != null)
+            .AddClass(Class)
+            .Build();
+    protected string PopoverStyles =>
+        new StyleBuilder()
+        .AddStyle("transition-duration", $"{Duration}ms")
+        .AddStyle("transition-delay", $"{Delay}ms")
+        .AddStyle("max-height", MaxHeight.ToPx(), MaxHeight != null)
+        .AddStyle(Style)
+        .Build();
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await Service.Unregister(popoverHandler!);
+        }
+        catch (JSDisconnectedException) { }
+        catch (TaskCanceledException) { }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender == true)
+        {
+            await popoverHandler.Initialize();
+            await Service.InitializeIfNeeded();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+    protected override void OnInitialized()
+    {
+        popoverHandler = Service.Register(ChildContent ?? new RenderFragment((x) => { }));
+        popoverHandler.SetComponentBaseParameters(this, PopoverClass, PopoverStyles, Open);
+        base.OnInitialized();
+    }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        popoverHandler?.UpdateFragment(ChildContent!, this, PopoverClass, PopoverStyles, Open);
+    }
+}

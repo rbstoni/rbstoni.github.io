@@ -79,8 +79,8 @@ $headings-color: null !default;
   --#{$prefix}body-text-align: left;
   --#{$prefix}body-color: #{$black};
   --#{$prefix}body-bg: #{$body-bg};
-  --#{$prefix}disabled-bg: $default-disabled-color;
-  --#{$prefix}disabled-color: #00000042;
+  --#{$prefix}disabled-bg: #{$default-disabled-bg};
+  --#{$prefix}disabled-color: #{$default-disabled-color};
 
   --#{$prefix}border-width: #{$border-width};
   --#{$prefix}border-style: #{$border-style};
@@ -101,7 +101,7 @@ $headings-color: null !default;
   --#{$prefix}zindex-tooltip: #{$zindex-tooltip};
 
 
-  // development
+  // // development
   // * {
   //   outline: 1px solid red;
   // }

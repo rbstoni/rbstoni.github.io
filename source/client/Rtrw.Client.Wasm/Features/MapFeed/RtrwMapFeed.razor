@@ -1,0 +1,63 @@
+﻿@using Rtrw.Client.Wasm.Components.Container
+@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Components.Extensions
+@using Rtrw.Client.Wasm.Utilities
+
+<section @attributes="@Attributes" class="@ClassName" style="@StyleName">
+    <RtrwContainer>
+        <div class="section-header-content">
+            <div class="header-bar" @onclick="@HeaderBarOnClick">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="4" viewBox="0 0 40 4">
+                    <rect id="Rectangle_100" data-name="Rectangle 100" width="40" height="4" rx="2" fill="#928a8a" />
+                </svg>
+            </div>
+            <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-center rtrw-width-100">
+                <div class="rtrw-flex rtrw-flex-col rtrw-justify-content-start rtrw-margin-end-auto">
+                    <div style="font-family:Raleway; font-weight: normal; font-size: 24px; color: #716464">
+                        @Kelurahan
+                    </div>
+                    <div style="font-family:Raleway; font-weight: normal; font-size: 13px; color: #716464">
+                        @($"{KabupatenKota}, {Provinsi}")
+                    </div>
+                </div>
+                <RtrwButton Color="ThemeColor.Primary" Variant="Variant.Filled" OnClick="@OnClick" Type="ButtonType.Button">
+                    Ikuti #RTRW Ini
+                </RtrwButton>
+            </div>
+        </div>
+        <div class="section-body-content">
+        </div>
+    </RtrwContainer>
+</section>
+
+@code {
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public string? Provinsi { get; set; } = "DKI Jakarta";
+    [Parameter] public string? KabupatenKota { get; set; } = "Jakarta Barat";
+    [Parameter] public string? Kelurahan { get; set; } = "Kemanggisan";
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public EventCallback<bool> HeaderBarIsClick { get; set; }
+
+    bool headerBarWasClicked;
+    async void HeaderBarOnClick()
+    {
+        headerBarWasClicked = !headerBarWasClicked;
+        await HeaderBarIsClick.InvokeAsync(headerBarWasClicked);
+    }
+
+    protected string ClassName
+        => new CssBuilder()
+            .AddClass("map-feed")
+            .AddClass("rtrw-animated rtrw-animated-slide-in-up")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle("height", "85vh", headerBarWasClicked)
+            .AddStyle(Style)
+            .Build();
+}

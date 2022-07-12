@@ -1,0 +1,19 @@
+﻿.horizontal-scrollable {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px;
+
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &>div {
+        display: inline-flex;
+        flex: 0 0 auto;
+    }
+}

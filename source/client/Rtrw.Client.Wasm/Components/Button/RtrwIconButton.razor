@@ -4,7 +4,7 @@
 <RtrwElement @bind-Ref="@elementReference"
              HtmlTag="@HtmlTag"
              Class="@Classname"
-             Style="@Style"
+             Style="@($"{Stylename} {Style}")"
              @attributes="UserAttributes"
              @onclick="OnClickHandler"
              type="@Type"
@@ -22,14 +22,19 @@
     [Parameter] public Edge Edge { get; set; }
     [Parameter] public string? Title { get; set; }
     [Parameter] public Variant Variant { get; set; } = Variant.Text;
+    [Parameter] public string Padding { get; set; } = string.Empty;
     protected bool AsButton => Variant != Variant.Text;
-    protected string Classname =>
-        new CssBuilder("rtrw-button-root rtrw-icon-button")
-            .AddClass("rtrw-button", when: AsButton)
-            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text hover:rtrw-{Color.EnumToDescriptionString}-hover", !AsButton && Color != ThemeColor.Default)
-            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}", AsButton)
-            .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}-{Color.EnumToDescriptionString()}", AsButton)
-            .AddClass($"rtrw-icon-button-tepian-{Edge.EnumToDescriptionString()}", when: () => Edge != Edge.False)
-            .AddClass(Class)
+    protected string Classname
+        => new CssBuilder("rtrw-button-root rtrw-icon-button")
+                .AddClass("rtrw-button", when: AsButton)
+                .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text hover:rtrw-{Color.EnumToDescriptionString()}-hover", !AsButton && Color != ThemeColor.Default)
+                .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}", AsButton)
+                .AddClass($"rtrw-button-{Variant.EnumToDescriptionString()}-{Color.EnumToDescriptionString()}", AsButton)
+                .AddClass($"rtrw-icon-button-edge-{Edge.EnumToDescriptionString()}", when: () => Edge != Edge.False)
+                .AddClass(Class)
+                .Build();
+    protected string Stylename
+        => new StyleBuilder()
+            .AddStyle("padding", Padding, !string.IsNullOrWhiteSpace(Padding))
             .Build();
 }
