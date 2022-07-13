@@ -1,0 +1,107 @@
+﻿@using Rtrw.Client.Wasm.Components.Container
+@using Rtrw.Client.Wasm.Features.Post.Components
+@using Rtrw.Client.Wasm.Models
+@using Rtrw.Client.Wasm.Utilities
+
+<div @attributes="@Attributes" class="@ClassName" style="@StyleName">
+    <RtrwContainer Class="rtrw-flex rtrw-justify-content-center rtrw-align-items-center">
+        <AvatarWarga Id="@Warga?.Id" AvatarUrl="@Warga?.AvatarUrl" Size="45" />
+        <div class="rtrw-margin-start-auto rtrw-align-self-center">
+            @if (HeaderBarWasClicked)
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
+                    <defs>
+                        <filter id="Ellipse_164" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <g id="Group_1470" data-name="Group 1470" transform="translate(-361 -507)">
+                        <g id="Group_1079" data-name="Group 1079" transform="translate(370 516)">
+                            <g transform="matrix(1, 0, 0, 1, -9, -9)" filter="url(#Ellipse_164)">
+                                <circle id="Ellipse_164-2" data-name="Ellipse 164" cx="18" cy="18" r="18" transform="translate(9 9)" fill="#fff" />
+                            </g>
+                        </g>
+                        <path id="location-arrow" d="M19.183,1.141l-7.532,15.1a.819.819,0,0,1-.782.43,1.292,1.292,0,0,1-.206-.024.845.845,0,0,1-.487-.276.72.72,0,0,1-.185-.485L9.753,8.58H1.259a.932.932,0,0,1-.542-.166.737.737,0,0,1-.309-.435.718.718,0,0,1,.055-.515A.785.785,0,0,1,.86,7.1L18,.086A.9.9,0,0,1,18.4,0a.866.866,0,0,1,.618.233.711.711,0,0,1,.254.423A.68.68,0,0,1,19.183,1.141Z" transform="translate(377.617 525.663)" fill="#0db201" />
+                    </g>
+                </svg>
+            }
+            @if (HeaderBarWasClicked)
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
+                    <defs>
+                        <filter id="Ellipse_164" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <g id="Group_1452" data-name="Group 1452" transform="translate(-361 -45)">
+                        <g id="Group_1469" data-name="Group 1469" transform="translate(370 54)">
+                            <g transform="matrix(1, 0, 0, 1, -9, -9)" filter="url(#Ellipse_164)">
+                                <circle id="Ellipse_164-2" data-name="Ellipse 164" cx="18" cy="18" r="18" transform="translate(9 9)" fill="#fff" />
+                            </g>
+                        </g>
+                        <g id="Group_1529" data-name="Group 1529" transform="translate(375.74 59.75)">
+                            <path id="Ellipse_170" data-name="Ellipse 170" d="M6.35-.5A6.833,6.833,0,0,1,13.2,6.3,6.85,6.85,0,0,1-.5,6.3,6.833,6.833,0,0,1,6.35-.5Zm0,12.6A5.832,5.832,0,0,0,12.2,6.3,5.85,5.85,0,0,0,.5,6.3,5.832,5.832,0,0,0,6.35,12.1Z" transform="translate(3.51 3.75)" fill="#0db201" stroke="#0db201" stroke-width="0.5" />
+                            <path id="Line_192" data-name="Line 192" d="M5.43,6.38a1,1,0,0,1-.7-.29L-.7.71A1,1,0,0,1-.71-.7,1,1,0,0,1,.7-.71l5.43,5.38a1,1,0,0,1-.7,1.71Z" transform="translate(15.08 14.869)" fill="#0db201" stroke="#0db201" stroke-linecap="round" stroke-width="0.5" />
+                        </g>
+                    </g>
+                </svg>
+            }
+            @if (!HeaderBarWasClicked)
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
+                    <defs>
+                        <filter id="Ellipse_164" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
+                            <feOffset input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.349" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <g id="Group_1530" data-name="Group 1530" transform="translate(-361 -43)">
+                        <g id="Group_1452" data-name="Group 1452" transform="translate(0 -2)">
+                            <g id="Group_1469" data-name="Group 1469" transform="translate(370 54)">
+                                <g transform="matrix(1, 0, 0, 1, -9, -9)" filter="url(#Ellipse_164)">
+                                    <circle id="Ellipse_164-2" data-name="Ellipse 164" cx="18" cy="18" r="18" transform="translate(9 9)" fill="rgba(0,0,0,0.25)" />
+                                </g>
+                            </g>
+                        </g>
+                        <g id="Group_1529" data-name="Group 1529" transform="translate(375.74 57.75)">
+                            <path id="Ellipse_170" data-name="Ellipse 170" d="M6.35-.5A6.833,6.833,0,0,1,13.2,6.3,6.85,6.85,0,0,1-.5,6.3,6.833,6.833,0,0,1,6.35-.5Zm0,12.6A5.832,5.832,0,0,0,12.2,6.3,5.85,5.85,0,0,0,.5,6.3,5.832,5.832,0,0,0,6.35,12.1Z" transform="translate(3.51 3.75)" fill="#fff" stroke="#fff" stroke-width="0.5" />
+                            <path id="Line_192" data-name="Line 192" d="M5.43,6.38a1,1,0,0,1-.7-.29L-.7.71A1,1,0,0,1-.71-.7,1,1,0,0,1,.7-.71l5.43,5.38a1,1,0,0,1-.7,1.71Z" transform="translate(15.08 14.869)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-width="0.5" />
+                        </g>
+                    </g>
+                </svg>
+            }
+        </div>
+    </RtrwContainer>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+
+    [CascadingParameter] protected Warga? Warga { get; set; }
+    [CascadingParameter] protected bool HeaderBarWasClicked { get; set; }
+
+    protected string ClassName
+        => new CssBuilder()
+            .AddClass("map-feed-top-toolbars")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle(Style)
+            .Build();
+}

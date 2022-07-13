@@ -9,7 +9,7 @@ namespace Rtrw.Client.Wasm.Services
 
     public class CurrentUser : ICurrentUser
     {
-        Warga warga = new()
+        readonly Warga warga = new()
         {
             DateOfBirth = new DateTime(1985, 5, 28),
             FirstName = "Toni",
@@ -24,8 +24,8 @@ namespace Rtrw.Client.Wasm.Services
                 Kelurahan = "Sunter Agung",
                 KodePos = "14350",
                 Alamat = "Sunter Muara 1B",
-                Longitude = "106.85654880943139",
-                Latitude = "-6.144607199436237",
+                Longitude = "106.8563909153426",
+                Latitude = "-6.144614964014737",               
             },
         };
         public Warga Warga => warga;

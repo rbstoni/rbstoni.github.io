@@ -3,13 +3,10 @@
 
 @if (!IsInline)
 {
-    <div @attributes="UserAttributes" class="@ContentClass" style="@ContentStyle">
-        @ModalContent
-    </div>
-    @if (FooterContent is not null)
+    <div @attributes="UserAttributes" class="@ContentClass" style="@ContentStyle">@ModalContent</div>
+
+    @if (FooterContent != null)
     {
-        <div class="@FooterClass">
-            @FooterContent
-        </div>
+        <div class="@FooterClass">@FooterContent</div>
     }
 }

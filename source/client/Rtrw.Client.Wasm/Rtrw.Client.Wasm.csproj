@@ -27,4 +27,9 @@
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="FakeData\Helpers\" />
+	  <Folder Include="FakeData\Services\" />
+	</ItemGroup>
+
 </Project>

@@ -6,30 +6,14 @@ namespace Rtrw.Client.Wasm.Components
 {
     public partial class RtrwModal : RtrwComponentBase
     {
-        protected string ContentClass =>
-            new CssBuilder("rtrw-modal-content")
-                .AddClass(Class)
-                .Build();
-        protected string FooterClass =>
-            new CssBuilder("rtrw-modal-footer")
-                .Build();
 
-        [CascadingParameter] private RtrwModalInstance ModalInstance { get; set; }
+        private bool isVisible;
+        private IModalReference modalReference;
 
-        [Inject] public IModalService ModalService { get; set; }
-
-        [Parameter]
-        public RenderFragment TitleContent { get; set; }
-        [Parameter]
-        public RenderFragment ModalContent { get; set; }
-        [Parameter]
-        public RenderFragment FooterContent { get; set; }
-        [Parameter]
-        public ModalOptions Options { get; set; }
-        [Parameter]
-        public Action OnBackdropClick { get; set; }
-        [Parameter]
-        public string ContentStyle { get; set; }
+        [Parameter] public string ContentStyle { get; set; }
+        [Parameter] public string ClassModal { get; set; }
+        [Parameter] public string ClassFooter { get; set; }
+        [Parameter] public RenderFragment FooterContent { get; set; }
         [Parameter]
         public bool IsVisible
         {
@@ -42,10 +26,30 @@ namespace Rtrw.Client.Wasm.Components
                 IsVisibleChanged.InvokeAsync(value);
             }
         }
-        private bool isVisible;
         [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
+        [Parameter] public RenderFragment? ModalContent { get; set; }
+        [Inject] public IModalService? ModalService { get; set; }
+        [Parameter] public Action? OnBackdropClick { get; set; }
+        [Parameter] public ModalOptions? Options { get; set; }
+        [Parameter] public RenderFragment? TitleContent { get; set; }
+        protected string ContentClass =>
+            new CssBuilder("rtrw-modal-content")
+                .AddClass(ClassModal)
+                .Build();
+        protected string FooterClass =>
+            new CssBuilder("rtrw-modal-footer")
+                .AddClass(ClassFooter)
+                .Build();
         private bool IsInline => ModalInstance == null;
-        private IModalReference modalReference;
+        [CascadingParameter] private RtrwModalInstance ModalInstance { get; set; }
+
+        public void Close(ModalResult result = null)
+        {
+            if (!IsInline || modalReference == null)
+                return;
+            modalReference.Close(result);
+            modalReference = null;
+        }
         public IModalReference Show(string title = null, ModalOptions options = null)
         {
             if (!IsInline)
@@ -69,7 +73,7 @@ namespace Rtrw.Client.Wasm.Components
             });
             return modalReference;
         }
-
+        internal void ForceUpdate() => StateHasChanged();
         protected override void OnAfterRender(bool firstRender)
         {
             if (IsInline)
@@ -86,19 +90,11 @@ namespace Rtrw.Client.Wasm.Components
             }
             base.OnAfterRender(firstRender);
         }
-        internal void ForceUpdate() => StateHasChanged();
-        public void Close(ModalResult result = null)
-        {
-            if (!IsInline || modalReference == null)
-                return;
-            modalReference.Close(result);
-            modalReference = null;
-        }
-
         protected override void OnInitialized()
         {
             base.OnInitialized();
             ModalInstance?.Register(this);
         }
+
     }
 }

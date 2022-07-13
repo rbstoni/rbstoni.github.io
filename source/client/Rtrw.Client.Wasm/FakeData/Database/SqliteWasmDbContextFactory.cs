@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Rtrw.Client.Wasm.FakeData.JSInterop;
 
 namespace Rtrw.Client.Wasm.FakeData
 {
-    public interface IApplicationDbContextFactory<TContext> where TContext : DbContext
+    public interface ISqliteWasmDbContextFactory<TContext> where TContext : DbContext
     {
         Task<TContext> CreateDbContextAsync();
     }
 
-    public class ApplicationDbContextFactory<TContext> : IApplicationDbContextFactory<TContext>
+    public class SqliteWasmDbContextFactory<TContext> : ISqliteWasmDbContextFactory<TContext>
         where TContext : DbContext
     {
         private static readonly IDictionary<Type, string> FileNames = new Dictionary<Type, string>();
@@ -19,7 +20,7 @@ namespace Rtrw.Client.Wasm.FakeData
         private int lastStatus = -2;
         private bool init = false;
 
-        public ApplicationDbContextFactory(
+        public SqliteWasmDbContextFactory(
             IDbContextFactory<TContext> dbContextFactory,
             IBrowserCache cache,
             ISqliteSwap swap)
@@ -31,69 +32,56 @@ namespace Rtrw.Client.Wasm.FakeData
         }
 
         private static string Filename => FileNames[typeof(TContext)];
-        private static string BackupFile => $"{ApplicationDbContextFactory<TContext>.Filename}_bak";
+        private static string BackupFile => $"{SqliteWasmDbContextFactory<TContext>.Filename}_bak";
 
         public static void Reset() => FileNames.Clear();
 
-        public static string? GetFilenameForType() => FileNames.ContainsKey(typeof(TContext))
-            ? FileNames[typeof(TContext)]
-            : null;
+        public static string? GetFilenameForType() => FileNames.ContainsKey(typeof(TContext)) ? FileNames[typeof(TContext)] : null;
 
         public async Task<TContext> CreateDbContextAsync()
         {
             await CheckForStartupTaskAsync();
-            var dnContext = await dbContextFactory.CreateDbContextAsync();
+            var dbContext = await dbContextFactory.CreateDbContextAsync();
 
             if (!init)
             {
                 // first time, it should be created
-                await dnContext.Database.EnsureCreatedAsync();
+                await dbContext.Database.EnsureCreatedAsync();
                 init = true;
             }
 
             // hook into saved changes
-            dnContext.SavedChanges += (o, e)
-                => Ctx_SavedChanges(dnContext, e);
+            dbContext.SavedChanges += (o, e) => Ctx_SavedChanges(dbContext, e);
 
-            return dnContext;
+            return dbContext;
         }
 
         private void DoSwap(string source, string target) => swap.DoSwap(source, target);
 
         private string GetFilename()
         {
-            using var ctx = dbContextFactory.CreateDbContext();
+            using var dbContext = dbContextFactory.CreateDbContext();
             var filename = "filenotfound.db";
-            var type = ctx.GetType();
+            var type = dbContext.GetType();
             if (FileNames.ContainsKey(type))
             {
                 return FileNames[type];
             }
 
-            var cs = ctx.Database.GetConnectionString();
+            var connectionString = dbContext.Database.GetConnectionString();
 
-            if (cs != null)
+            if (connectionString != null)
             {
-                var file = cs.Split(';')
-                    .Select(
-                        s
-                            => s.Split('='))
-                    .Select(
-                        split
-                            => new { key = split[0].ToLowerInvariant(), value = split[1], })
-                    .Where(
-                        kv
-                            => kv.key.Contains("data source") ||
-                            kv.key.Contains("datasource") ||
-                            kv.key.Contains("filename"))
-                    .Select(
-                        kv
-                            => kv.value)
+                var file = connectionString.Split(';')
+                    .Select(s => s.Split('='))
+                    .Select(split => new { key = split[0].ToLowerInvariant(), value = split[1], })
+                    .Where(kv => kv.key.Contains("data source") ||
+                                 kv.key.Contains("datasource") ||
+                                 kv.key.Contains("filename"))
+                    .Select(kv => kv.value)
                     .FirstOrDefault();
                 if (file != null)
-                {
                     filename = file;
-                }
             }
 
             FileNames.Add(type, filename);
@@ -116,8 +104,8 @@ namespace Rtrw.Client.Wasm.FakeData
             await CheckForStartupTaskAsync();
             if (e.EntitiesSavedCount > 0)
             {
-                var backupName = $"{ApplicationDbContextFactory<TContext>.BackupFile}-{Guid.NewGuid().ToString().Split('-')[0]}";
-                DoSwap(ApplicationDbContextFactory<TContext>.Filename, backupName);
+                var backupName = $"{SqliteWasmDbContextFactory<TContext>.BackupFile}-{Guid.NewGuid().ToString().Split('-')[0]}";
+                DoSwap(SqliteWasmDbContextFactory<TContext>.Filename, backupName);
                 lastStatus = await cache.SyncDbWithCacheAsync(backupName);
             }
         }

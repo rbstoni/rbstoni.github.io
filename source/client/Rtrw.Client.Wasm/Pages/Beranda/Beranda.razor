@@ -7,13 +7,14 @@
 @inject ICurrentUser CurrentUser
 @inject IPostService PostService
 
+
 <RtrwAppBar Position="sticky-top">
     <EndBarContent>
-        <AvatarWarga AvatarUrl="@currentUser?.AvatarUrl" Size="40" />
+        <AvatarWarga AvatarUrl="@CurrentWarga?.AvatarUrl" Size="40" />
     </EndBarContent>
 </RtrwAppBar>
 <RtrwMainContent Style="gap: 4px">
-    @if (Posts != null && Posts.Count != 0)
+    @if (Posts != null && Posts.Count != 0 && !dataLoaded)
     {
         <Virtualize Items="Posts" Context="post">
             <ItemContent>
@@ -24,6 +25,13 @@
             </Placeholder>
         </Virtualize>
     }
+
+    @if (dataLoaded)
+    {
+        <RtrwOverlay Absolute DarkBackground LockScroll Visible="dataLoaded">
+            <RtrwSpinner Indeterminate StrokeWidth="4" Color="ThemeColor.Primary" />
+        </RtrwOverlay>
+    }
 </RtrwMainContent>
 <RtrwFooter>
     <RtrwNavBar />
@@ -31,16 +39,31 @@
 
 @code {
     List<Post>? Posts { get; set; }
-    Warga? currentUser;
+    [CascadingParameter] Warga? CurrentWarga { get; set; }
 
-    protected override async void OnInitialized()
+    bool dataLoaded;
+
+    protected override async Task OnParametersSetAsync()
     {
-        currentUser = CurrentUser.Warga;
-        var results = (await PostService.GetPostsAsync()).OrderBy(x => x.CreatedAt).ToList();
-        if (results != null && results.Count() != 0)
+        dataLoaded = true;
+        var posts = await PostService.GetPostsAsync();
+        var sortedPosts = posts.OrderBy(x => x.CreatedAt);
+        if (sortedPosts?.Count() != 0)
         {
-            Posts = results;
+            Posts = sortedPosts!.ToList();
         }
-        StateHasChanged();
+        await base.OnParametersSetAsync();
+        dataLoaded = false;
     }
+
+    //protected override async void OnInitialized()
+    //{
+    //    CurrentWarga = CurrentUser.Warga;
+    //    var results = (await PostService.GetPostsAsync()).OrderBy(x => x.CreatedAt).ToList();
+    //    if (results != null && results.Count() != 0)
+    //    {
+    //        Posts = results;
+    //    }
+    //    StateHasChanged();
+    //}
 }

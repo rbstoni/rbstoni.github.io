@@ -80,6 +80,10 @@
   --rtrw-hover-color: rgba(0, 0, 0, 0.058823529411764705);
   --rtrw-overlay-dark: rgba(33, 33, 33, 0.4980392156862745);
   --rtrw-overlay-light: rgba(255, 255, 255, 0.4980392156862745);
+  --rtrw-drawer-width-left:240px;
+  --rtrw-drawer-width-right:240px;
+  --rtrw-drawer-width-mini-left:56px;
+  --rtrw-drawer-width-mini-right:56px;
   --rtrw-zindex-drawer: 1100;
   --rtrw-zindex-sticky: 1300;
   --rtrw-zindex-fixed: 1300;
@@ -1948,11 +1952,6 @@ a.rtrw-avatar {
 .rtrw-drawer {
   position: fixed;
   display: flex;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0 auto !important;
   flex-direction: column;
   flex-shrink: 0;
   flex-grow: 1;
@@ -1962,20 +1961,15 @@ a.rtrw-avatar {
   overflow-y: auto;
   color: var(--rtrw-body-color);
   background-color: var(--rtrw-body-bg);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
   --rtrw-drawer-content-height: 0;
-  border-top: 1px solid rgba(112, 112, 112, 0.25);
 }
 @media screen and (min-device-width: 600px) {
   .rtrw-drawer {
     max-width: 600px;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
   }
 }
 .rtrw-drawer .rtrw-drawer-content {
-  padding: 16px 0;
+  padding: 16px 16px;
   height: 100%;
   max-height: 100%;
   display: flex;
@@ -1986,7 +1980,7 @@ a.rtrw-avatar {
 }
 @media screen and (min-device-width: 600px) {
   .rtrw-drawer .rtrw-drawer-content {
-    padding: 24px 0;
+    padding: 24px 24px;
   }
 }
 .rtrw-drawer:not(.rtrw-drawer-fixed) {
@@ -2058,7 +2052,7 @@ a.rtrw-avatar {
   width: var(--rtrw-drawer-width-right);
 }
 .rtrw-drawer.rtrw-drawer-temporary {
-  margin: 0 !important;
+  margin: 0 auto !important;
   z-index: calc(var(--rtrw-zindex-appbar) + 2);
   transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 }
@@ -2104,8 +2098,11 @@ a.rtrw-avatar {
 }
 .rtrw-drawer.rtrw-drawer-temporary.rtrw-drawer-pos-bottom {
   left: 0;
+  right: 0;
   top: auto;
   width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .rtrw-drawer.rtrw-drawer-temporary.rtrw-drawer-pos-bottom.rtrw-drawer--open {
   bottom: 0;
@@ -2123,8 +2120,11 @@ a.rtrw-avatar {
 }
 .rtrw-drawer.rtrw-drawer-temporary.rtrw-drawer-pos-top {
   left: 0;
+  right: 0;
   bottom: auto;
   width: 100%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .rtrw-drawer.rtrw-drawer-temporary.rtrw-drawer-pos-top.rtrw-drawer--open {
   top: 0;
@@ -2694,7 +2694,7 @@ a.rtrw-avatar {
     max-width: 600px;
   }
 }
-.rtrw-overlay .rtrw-overlay-absolute {
+.rtrw-overlay.rtrw-overlay-absolute {
   position: absolute;
 }
 .rtrw-overlay .rtrw-overlay-scrim {

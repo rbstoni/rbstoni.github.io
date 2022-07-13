@@ -3,7 +3,7 @@ using Bogus.DataSets;
 using Rtrw.Client.Wasm.Enums;
 using Rtrw.Client.Wasm.Models;
 
-namespace Rtrw.Client.Wasm.FakeData
+namespace Rtrw.Client.Wasm.FakeData.Bogus
 {
     public class Dummy
     {
@@ -64,7 +64,7 @@ namespace Rtrw.Client.Wasm.FakeData
                 .RuleFor(x => x.CreatedAt, f => f.Date.Between(new DateTime(2022, 1, 1), new DateTime(2022, 5, 31)))
                 .RuleFor(x => x.Commenter, f => GenerateFakeWarga().Generate())
                 .RuleFor(x => x.Text, Lorem.Paragraph(25))
-                .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(1, 100));
+                .RuleFor(x => x.Reactions, GenerateFakeReaction().GenerateBetween(1, 10));
         public Faker<Reaction> GenerateFakeReaction()
             => new Faker<Reaction>("id_ID")
                 .RuleFor(x => x.CreatedAt, DateTime.Now)

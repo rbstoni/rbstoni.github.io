@@ -1,0 +1,12 @@
+﻿.code-box{
+    max-height: 500px;
+    overflow: auto;
+    margin: 8px 0;
+    font-family: Monospace;
+    font-size: 10px;
+    letter-spacing: normal;
+}
+
+.code-block{
+
+}

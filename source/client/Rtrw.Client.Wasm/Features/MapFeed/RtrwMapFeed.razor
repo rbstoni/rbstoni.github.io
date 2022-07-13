@@ -57,7 +57,7 @@
 
     protected string StyleName
         => new StyleBuilder()
-            .AddStyle("height", "85vh", headerBarWasClicked)
+            .AddStyle("height", "calc(100vh - 5vh - 58px - 56px)", headerBarWasClicked)
             .AddStyle(Style)
             .Build();
 }

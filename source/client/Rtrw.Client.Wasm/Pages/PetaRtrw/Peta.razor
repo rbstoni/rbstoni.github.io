@@ -2,7 +2,9 @@
 @inject NavigationManager NavigationManager
 @inject IModalService ModalService
 @inject IPostService PostService
+
 @using Rtrw.Client.Wasm.Components.Container
+@using Rtrw.Client.Wasm.Extensions
 @using Rtrw.Client.Wasm.Features
 @using Rtrw.Client.Wasm.Features.HorizontalScrollable
 @using Rtrw.Client.Wasm.Features.MapFeed
@@ -11,34 +13,37 @@
 @using Rtrw.Client.Wasm.Services
 @using Rtrw.Client.Wasm.Svgs
 
-<CascadingValue Value="@this" IsFixed="true">
-    <RtrwMapbox OnKelurahanChange="@ChangeKelurahan" />
+<CascadingValue Value="@HeaderBarWasClicked">
+    <RtrwMapbox OnKelurahanChange="@ChangeKelurahan" @ref="MapboxReference" />
+    <RtrwMapFeedTopToolbars />
     <RtrwFooter>
-
-        <RtrwContainer>
-            <RtrwIconButton Padding="0" Style="float: right">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
-                    <defs>
-                        <filter id="Ellipse_164" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
-                            <feOffset input="SourceAlpha" />
-                            <feGaussianBlur stdDeviation="3" result="blur" />
-                            <feFlood flood-opacity="0.349" />
-                            <feComposite operator="in" in2="blur" />
-                            <feComposite in="SourceGraphic" />
-                        </filter>
-                    </defs>
-                    <g id="Group_1470" data-name="Group 1470" transform="translate(-361 -507)">
-                        <g id="Group_1079" data-name="Group 1079" transform="translate(370 516)">
-                            <g transform="matrix(1, 0, 0, 1, -9, -9)" filter="url(#Ellipse_164)">
-                                <circle id="Ellipse_164-2" data-name="Ellipse 164" cx="18" cy="18" r="18" transform="translate(9 9)" fill="rgba(0,0,0,0.26)" />
+        @if (!HeaderBarWasClicked)
+        {
+            <RtrwContainer>
+                <RtrwIconButton Padding="0" Style="float: right" OnClick="@GoCurrentUserKelurahan">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="54" viewBox="0 0 54 54">
+                        <defs>
+                            <filter id="Ellipse_164" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse">
+                                <feOffset input="SourceAlpha" />
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feFlood flood-opacity="0.349" />
+                                <feComposite operator="in" in2="blur" />
+                                <feComposite in="SourceGraphic" />
+                            </filter>
+                        </defs>
+                        <g id="Group_1470" data-name="Group 1470" transform="translate(-361 -507)">
+                            <g id="Group_1079" data-name="Group 1079" transform="translate(370 516)">
+                                <g transform="matrix(1, 0, 0, 1, -9, -9)" filter="url(#Ellipse_164)">
+                                    <circle id="Ellipse_164-2" data-name="Ellipse 164" cx="18" cy="18" r="18" transform="translate(9 9)" fill="rgba(0,0,0,0.26)" />
+                                </g>
                             </g>
+                            <path id="location-arrow" d="M20.726,1.271,12.576,18.1a.881.881,0,0,1-.846.479,1.36,1.36,0,0,1-.223-.027.909.909,0,0,1-.527-.307.816.816,0,0,1-.2-.54l-.258-8.142H1.33a.988.988,0,0,1-.587-.184A.843.843,0,0,1,.469,8.315.859.859,0,0,1,.9,7.9L19.449.1a.955.955,0,0,1,.43-.1.922.922,0,0,1,.668.26.8.8,0,0,1,.275.472A.776.776,0,0,1,20.726,1.271Z" transform="translate(377.391 524.712)" fill="#fff" />
                         </g>
-                        <path id="location-arrow" d="M20.726,1.271,12.576,18.1a.881.881,0,0,1-.846.479,1.36,1.36,0,0,1-.223-.027.909.909,0,0,1-.527-.307.816.816,0,0,1-.2-.54l-.258-8.142H1.33a.988.988,0,0,1-.587-.184A.843.843,0,0,1,.469,8.315.859.859,0,0,1,.9,7.9L19.449.1a.955.955,0,0,1,.43-.1.922.922,0,0,1,.668.26.8.8,0,0,1,.275.472A.776.776,0,0,1,20.726,1.271Z" transform="translate(377.391 524.712)" fill="#fff" />
-                    </g>
-                </svg>
-            </RtrwIconButton>
-        </RtrwContainer>
-        @if (Posts?.Count != 0 && !headerBarWasClicked)
+                    </svg>
+                </RtrwIconButton>
+            </RtrwContainer>
+        }
+        @if (Posts?.Count != 0 && !HeaderBarWasClicked)
         {
             <RtrwHorizontalScrollable>
                 @foreach (var post in Posts)
@@ -52,7 +57,7 @@
                 }
             </RtrwHorizontalScrollable>
         }
-        @if (Posts?.Count == 0 && featureProperties != null && !headerBarWasClicked)
+        @if (Posts?.Count == 0 && featureProperties != null && !HeaderBarWasClicked)
         {
             <RtrwNoPostCard />
         }
@@ -61,21 +66,22 @@
             <RtrwMapFeed Provinsi="@featureProperties.ADM2_EN"
                      KabupatenKota="@featureProperties.ADM3_EN"
                      Kelurahan="@featureProperties.ADM4_EN"
-                     HeaderBarIsClick=HeaderBarIsClick/>
+                     HeaderBarIsClick=HeaderBarIsClick />
         }
         <RtrwNavBar />
     </RtrwFooter>
 </CascadingValue>
 @code {
     MapboxFeatureProperties? featureProperties;
+    protected Warga Warga { get; set; }
+    bool HeaderBarWasClicked { get; set; }
     List<Post>? Posts { get; set; } = new();
-    bool headerBarWasClicked;
+    RtrwMapbox? MapboxReference { get; set; }
 
     async void ChangeKelurahan(MapboxFeatureProperties featureProperties)
     {
         this.featureProperties = featureProperties;
-        Console.WriteLine(featureProperties.ADM4_EN.ToLower());
-        var results = (await PostService.GetPostsAsync()).Where(x => x.Author?.Geocoder?.Kelurahan.ToLower() == featureProperties.ADM4_EN.ToLower()).ToList();
+        var results = (await PostService.GetPostsAsync()).Where(x => x.Author?.Geocoder?.Kelurahan.ToLower().Trim() == featureProperties.ADM4_EN.ToLower().Trim()).ToList();
         if (results?.Count != 0)
         {
             Posts = results;
@@ -86,7 +92,12 @@
 
     void HeaderBarIsClick(bool bl)
     {
-        headerBarWasClicked = bl;
+        HeaderBarWasClicked = bl;
         StateHasChanged();
+    }
+
+    async Task GoCurrentUserKelurahan()
+    {
+        await MapboxReference.ShowAsync(Warga.Geocoder.Latitude.StringToDouble(), Warga.Geocoder.Longitude.StringToDouble());
     }
 }

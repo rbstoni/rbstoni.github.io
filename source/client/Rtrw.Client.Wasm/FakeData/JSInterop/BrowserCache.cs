@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Rtrw.Client.Wasm.FakeData
+namespace Rtrw.Client.Wasm.FakeData.JSInterop
 {
     public interface IBrowserCache
     {
@@ -16,9 +16,7 @@ namespace Rtrw.Client.Wasm.FakeData
 
         public BrowserCache(IJSRuntime jsRuntime)
         {
-            moduleTask = new(
-                ()
-                    => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/browserCache.js").AsTask()!);
+            moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/browserCache.js").AsTask()!);
         }
 
         public async ValueTask DisposeAsync()

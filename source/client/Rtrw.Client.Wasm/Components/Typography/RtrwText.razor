@@ -1,0 +1,68 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+
+@switch (Typo)
+{
+    case Typo.h1:
+        <h1 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h1>
+        break;
+    case Typo.h2:
+        <h2 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h2>
+        break;
+    case Typo.h3:
+        <h3 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h3>
+        break;
+    case Typo.h4:
+        <h4 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h4>
+        break;
+    case Typo.h5:
+        <h5 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h5>
+        break;
+    case Typo.h6:
+        <h6 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h6>
+        break;
+    case Typo.subtitle1:
+        <h6 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h6>
+        break;
+    case Typo.subtitle2:
+        <h6 @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</h6>
+        break;
+    case Typo.body1:
+        <p @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</p>
+        break;
+    case Typo.body2:
+        <p @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</p>
+        break;
+    case Typo.button:
+        <span @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</span>
+        break;
+    case Typo.caption:
+        <span @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</span>
+        break;
+    case Typo.overline:
+        <span @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</span>
+        break;
+    case Typo.inherit:
+        <span @attributes="Attributes" class="@ClassName" style="@Style">@ChildContent</span>
+        break;
+}
+
+@code {
+    protected string ClassName
+        => new CssBuilder("typography")
+            .AddClass($"typography-{Typo.EnumToDescriptionString()}")
+            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text", Color != ThemeColor.Default && Color != ThemeColor.Inherit)
+            .AddClass("typography-gutterbottom", GutterBottom)
+            .AddClass($"typography-align-{Align.EnumToDescriptionString()}", Align != Align.Inherit)
+            .AddClass("typography-display-inline", Inline)
+            .AddClass(Class ?? string.Empty)
+            .Build();
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public Align Align { get; set; } = Align.Inherit;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public ThemeColor Color { get; set; } = ThemeColor.Inherit;
+    [Parameter] public bool GutterBottom { get; set; } = false;
+    [Parameter] public bool Inline { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public Typo Typo { get; set; } = Typo.body1;
+}

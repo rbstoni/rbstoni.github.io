@@ -1,7 +1,6 @@
 ﻿@namespace Rtrw.Client.Wasm.Components
-@inherits RtrwComponentBase
 
-<div @attributes="UserAttributes" class="@ClassName" style="@StyleName">
+<div @attributes="Attributes" class="@ClassName" style="@StyleName">
     <CascadingValue Value="this" IsFixed="true">
         @ChildContent
     </CascadingValue>
@@ -10,12 +9,15 @@
 @code {
     private List<RtrwDrawer> _drawers = new();
 
+    [Parameter] public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     protected virtual string ClassName
         => new CssBuilder()
             .AddClass(GetDrawerClass(FindLeftDrawer()))
             .AddClass(GetDrawerClass(FindRightDrawer()))
-            .AddClass(Class)
+            .AddClass(Class ?? default!)
             .Build();
     protected bool Fixed { get; set; } = false;
     protected string StyleName
@@ -24,7 +26,7 @@
             .AddStyle("--rtrw-drawer-width-right", GetDrawerWidth(FindRightDrawer()), !string.IsNullOrEmpty(GetDrawerWidth(FindRightDrawer())))
             .AddStyle("--rtrw-drawer-width-mini-left", GetMiniDrawerWidth(FindLeftMiniDrawer()), !string.IsNullOrEmpty(GetMiniDrawerWidth(FindLeftMiniDrawer())))
             .AddStyle("--rtrw-drawer-width-mini-right", GetMiniDrawerWidth(FindRightMiniDrawer()), !string.IsNullOrEmpty(GetMiniDrawerWidth(FindRightMiniDrawer())))
-            .AddStyle(Style)
+            .AddStyle(Style ?? default!)
             .Build();
 
     internal void Add(RtrwDrawer drawer)
@@ -36,25 +38,25 @@
     internal void Remove(RtrwDrawer drawer) => _drawers.Remove(drawer);
     private RtrwDrawer FindLeftDrawer()
     {
-        return _drawers.FirstOrDefault(d => d.Anchor == Anchor.Left);
+        return _drawers.FirstOrDefault(d => d.Anchor == Anchor.Left) ?? default!;
     }
     private RtrwDrawer FindLeftMiniDrawer()
     {
-        return _drawers.FirstOrDefault(d => d.Variant == DrawerVariant.Mini && (d.Anchor == Anchor.Left));
+        return _drawers.FirstOrDefault(d => d.Variant == DrawerVariant.Mini && (d.Anchor == Anchor.Left)) ?? default!;
     }
     private RtrwDrawer FindRightDrawer()
     {
-        return _drawers.FirstOrDefault(d => d.Anchor == Anchor.Right);
+        return _drawers.FirstOrDefault(d => d.Anchor == Anchor.Right) ?? default!;
     }
     private RtrwDrawer FindRightMiniDrawer()
     {
-        return _drawers.FirstOrDefault(d => d.Variant == DrawerVariant.Mini && (d.Anchor == Anchor.Right));
+        return _drawers.FirstOrDefault(d => d.Variant == DrawerVariant.Mini && (d.Anchor == Anchor.Right)) ?? default!;
     }
     private string GetDrawerClass(RtrwDrawer drawer)
     {
         if (drawer == null)
             return string.Empty;
-            
+
         var className = $"rtrw-drawer-{(drawer.Open ? "open" : "close")}-{drawer.Variant.EnumToDescriptionString()}";
         className += $"-{drawer.Anchor.EnumToDescriptionString()}";
 
@@ -67,13 +69,13 @@
         if (drawer == null)
             return string.Empty;
 
-        return drawer.Width;
+        return drawer.Width ?? default!;
     }
     private string GetMiniDrawerWidth(RtrwDrawer drawer)
     {
         if (drawer == null)
             return string.Empty;
 
-        return drawer.MiniWidth;
+        return drawer.MiniWidth ?? default!;
     }
 }

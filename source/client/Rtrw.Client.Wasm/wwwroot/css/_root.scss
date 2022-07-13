@@ -17,6 +17,7 @@ $headings-color: null !default;
 // scss-docs-end headings-variables
 
 :root {
+
   // Colors
   @each $color,
   $value in $colors {
@@ -90,6 +91,11 @@ $headings-color: null !default;
   --#{$prefix}hover-color: rgba(0, 0, 0, 0.058823529411764705);
   --#{$prefix}overlay-dark: rgba(33, 33, 33, 0.4980392156862745);
   --#{$prefix}overlay-light: rgba(255, 255, 255, 0.4980392156862745);
+
+  --#{$prefix}drawer-width-left:240px;
+  --#{$prefix}drawer-width-right:240px;
+  --#{$prefix}drawer-width-mini-left:56px;
+  --#{$prefix}drawer-width-mini-right:56px;
 
   --#{$prefix}zindex-drawer: #{$zindex-drawer};
   --#{$prefix}zindex-sticky: #{$zindex-sticky};

@@ -7,17 +7,16 @@ namespace Rtrw.Client.Wasm.Components.Extensions
 {
     public static class ElementReferenceExtensions
     {
-        private static readonly PropertyInfo jsRuntimeProperty =
-            typeof(WebElementReferenceContext).GetProperty("JSRuntime", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly PropertyInfo? jsRuntimeProperty = typeof(WebElementReferenceContext).GetProperty("JSRuntime", BindingFlags.Instance | BindingFlags.NonPublic);
 
         internal static IJSRuntime GetJSRuntime(this ElementReference elementReference)
         {
             if (elementReference.Context is not WebElementReferenceContext context)
             {
-                return null;
+                return null!;
             }
 
-            return (IJSRuntime)jsRuntimeProperty.GetValue(context);
+            return jsRuntimeProperty?.GetValue(context) as IJSRuntime ?? null!;
         }
 
         public static ValueTask<BoundingClientRect> RtrwGetBoundingClientRectAsync(this ElementReference elementReference)

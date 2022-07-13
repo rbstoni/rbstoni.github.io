@@ -1,6 +1,8 @@
 ﻿@implements IAsyncDisposable
 @inject IJSRuntime JSRuntime
+@using Rtrw.Client.Wasm.Extensions
 @using Rtrw.Client.Wasm.JsInterop
+@using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Utilities
 @using System.Text.Json
 
@@ -8,7 +10,8 @@
 
 @code {
     private ElementReference mapboxRef;
-    [CascadingParameter] protected MapboxFeatureProperties? FeatureProperties { get; set; } 
+    [CascadingParameter] protected MapboxFeatureProperties? FeatureProperties { get; set; }
+    [CascadingParameter] protected Warga Warga { get; set; } 
     [Parameter] public Dictionary<string, object>? Attributes { get; set; }
     [Parameter] public string? Class { get; set; }
     [Parameter] public string? Style { get; set; }
@@ -27,10 +30,9 @@
     {
         if (firstRender)
         {
-            mapJsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./js/mapboxComponent.js");
-            mapInstance = await mapJsModule.InvokeAsync<IJSObjectReference>(
-                "addMapToElement", mapboxRef);
+            mapJsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/mapboxComponent.js");
+            Console.WriteLine(Warga is null);
+            mapInstance = await mapJsModule.InvokeAsync<IJSObjectReference>("addMapToElement", mapboxRef, Warga.Geocoder.Longitude.StringToDouble(), Warga.Geocoder.Latitude.StringToDouble());
             await mapJsModule.InvokeVoidAsync("addMapControl", mapInstance);
             var dotNetReference = DotNetObjectReference.Create(this);
             await mapJsModule.InvokeAsync<string>("getMapFeatures", mapInstance, dotNetReference);
@@ -46,12 +48,11 @@
         StateHasChanged();
     }
 
-    async Task ShowAsync(double latitude, double longitude)
+    public async Task ShowAsync(double latitude, double longitude)
     {
         if (mapJsModule is not null && mapInstance is not null)
         {
-            await mapJsModule.InvokeVoidAsync("setMapCenter", mapInstance,
-                latitude, longitude).AsTask();
+            await mapJsModule.InvokeVoidAsync("setMapCenter", mapInstance, latitude, longitude).AsTask();
         }
     }
 

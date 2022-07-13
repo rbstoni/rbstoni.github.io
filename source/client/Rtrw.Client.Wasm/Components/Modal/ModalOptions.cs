@@ -1,4 +1,6 @@
-﻿namespace Rtrw.Client.Wasm.Components
+﻿using Rtrw.Client.Wasm.Components.Enums;
+
+namespace Rtrw.Client.Wasm.Components
 {
     public class ModalOptions
     {
@@ -6,5 +8,6 @@
         public bool? CloseButton { get; set; }
         public bool? NoHeader { get; set; }
         public bool? FullScreen { get; set; }
+        public ModalPosition? Position { get; set; }
     }
 }

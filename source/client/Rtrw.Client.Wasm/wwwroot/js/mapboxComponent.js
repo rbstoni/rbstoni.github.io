@@ -3,11 +3,11 @@ import 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/ma
 
 mapboxgl.accessToken = "pk.eyJ1IjoiZGhhcmlvc3V0ZWpvIiwiYSI6ImNrenp0anQ3MzBkbmszZHFjMXVwMWZ5Z2wifQ.QS_6oRMj0Yriiy9oX5GYaQ";
 
-export function addMapToElement(element) {
+export function addMapToElement(element, longitude, latitude) {
     return new mapboxgl.Map({
         container: element,
         style: "mapbox://styles/dhariosutejo/cl4cfdjvt000115tadd9zco0m",
-        center: [106.8272, -6.1754],
+        center: [longitude, latitude],
         minZoom: 12,
         zoom: 14,
         maxZoom: 16,
@@ -26,16 +26,20 @@ export function addGeocoderToElement(element) {
 }
 
 export function setMapCenter(map, latitude, longitude) {
-    map.setCenter([longitude, latitude]);
+    map.flyTo({ center: [longitude, latitude], essential: true });
+
+    map.on("moveend", () => {
+        console.log(longitude, latitude);
+    });
 }
 
 //const popup = new mapboxgl.Popup({
 //    closeButton: false,
 //});
 
-const marker = new mapboxgl.Marker();
+//const marker = new mapboxgl.Marker();
 
-export function getMapFeatures(map,dotNetObject) {
+export function getMapFeatures(map, dotNetObject) {
     map.on("load", () => {
         map.addLayer({
             id: "kelurahan-highlighted",
@@ -50,10 +54,10 @@ export function getMapFeatures(map,dotNetObject) {
         });
 
         map.on("click", "kelurahan-jawa-boundaries-area", (e) => {
-            //map.getCanvas().style.cursor = "pointer";
+            map.getCanvas().style.cursor = "pointer";
             const feature = e.features[0];
-            map.flyTo(e.lngLat);
-            marker.setLngLat(e.lngLat).addTo(map);
+            //map.flyTo(e.lngLat);
+            //marker.setLngLat(e.lngLat).addTo(map);
             const relatedKelurahan = map.querySourceFeatures("composite", {
                 sourceLayer: "idn_admbnda_adm4_ID3_bps_2020-dtakwq",
                 filter: ["in", "ADM4_EN", feature.properties.ADM4_EN],

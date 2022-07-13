@@ -1,7 +1,7 @@
 ﻿@namespace Rtrw.Client.Wasm.Components
-@inherits RtrwComponentBase
+@implements IDisposable
 
-<aside @ref="_drawerRef" @attributes="UserAttributes" class="@Classname" style="@Stylename">
+<aside @ref="_drawerRef" @attributes="Attributes" class="@Classname" style="@Stylename">
     <div @ref="_contentRef" class="rtrw-drawer-content">
         <CascadingValue Value="this" IsFixed="true">
             @ChildContent
@@ -9,3 +9,184 @@
     </div>
 </aside>
 <RtrwOverlay Visible="@OverlayVisible" OnClick="@CloseDrawer" Class="@OverlayClass" DarkBackground="true" LockScroll="false" />
+
+@code {
+    private DrawerClipMode _clipMode;
+    private ElementReference _contentRef, _drawerRef;
+    int _disposeCount;
+    private DotNetObjectReference<RtrwDrawer>? _dotNetRef;
+    private double _height;
+    private int _mouseEnterListenerId, _mouseLeaveListenerId;
+    private bool _open, _isRendered, _initial = true, _keepInitialState, _fixed = true;
+    private bool closeOnMouseLeave = false;
+
+    [Parameter] public Anchor Anchor { get; set; } = Anchor.Bottom;
+    [Parameter] public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter]
+    public DrawerClipMode ClipMode
+    {
+        get => _clipMode;
+        set
+        {
+            if (_clipMode == value)
+                return;
+            _clipMode = value;
+            if (Fixed)
+            {
+                DrawerContainer?.FireDrawersChanged();
+            }
+            StateHasChanged();
+        }
+    }
+    [Parameter] public bool DisableOverlay { get; set; } = false;
+    [Parameter]
+    public bool Fixed
+    {
+        get => _fixed && DrawerContainer is RtrwLayout; set
+        {
+            if (_fixed == value)
+                return;
+            _fixed = value;
+        }
+    }
+    [Parameter] public string? Height { get; set; }
+    [Parameter] public string? MiniWidth { get; set; }
+    [Parameter]
+    public bool Open
+    {
+        get => _open;
+        set
+        {
+            if (_open == value)
+                return;
+            _open = value;
+            if (_isRendered && _initial && !_keepInitialState)
+                _initial = false;
+            if (_keepInitialState)
+                _keepInitialState = false;
+            if (_isRendered && value && (Anchor == Anchor.Top || Anchor == Anchor.Bottom))
+            {
+                _ = UpdateHeight();
+            }
+
+            DrawerContainer?.FireDrawersChanged();
+            OpenChanged.InvokeAsync(_open);
+        }
+    }
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter] public bool OpenMiniOnHover { get; set; }
+    [Parameter] public bool PreserveOpenState { get; set; } = false;
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public DrawerVariant Variant { get; set; } = DrawerVariant.Temporary;
+    [Parameter] public string? Width { get; set; }
+    protected string Classname
+        => new CssBuilder("rtrw-drawer")
+            .AddClass("rtrw-drawer-fixed", Fixed)
+            .AddClass($"rtrw-drawer-pos-{GetPosition()}")
+            .AddClass("rtrw-drawer--open", Open)
+            .AddClass("rtrw-drawer--closed", !Open)
+            .AddClass("rtrw-drawer--initial", _initial)
+            .AddClass($"rtrw-drawer-clipped-{_clipMode.EnumToDescriptionString()}")
+            .AddClass($"rtrw-drawer-{Variant.EnumToDescriptionString()}")
+            .AddClass(Class ?? string.Empty)
+            .Build();
+    protected string OverlayClass
+        => new CssBuilder("rtrw-drawer-overlay rtrw-overlay-drawer")
+            .AddClass($"rtrw-drawer-pos-{GetPosition()}")
+            .AddClass($"rtrw-drawer-overlay--open", Open)
+            .AddClass($"rtrw-drawer-overlay-{Variant.EnumToDescriptionString()}")
+            .AddClass($"rtrw-drawer-overlay--initial", _initial)
+            .Build();
+    protected string Stylename
+        => new StyleBuilder()
+            .AddStyle("--rtrw-drawer-width", Width ?? string.Empty, !string.IsNullOrWhiteSpace(Width) && (!Fixed || Variant == DrawerVariant.Temporary))
+            .AddStyle("height", Height ?? string.Empty, !string.IsNullOrWhiteSpace(Height))
+            .AddStyle("--rtrw-drawer-content-height", string.IsNullOrWhiteSpace(Height) ? _height.ToPx() : Height, Anchor == Anchor.Bottom || Anchor == Anchor.Top)
+            .AddStyle("visibility", "hidden", string.IsNullOrWhiteSpace(Height) && _height == 0 && (Anchor == Anchor.Bottom || Anchor == Anchor.Top))
+            .AddStyle(Style ?? string.Empty)
+            .Build();
+    [CascadingParameter] RtrwDrawerContainer? DrawerContainer { get; set; }
+    private bool OverlayVisible => _open && !DisableOverlay && (Variant == DrawerVariant.Temporary || Variant == DrawerVariant.Mini);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    public virtual void Dispose(bool disposing)
+    {
+        if (Interlocked.Increment(ref _disposeCount) == 1)
+        {
+            if (disposing)
+            {
+                DrawerContainer?.Remove(this);
+                if (_mouseEnterListenerId != 0)
+                    _ = _drawerRef.RtrwRemoveEventListenerAsync("mouseenter", _mouseEnterListenerId);
+                if (_mouseLeaveListenerId != 0)
+                    _ = _drawerRef.RtrwRemoveEventListenerAsync("mouseleave", _mouseLeaveListenerId);
+                var toDispose = _dotNetRef;
+                _dotNetRef = null;
+                toDispose?.Dispose();
+            }
+        }
+    }
+    [JSInvokable]
+    public async void OnMouseEnter()
+    {
+        if (Variant == DrawerVariant.Mini && !Open && OpenMiniOnHover)
+        {
+            closeOnMouseLeave = true;
+            await OpenChanged.InvokeAsync(true);
+        }
+    }
+    [JSInvokable]
+    public async void OnMouseLeave()
+    {
+        if (Variant == DrawerVariant.Mini && Open && closeOnMouseLeave)
+        {
+            closeOnMouseLeave = false;
+            await OpenChanged.InvokeAsync(false);
+        }
+    }
+    public async Task OnNavigation()
+    {
+        if (Variant == DrawerVariant.Temporary)
+        {
+            await OpenChanged.InvokeAsync(false);
+        }
+    }
+    internal string GetPosition() => Anchor.EnumToDescriptionString();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateHeight();
+            _isRendered = true;
+            if (string.IsNullOrWhiteSpace(Height) && (Anchor == Anchor.Bottom || Anchor == Anchor.Top))
+            {
+                StateHasChanged();
+            }
+            _mouseEnterListenerId = await _drawerRef.RtrwAddEventListenerAsync(_dotNetRef ?? null!, "mouseenter", nameof(OnMouseEnter), true);
+            _mouseLeaveListenerId = await _drawerRef.RtrwAddEventListenerAsync(_dotNetRef ?? null!, "mouseleave", nameof(OnMouseLeave), true);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+    protected override void OnInitialized()
+    {
+        if (Variant != DrawerVariant.Temporary)
+        {
+            DrawerContainer?.Add(this);
+        }
+        _dotNetRef = DotNetObjectReference.Create(this);
+        base.OnInitialized();
+    }
+    private void CloseDrawer()
+    {
+        if (Open)
+            OpenChanged.InvokeAsync(false);
+    }
+    private async Task UpdateHeight() => _height = (await _contentRef.RtrwGetBoundingClientRectAsync())?.Height ?? 0;
+}

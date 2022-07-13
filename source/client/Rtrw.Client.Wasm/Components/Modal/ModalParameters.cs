@@ -33,7 +33,7 @@ namespace Rtrw.Client.Wasm.Components
             if (modalParameters.TryGetValue(parameterName, out var value))
                 return (T)value;
 
-            return default;
+            return default!;
         }
 
     }

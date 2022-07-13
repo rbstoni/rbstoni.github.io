@@ -14,9 +14,9 @@
         public object Data { get; }
         public Type DataType { get; }
 
-        public static ModalResult Cancel() => new(default, typeof(object), true);
-        public static ModalResult Ok<T>(T result) => Ok(result, default);
-        public static ModalResult Ok<T>(T result, Type modalType) => new(result, modalType, false);
+        public static ModalResult Cancel() => new(default!, typeof(object), true);
+        public static ModalResult Ok<T>(T result) => Ok(result, default!);
+        public static ModalResult Ok<T>(T result, Type modalType) => new(result!, modalType, false);
 
     }
 }

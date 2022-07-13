@@ -20,9 +20,9 @@ namespace Rtrw.Client.Wasm.Services
     public class PostService : IPostService
     {
 
-        private readonly IApplicationDbContextFactory<SqliteDbContext> dbContextFactory;
+        private readonly ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory;
 
-        public PostService(IApplicationDbContextFactory<SqliteDbContext> dbContextFactory)
+        public PostService(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory)
         { this.dbContextFactory = dbContextFactory; }
 
         public async Task<Comment> GetCommentByIdAsync(string commentId)
@@ -85,7 +85,7 @@ namespace Rtrw.Client.Wasm.Services
         public async Task SavePostAsync(Post post)
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            dbContext.Posts.Add(post);
+            await dbContext.Posts.AddAsync(post);
             await dbContext.SaveChangesAsync();
         }
         public async Task SavePostAsync(IEnumerable<Post> posts)

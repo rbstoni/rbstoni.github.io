@@ -19,25 +19,13 @@
                 <div class="rtrw-flex rtrw-gap-col-8px">
                     <AvatarWarga Id="@Post.Author.Id" Size="40" AvatarUrl="@Post.Author.AvatarUrl" />
                     <div class="rtrw-flex rtrw-flex-col">
-                        <div class="rtrw-inline-flex rtrw-align-items-center rtrw-gap-col-8px">
-                            <div class="display-name" type="button">
-                                @Post.Author.FullName
-                            </div>
-                            <span style="color:black">
-                                &bull;
-                            </span>
-                            <div class="display-location" type="button">
-                                @Post.Author.Geocoder?.Kelurahan
-                            </div>
-                        </div>
+                        <NameBar FullName="@Post.Author.FullName" Kelurahan="@Post.Author.Geocoder.Kelurahan" />
                         <div class="display-date" type="button">
                             @Post.CreatedAt.TimeSpanToString()
                         </div>
                     </div>
                 </div>
-                <div class="rtrw-margin-start-auto">
-                    <PostOptions />
-                </div>
+                <PostOptions />
             </div>
         </div>
 
@@ -56,7 +44,7 @@
                 <LastThreeReaction Reactions="@Post.Reactions" />
             </div>
             <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center">
-                <AddReaction NewReaction="@AddCurrentUserReaction" RemoveReaction="@RemoveCurrentUserReaction"/>
+                <AddReaction NewReaction="@AddCurrentUserReaction" RemoveReaction="@RemoveCurrentUserReaction" />
                 <RtrwButton Style="gap: 8px">
                     <RtrwSvgComment />
                     @if (Post.Comments?.Count > 0)
@@ -106,12 +94,12 @@
     }
 
     Task CheckIfCurrentUserHasReacted()
-    {        
+    {
         var currentUserReaction = Post.Reactions.FirstOrDefault(x => x.Reactor.Id == CurrentUser.Warga.Id);
-        if (currentUserReaction!=null)
+        if (currentUserReaction != null)
         {
             currentUserHasReacted = true;
-            currentEmoji = currentUserReaction.Emoji; 
+            currentEmoji = currentUserReaction.Emoji;
         }
         else
         {

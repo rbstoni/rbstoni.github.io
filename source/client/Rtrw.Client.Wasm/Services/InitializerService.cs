@@ -1,6 +1,7 @@
 ﻿using Rtrw.Client.Wasm.FakeData.Database;
 using Rtrw.Client.Wasm.Models;
 using Rtrw.Client.Wasm.FakeData;
+using Rtrw.Client.Wasm.FakeData.Bogus;
 
 namespace Rtrw.Client.Wasm.Services
 {
@@ -12,48 +13,20 @@ namespace Rtrw.Client.Wasm.Services
 
     public class InitializerService : IInitializerService
     {
-        private readonly IApplicationDbContextFactory<SqliteDbContext> dbContextFactory;
+        private readonly ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory;
         private Dummy Dummy { get; } = new Dummy();
 
-        public InitializerService(IApplicationDbContextFactory<SqliteDbContext> dbContextFactory)
+        public InitializerService(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory)
         { this.dbContextFactory = dbContextFactory; }
 
         public async Task InitializeFakeRandomPostAsync()
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            if (!dbContext.Posts.Any())
+            var posts = dbContext.Posts;
+            if (posts == null || !posts.Any())
             {
-                var randomPost = Dummy.GenerateFakePost().Generate(10);
-                await dbContext.Posts.AddRangeAsync(randomPost);
-                await dbContext.SaveChangesAsync();
-            }
-        }
-
-        async Task InitializeFakeRandomWargaAsync()
-        {
-            using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            if (dbContext.Warga.Count() == 0)
-            {
-                Warga newWarga = new()
-                {
-                    DateOfBirth = new DateTime(1985, 5, 28),
-                    FirstName = "Toni",
-                    LastName= "Ribas",
-                    Email = "toni@rtrw.app",
-                    Gender = Enums.Gender.Lakilaki,
-                    Geocoder = new Geocoder()
-                    {
-                        Provinsi = "DKI Jakarta",
-                        KabupatenKota = "Kota Jakarta Utara",
-                        Kecamatan = "Tanjung Priok",
-                        Kelurahan = "Sunter Agung",
-                        KodePos = "14350",
-                        Alamat = "Sunter Muara 1B",
-                        Longitude = "106.85654880943139",
-                        Latitude = "-6.144607199436237",
-                    },
-                };
-                await dbContext.Warga.AddAsync(newWarga);
+                var randomPost = Dummy.GenerateFakePost();
+                await posts!.AddAsync(randomPost);
                 await dbContext.SaveChangesAsync();
             }
         }

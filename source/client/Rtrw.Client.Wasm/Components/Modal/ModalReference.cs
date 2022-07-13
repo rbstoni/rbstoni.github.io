@@ -67,7 +67,7 @@ namespace Rtrw.Client.Wasm.Components
             catch (InvalidCastException)
             {
                 Debug.WriteLine($"Could not cast return value to {typeof(T)}, returning default.");
-                return default;
+                return default!;
             }
         }
         public void InjectModal(object inst)

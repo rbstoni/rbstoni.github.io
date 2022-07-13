@@ -1,11 +1,7 @@
 .#{$prefix}drawer {
     position: fixed;
     display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0 auto !important;
+    // margin: 0 auto !important;
     flex-direction: column;
     flex-shrink: 0;
     flex-grow: 1;
@@ -15,24 +11,17 @@
     overflow-y: auto;
     color: var(--#{$prefix}body-color);
     background-color: var(--#{$prefix}body-bg);
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
     --#{$prefix}drawer-content-height: 0;
 
-    border-top: 1px solid rgba(#707070, 0.25);
-
-    
     @media screen and (min-device-width: 600px) {
         max-width: 600px;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
     }
 
     .#{$prefix}drawer-content {
-        padding: 16px 0;
+        padding: 16px 16px;
 
         @media screen and (min-device-width: 600px) {
-            padding: 24px 0;
+            padding: 24px 24px;
         }
 
         height: 100%;
@@ -42,9 +31,6 @@
         flex-shrink: 0;
         flex-grow: 1;
         flex: 0 0 auto;
-
-        // development
-        // border: 1px solid rebeccapurple
     }
 
     &:not(.#{$prefix}drawer-fixed) {
@@ -131,7 +117,7 @@
     }
 
     &.#{$prefix}drawer-temporary {
-        margin: 0 !important;
+        margin: 0 auto !important;
         z-index: calc(var(--#{$prefix}zindex-appbar) + 2);
         transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
@@ -183,8 +169,12 @@
 
         &.#{$prefix}drawer-pos-bottom {
             left: 0;
+            right: 0;
             top: auto;
             width: 100%;
+
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
 
             &.#{$prefix}drawer--open {
                 bottom: 0;
@@ -205,8 +195,12 @@
 
         &.#{$prefix}drawer-pos-top {
             left: 0;
+            right: 0;
             bottom: auto;
             width: 100%;
+
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
 
             &.#{$prefix}drawer--open {
                 top: 0;
@@ -226,33 +220,34 @@
         }
     }
 
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left ~ div:not(.#{$prefix}main-content),
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right ~ div:not(.#{$prefix}main-content),
-    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-left ~ div:not(.#{$prefix}main-content),
-    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-right ~ div:not(.#{$prefix}main-content) {
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left~div:not(.#{$prefix}main-content),
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right~div:not(.#{$prefix}main-content),
+    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-left~div:not(.#{$prefix}main-content),
+    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-right~div:not(.#{$prefix}main-content) {
         transition: margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
     }
 
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left.#{$prefix}drawer--open ~ div:not(.#{$prefix}main-content),
-    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-left.#{$prefix}drawer--open ~ div:not(.#{$prefix}main-content) {
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left.#{$prefix}drawer--open~div:not(.#{$prefix}main-content),
+    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-left.#{$prefix}drawer--open~div:not(.#{$prefix}main-content) {
         margin-left: var(--#{$prefix}drawer-width, var(--#{$prefix}drawer-width-left));
     }
 
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right.#{$prefix}drawer--open ~ div:not(.#{$prefix}main-content),
-    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-right.#{$prefix}drawer--open ~ div:not(.#{$prefix}main-content) {
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right.#{$prefix}drawer--open~div:not(.#{$prefix}main-content),
+    &.#{$prefix}drawer-persistent.#{$prefix}drawer-pos-right.#{$prefix}drawer--open~div:not(.#{$prefix}main-content) {
         margin-right: var(--#{$prefix}drawer-width, var(--#{$prefix}drawer-width-right));
     }
 
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left.#{$prefix}drawer--closed ~ div:not(.#{$prefix}main-content) {
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-left.#{$prefix}drawer--closed~div:not(.#{$prefix}main-content) {
         margin-left: var(--#{$prefix}drawer-width, var(--#{$prefix}drawer-width-mini-left));
     }
 
-    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right.#{$prefix}drawer--closed ~ div:not(.#{$prefix}main-content) {
+    &.#{$prefix}drawer-mini.#{$prefix}drawer-pos-right.#{$prefix}drawer--closed~div:not(.#{$prefix}main-content) {
         margin-right: var(--#{$prefix}drawer-width, var(--#{$prefix}drawer-width-mini-right));
     }
 }
 
 .#{$prefix}drawer-fixed {
+
     &.#{$prefix}drawer-mini.#{$prefix}drawer-clipped-always,
     &.#{$prefix}drawer-persistent:not(.#{$prefix}drawer-clipped-never),
     ud-drawer-clipped-always,
@@ -262,7 +257,8 @@
     }
 }
 
-.#{$prefix}appbar-dense ~ .#{$prefix}drawer-fixed {
+.#{$prefix}appbar-dense~.#{$prefix}drawer-fixed {
+
     &.#{$prefix}drawer-mini:not(.#{$prefix}drawer-clipped-never),
     &.#{$prefix}drawer-persistent:not(.#{$prefix}drawer-clipped-never),
     ud-drawer-clipped-always,

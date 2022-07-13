@@ -1,0 +1,25 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using Rtrw.Client.Wasm.FakeData.JSInterop
+@inject IBrowserCache BrowserCache
+
+<span @ref="elementReference">(not initialized)</span>
+
+
+@code {
+    ElementReference elementReference;
+    [Parameter] public Type? DbContextType { get; set; }
+    string filename = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DbContextType == null || !(typeof(DbContext).IsAssignableFrom(DbContextType)))
+        {
+            throw new InvalidOperationException($"Parameter {nameof(DbContextType)} must be set to a DbContext type.");
+        }
+        var factory = typeof(SqliteWasmDbContextFactory<>).MakeGenericType(DbContextType);
+        var method = factory.GetMethod(nameof(SqliteWasmDbContextFactory<DbContext>.GetFilenameForType), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        filename = (string)method!.Invoke(null, null)!;
+        await base.OnInitializedAsync();
+    }
+    public async Task RefreshAsync() => await BrowserCache.GenerateDownloadLinkAsync(elementReference, filename);
+}

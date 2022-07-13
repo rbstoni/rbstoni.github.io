@@ -1,9 +1,9 @@
 ﻿@using Rtrw.Client.Wasm.Components.Enums
-@using Rtrw.Client.Wasm.FakeData
+@using Rtrw.Client.Wasm.FakeData.Bogus
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Services
-
 @inject IPostService PostService
+
 <RtrwModal>
     <ModalContent>
         <div class="rtrw-flex rtrw-flex-col rtrw-justify-content-center rtrw-align-items-center rtrw-width-100">
@@ -22,43 +22,65 @@
             <pre>Sedang membangun data</pre>
         </div>
         <hr />
-        <div class="rtrw-flex rtrw-flex-col">
-            @if (reports?.Count() != 0)
+        <div class="code-box">
+            @if (Reports?.Count() != 0)
             {
-                @foreach (var report in reports)
+                @foreach (var report in Reports)
                 {
-                    <span>@report</span>
+                    <div class="code-block">@report</div>
                 }
             }
-            <RtrwSpinner Indeterminate="true" Color="ThemeColor.Primary"></RtrwSpinner>
         </div>
+        @if (initial)
+        {
+            <RtrwButton Disabled="busy" Color="ThemeColor.Primary" Variant="Variant.Filled" FullWidth OnClick="()=>GenerateFakeData(100)">
+                @if (busy)
+                {
+                    <RtrwSpinner StrokeWidth="6" Indeterminate="true" Color="ThemeColor.Primary" Style="align-self: center" />
+                }
+                else
+                {
+                    @("Mulai mengisi data acak")
+                    ;
+                }
+            </RtrwButton>
+        }
+        @if (finished)
+        {
+            <RtrwButton Color="ThemeColor.Primary" Variant="Variant.Filled" FullWidth OnClick="ModalClose">
+                Lanjutkan ke RTRW
+            </RtrwButton>
+        }
+
     </ModalContent>
 </RtrwModal>
 
 @code {
-    int task = 10;
-    string[]? reports;
+    bool busy, initial = true, finished;
+    List<string> Reports { get; set; } = new();
     Dummy Dummy { get; set; } = new Dummy();
-    Task<Warga>[] tasks = new Task<Warga>[5];
     [CascadingParameter] RtrwModalInstance? Modal { get; set; }
-
-    protected override void OnInitialized()
+    async Task GenerateFakeData(int dataNumber)
     {
-        for (var i = 0; i < tasks.Length; i++)
+        busy = true;
+        StateHasChanged();
+        await Task.Delay(1000);
+        for (var i = 0; i < dataNumber; i++)
         {
-            tasks[i] = Task<Warga>.Run(() => Dummy.GenerateFakeWarga().Generate());
+            var post = Dummy.GenerateFakePost().Generate();
+            await PostService.SavePostAsync(post);
+            Reports.Add($"Posting atas nama {post.Author.FullName} telah dibuat di kelurahan {post.Author.Geocoder.Kelurahan}");
+            StateHasChanged();
+            await Task.Delay(10);
         }
+        busy = false;
+        initial = false;
+        finished = true;
+        StateHasChanged();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    void ModalClose()
     {
-        foreach (var task in tasks)
-        {
-            var warga = task.Result;
-            await PostService.SavePostAsync(warga.Posts);
-            reports.Append($"{warga.FullName} telah dibuat");
-        }
-
         Modal.Close(ModalResult.Ok(true));
     }
 }

@@ -22,10 +22,10 @@ namespace Rtrw.Client.Wasm.Services
     {
 
         private readonly AuthenticationStateProvider authenticationStateProvider;
-        private readonly IApplicationDbContextFactory<SqliteDbContext> dbContextFactory;
+        private readonly ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory;
         private readonly ILocalStorageService localStorageService;
 
-        public AccountService(IApplicationDbContextFactory<SqliteDbContext> dbContextFactory,
+        public AccountService(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory,
             AuthenticationStateProvider authenticationStateProvider,
             ILocalStorageService localStorageService)
         {

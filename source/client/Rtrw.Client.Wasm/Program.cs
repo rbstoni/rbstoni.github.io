@@ -9,6 +9,7 @@ using Rtrw.Client.Wasm.Extensions;
 using Rtrw.Client.Wasm.FakeData;
 using Rtrw.Client.Wasm.FakeData.Authentication;
 using Rtrw.Client.Wasm.FakeData.Database;
+using Rtrw.Client.Wasm.FakeData.Extensions;
 using Rtrw.Client.Wasm.Services;
 using Rtrw.Client.Wasm.ViewModels;
 
@@ -23,8 +24,18 @@ namespace Rtrw.Client.Wasm
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            
+            builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddRtrwServices();
+            builder.Services.AddSqliteWasmDbContextFactory<SqliteWasmDbContext>(options => options.UseSqlite("Data Source=rtrw.sqlite3"));
+            builder.Services.AddScoped<IInitializerService, InitializerService>();
+            builder.Services.AddScoped<AuthenticationStateProvider, FakeAuthenticationStateProvider>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IWindowHistoryService, WindowHistoryService>();
+
+            builder.Services.AddRtrwComponentServices();
 
             // Authorization
             builder.Services.AddOptions();
