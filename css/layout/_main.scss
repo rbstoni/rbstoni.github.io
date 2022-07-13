@@ -1,0 +1,78 @@
+.#{$prefix}main-content {
+    margin: 0 auto;
+    flex: 1 1 auto;
+    // padding-top: calc(var(--#{$prefix}appbar-height) - var(--#{$prefix}appbar-height) / 8);
+    transition: margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+}
+
+.#{$prefix}drawer-open {
+    &-persistent {
+        &-left:not(&-right) .#{$prefix}main-content {
+            margin-left: var(--#{$prefix}drawer-width-left);
+        }
+
+        &-right:not(&-left) .#{$prefix}main-content {
+            margin-right: var(--#{$prefix}drawer-width-right);
+        }
+
+        &-left#{&}-right .#{$prefix}main-content {
+            margin-right: var(--#{$prefix}drawer-width-right);
+            margin-left: var(--#{$prefix}drawer-width-left);
+        }
+    }
+
+    &-mini {
+        @each $breakpoint in map-keys($breakpoints) {
+            &-#{$breakpoint} {
+                @media (min-width: map-get($breakpoints, $breakpoint)) {
+                    &-left .#{$prefix}main-content {
+                        margin-left: var(--#{$prefix}drawer-width-left);
+                    }
+
+                    &-right .#{$prefix}main-content {
+                        margin-right: var(--#{$prefix}drawer-width-right);
+                    }
+
+                    &-left#{&}-right .#{$prefix}main-content {
+                        margin-right: var(--#{$prefix}drawer-width-right);
+                        margin-left: var(--#{$prefix}drawer-width-left);
+                    }
+                }
+            }
+        }
+
+        &-none, &-always {
+            &-left .#{$prefix}main-content {
+                margin-left: var(--#{$prefix}drawer-width-left);
+            }
+
+            &-right .#{$prefix}main-content {
+                margin-right: var(--#{$prefix}drawer-width-right);
+            }
+
+            &-left#{&}-right .#{$prefix}main-content {
+                margin-right: var(--#{$prefix}drawer-width-right);
+                margin-left: var(--#{$prefix}drawer-width-left);
+            }
+        }
+    }
+}
+
+.#{$prefix}drawer-close {
+    &-mini {
+        &-none, &-always {
+            &-left .#{$prefix}main-content {
+                margin-left: var(--#{$prefix}drawer-width-mini-left);
+            }
+
+            &-right .#{$prefix}main-content {
+                margin-right: var(--#{$prefix}drawer-width-mini-right);
+            }
+
+            &-left#{&}-right .#{$prefix}main-content {
+                margin-right: var(--#{$prefix}drawer-width-mini-right);
+                margin-left: var(--#{$prefix}drawer-width-mini-left);
+            }
+        }
+    }
+}

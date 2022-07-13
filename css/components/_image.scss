@@ -1,0 +1,6 @@
+.#{$prefix}image {
+  &.#{$prefix}image-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+}

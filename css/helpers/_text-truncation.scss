@@ -1,0 +1,14 @@
+//
+// Text truncation
+//
+
+@mixin flex-text-truncate() {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.#{$prefix}flex-text-truncate {
+  @include flex-text-truncate();
+}

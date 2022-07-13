@@ -1,0 +1,62 @@
+$border-radiuses: (
+  "0": 0,
+  "sm": 2px,
+  "lg": 8px,
+  "xl": 24px,
+);
+
+@each $size, $value in $border-radiuses {
+  .#{$prefix}br-#{$size} {
+    border-radius: $value !important;
+  }
+
+  .#{$prefix}br-t-#{$size} {
+    border-top-left-radius: $value !important;
+    border-top-right-radius: $value !important;
+  }
+
+  .#{$prefix}br-r-#{$size},
+  .#{$prefix}br-e-#{$size} {
+    border-top-right-radius: $value !important;
+    border-bottom-right-radius: $value !important;
+  }
+
+  .#{$prefix}br-b-#{$size} {
+    border-bottom-right-radius: $value !important;
+    border-bottom-left-radius: $value !important;
+  }
+
+  .#{$prefix}br-l-#{$size},
+  .#{$prefix}br-s-#{$size} {
+    border-top-left-radius: $value !important;
+    border-bottom-left-radius: $value !important;
+  }
+
+  .#{$prefix}br-tl-#{$size},
+  .#{$prefix}br-ts-#{$size} {
+    border-top-left-radius: $value !important;
+  }
+
+  .#{$prefix}br-tr-#{$size},
+  .#{$prefix}br-te-#{$size} {
+    border-top-right-radius: $value !important;
+  }
+
+  .#{$prefix}br-br-#{$size},
+  .#{$prefix}br-be-#{$size} {
+    border-bottom-right-radius: $value !important;
+  }
+
+  .#{$prefix}br-bl-#{$size},
+  .#{$prefix}br-bs-#{$size} {
+    border-bottom-left-radius: $value !important;
+  }
+}
+
+.#{$prefix}br-circle {
+  border-radius: 50% !important;
+}
+
+.#{$prefix}br-pill {
+  border-radius: 9999px !important;
+}
