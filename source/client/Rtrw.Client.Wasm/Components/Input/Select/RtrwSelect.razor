@@ -1,0 +1,80 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@using Rtrw.Client.Wasm.Components.Input
+@typeparam T
+@inherits RtrwBaseInput<T>
+
+<CascadingValue Name="Standalone" Value="false" IsFixed="true">
+    <div class="rtrw-select" id="@_elementId">
+        <RtrwInputControl Label="@Label"
+                          Variant="@Variant"
+                          HelperText="@HelperText"
+                          HelperTextOnFocus="@HelperTextOnFocus"
+                          FullWidth="@FullWidth"
+                          Margin="@Margin"
+                          Class="@ClassName"
+                          Style="@Style"
+                          Error="@Error" 
+                          ErrorText="@ErrorText" 
+                          Disabled="@Disabled" 
+                          @onclick="@ToggleMenu" 
+                          Required="@Required" 
+                          ForId="@FieldId">
+            <InputContent>
+                <RtrwInput @ref="_elementReference"
+                           InputType="@(CanRenderValue || (Strict && !IsValueInList) ? InputType.Hidden : InputType.Text)"
+                           Class="rtrw-select-input"
+                           Margin="@Margin"
+                           Placeholder="@Placeholder"
+                           Variant="@Variant"
+                           TextUpdateSuppression="false"
+                           Value="@(Strict && !IsValueInList ? null : Text)"
+                           DisableUnderLine="@DisableUnderLine"
+                           Disabled="@Disabled"
+                           ReadOnly="true"
+                           Error="@Error"
+                           OnAdornmentClick="@OnAdornmentClick"
+                           Adornment="@Adornment"
+                           Clearable="@Clearable"
+                           OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
+                           @attributes="UserAttributes"
+                           OnBlur="@OnLostFocus">
+                    @if (CanRenderValue)
+                    {
+                        @GetSelectedValuePresenter()
+                    }
+                </RtrwInput>
+                <RtrwPopover Open=@(_isOpen)
+                             MaxHeight="@MaxHeight"
+                             AnchorOrigin="@AnchorOrigin"
+                             TransformOrigin="@TransformOrigin"
+                             Class="@PopoverClass"
+                             RelativeWidth="true">
+                    <CascadingValue Value="@((IRtrwSelect)this)" IsFixed="true">
+                        <RtrwList Clickable="true"
+                                  Dense="@Dense"
+                                  @bind-SelectedValue="_activeItemId">
+                            @if (MultiSelection && SelectAll)
+                            {
+                                <RtrwListItem Text="@SelectAllText"
+                                          OnClick="SelectAllClickAsync"
+                                          OnClickHandlerPreventDefault="true"
+                                          Dense="@Dense" />
+                                <RtrwDivider />
+                            }
+                            @ChildContent
+                        </RtrwList>
+                    </CascadingValue>
+                </RtrwPopover>
+            </InputContent>
+        </RtrwInputControl>
+    </div>
+    @*Shadow select items for IsValueInList and CanRenderValue*@
+    <CascadingValue Value="@((IRtrwShadowSelect)this)" IsFixed="true">
+        <CascadingValue Name="HideContent" Value="true">
+            @ChildContent
+        </CascadingValue>
+    </CascadingValue>
+
+</CascadingValue>
+<!-- mousedown instead of click needed to close the menu before OnLostFocus runs -->
+<RtrwOverlay Visible="_isOpen" @onmousedown="@(() => CloseMenu(false))" LockScroll="@LockScroll" />

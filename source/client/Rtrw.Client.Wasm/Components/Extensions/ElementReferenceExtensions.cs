@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Rtrw.Client.Wasm.Components.Interop;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Rtrw.Client.Wasm.Components.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ElementReferenceExtensions
     {
-        private static readonly PropertyInfo? jsRuntimeProperty = typeof(WebElementReferenceContext).GetProperty("JSRuntime", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly PropertyInfo jsRuntimeProperty = typeof(WebElementReferenceContext).GetProperty("JSRuntime", BindingFlags.Instance | BindingFlags.NonPublic);
 
         internal static IJSRuntime GetJSRuntime(this ElementReference elementReference)
         {
@@ -16,15 +18,57 @@ namespace Rtrw.Client.Wasm.Components.Extensions
                 return null!;
             }
 
-            return jsRuntimeProperty?.GetValue(context) as IJSRuntime ?? null!;
+            return (IJSRuntime)jsRuntimeProperty.GetValue(context);
         }
 
-        public static ValueTask<BoundingClientRect> RtrwGetBoundingClientRectAsync(this ElementReference elementReference)
-        {
-            return elementReference
-                .GetJSRuntime()?
-                .InvokeAsync<BoundingClientRect>("rtrwElementRef.getBoundingClientRect", elementReference) ?? ValueTask.FromResult(new BoundingClientRect());
-        }
+        public static ValueTask RtrwFocusFirstAsync(this ElementReference elementReference, int skip = 0, int min = 0) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.focusFirst", elementReference, skip, min) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwFocusLastAsync(this ElementReference elementReference, int skip = 0, int min = 0) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.focusLast", elementReference, skip, min) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwSaveFocusAsync(this ElementReference elementReference) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.saveFocus", elementReference) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwRestoreFocusAsync(this ElementReference elementReference) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.restoreFocus", elementReference) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwSelectAsync(this ElementReference elementReference) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.select", elementReference) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwSelectRangeAsync(this ElementReference elementReference, int pos1, int pos2) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.selectRange", elementReference, pos1, pos2) ?? ValueTask.CompletedTask;
+
+        public static ValueTask RtrwChangeCssAsync(this ElementReference elementReference, string css) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.changeCss", elementReference, css) ?? ValueTask.CompletedTask;
+
+        public static ValueTask<BoundingClientRect> RtrwGetBoundingClientRectAsync(this ElementReference elementReference) =>
+            elementReference.GetJSRuntime()?.InvokeAsync<BoundingClientRect>("rtrwElementRef.getBoundingClientRect", elementReference) ?? ValueTask.FromResult(new BoundingClientRect());
+
+        /// <summary>
+        /// Gets the client rect of the element 
+        /// </summary>
+        public static ValueTask<BoundingClientRect> RtrwGetClientRectFromParentAsync(this ElementReference elementReference) =>
+           elementReference.GetJSRuntime()?.InvokeAsync<BoundingClientRect>("rtrwElementRef.getClientRectFromParent", elementReference) ?? ValueTask.FromResult(new BoundingClientRect());
+
+        /// <summary>
+        /// Gets the client rect of the first child of the element.
+        /// Useful when you want to know the dimensions of a render fragment and for that you wrap it into a div
+        /// </summary>
+        public static ValueTask<BoundingClientRect> RtrwGetClientRectFromFirstChildAsync(this ElementReference elementReference) =>
+           elementReference.GetJSRuntime()?.InvokeAsync<BoundingClientRect>("rtrwElementRef.getClientRectFromFirstChild", elementReference) ?? ValueTask.FromResult(new BoundingClientRect());
+
+        /// <summary>
+        /// Returns true if the element has an ancestor with style position == "fixed"
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static ValueTask<bool> RtrwHasFixedAncestorsAsync(this ElementReference elementReference) =>
+            elementReference.GetJSRuntime()?
+            .InvokeAsync<bool>("rtrwElementRef.hasFixedAncestors", elementReference) ?? ValueTask.FromResult(false);
+
+
+        public static ValueTask RtrwChangeCssVariableAsync(this ElementReference elementReference, string variableName, int value) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.changeCssVariable", elementReference, variableName, value) ?? ValueTask.CompletedTask;
 
         public static ValueTask<int> RtrwAddEventListenerAsync<T>(this ElementReference elementReference, DotNetObjectReference<T> dotnet, string @event, string callback, bool stopPropagation = false) where T : class
         {
@@ -44,12 +88,9 @@ namespace Rtrw.Client.Wasm.Components.Extensions
             }
         }
 
-        public static ValueTask RtrwRemoveEventListenerAsync(this ElementReference elementReference, string @event, int eventId)
-        {
-            return elementReference
-                .GetJSRuntime()?
-                .InvokeVoidAsync("rtrwElementRef.removeEventListener", elementReference, eventId) ?? ValueTask.CompletedTask;
-        }
+        public static ValueTask RtrwRemoveEventListenerAsync(this ElementReference elementReference, string @event, int eventId) =>
+            elementReference.GetJSRuntime()?.InvokeVoidAsync("rtrwElementRef.removeEventListener", elementReference, eventId) ?? ValueTask.CompletedTask;
+
         private static object GetSerializationSpec(Type type)
         {
             var props = type.GetProperties();

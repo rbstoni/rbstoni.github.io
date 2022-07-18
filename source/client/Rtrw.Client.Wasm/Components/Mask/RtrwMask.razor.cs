@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Components.Web;
 using Rtrw.Client.Wasm.Components.Enums;
 using Rtrw.Client.Wasm.Components.Extensions;
-using Rtrw.Client.Wasm.Components.Input.Base;
+using Rtrw.Client.Wasm.Components.Input;
 using Rtrw.Client.Wasm.Components.Mask;
 using Rtrw.Client.Wasm.Components.Mask.MaskAlgorithms;
 using Rtrw.Client.Wasm.Components.Services;
 using Rtrw.Client.Wasm.Components.Services.JsEvents;
 using Rtrw.Client.Wasm.Utilities;
 using System.Text.RegularExpressions;
+using System;
 
 namespace Rtrw.Client.Wasm.Components
 {
@@ -16,7 +17,7 @@ namespace Rtrw.Client.Wasm.Components
     {
 
         private int caret;
-        private string elementId = "mask_" + Guid.NewGuid().ToString().Substring(0, 8);
+        private string elementId = string.Concat("mask_", Guid.NewGuid().ToString().AsSpan(0, 8));
         private ElementReference elementReference;
         private ElementReference elementReference1;
         private IJsEvent jsEvent;
@@ -120,15 +121,15 @@ namespace Rtrw.Client.Wasm.Components
             Mask.CaretPos = pos;
             //Console.WriteLine($"OnCaretPositionChanged: '{Mask}' ({pos})");
         }
-        //public override ValueTask SelectAsync()
-        //{
-        //    return elementReference.RtrwSelectAsync();
-        //}
-        //public override ValueTask SelectRangeAsync(int pos1, int pos2)
-        //{
-        //    return elementReference.RtrwSelectRangeAsync(pos1, pos2);
-        //}
-        internal void OnCopy()
+        public override ValueTask SelectAsync()
+        {
+            return elementReference.RtrwSelectAsync();
+        }
+        public override ValueTask SelectRangeAsync(int pos1, int pos2)
+        {
+            return elementReference.RtrwSelectRangeAsync(pos1, pos2);
+        }
+        internal async void OnCopy()
         {
             //Console.WriteLine($"Copy: {text}");
             var text = Text;
@@ -136,7 +137,7 @@ namespace Rtrw.Client.Wasm.Components
             {
                 (_, text, _) = BaseMask.SplitSelection(text, Mask.Selection.Value);
             }
-            _jsApiService.CopyToClipboardAsync(text);
+            await _jsApiService.CopyToClipboardAsync(text);
         }
         internal void OnFocused(FocusEventArgs obj)
         {

@@ -16,9 +16,12 @@
             return truncatedString;
         }
 
-        public static double StringToDouble(this string text)
+        public static double? StringToDouble(this string str)
         {
-            return double.Parse(text);
+            if (!string.IsNullOrEmpty(str))
+                return Convert.ToDouble(str);
+
+            return null!;
         }
     }
 }

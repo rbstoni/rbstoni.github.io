@@ -1,8 +1,11 @@
-﻿namespace Rtrw.Client.Wasm.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Rtrw.Client.Wasm.Models
 {
     public class Geocoder
     {
-        public string Id { get; set; } = $"geocoder-{Guid.NewGuid().ToString("N")}";
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
         public string? Provinsi { get; set; }
         public string? KabupatenKota { get; set; }
         public string? Kecamatan { get; set; }

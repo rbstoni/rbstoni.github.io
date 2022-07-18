@@ -3,47 +3,112 @@
 @using Rtrw.Client.Wasm.Components.Extensions
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Services
+@using Rtrw.Client.Wasm.Validators
 @inject NavigationManager NavigationManager
 @inject IModalService ModalService
 @inject IWindowHistoryService HistoryService
+@inject IPostService PostService
+@inject ILogger<RtrwNewPost> Logger
 
 <CascadingValue Value="@Post">
-    <EditForm Model="Post">
-        <div class="page-layout">
-            <div class="page-header">
-                <RtrwIconButton Href="/" OnClick="@(()=>HistoryService.Back())">
+    <RtrwForm @bind-IsValid="@isValid" Model="@Post" Validation="@(postRequestFluentValidator.ValidateValue)" ValidationDelay="0">
+        <RtrwAppBar Title="Postingan" Position="sticky-top" Style="filter: none">
+            <StartBarContent>
+                <RtrwIconButton Edge="Edge.Start"
+                                OnClick="()=>HistoryService.Back()"
+                                Class="rtrw-align-self-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 17.59 31.18">
-                        <path d="M4443.908-198.838,4431.146-211.6l12.762-12.762" transform="translate(-4429.146 227.19)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" />
+                        <path id="Path_2185" data-name="Path 2185" d="M4443.908-198.838,4431.146-211.6l12.762-12.762" transform="translate(-4429.146 227.19)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" />
                     </svg>
                 </RtrwIconButton>
-                <ChangePostCategory Category="@Post.Category" UpdatePostCategory="UpdatePostCategory"/>
-                <RtrwButton Type=ButtonType.Button
-                            Variant=Variant.Filled
-                            Color=ThemeColor.Primary>
+            </StartBarContent>
+            <EndBarContent>
+                <RtrwButton Type="ButtonType.Button"
+                            Variant="Variant.Filled"
+                            Color="ThemeColor.Primary"
+                            OnClick="SavePostAsync"
+                            Disabled="@(!isValid)">
                     Post
                 </RtrwButton>
-            </div>
+            </EndBarContent>
+        </RtrwAppBar>
 
-            @if (Post.Category == PostCategory.SuaraWarga)
-            {
-                <SuaraWarga />
-            }
-            @if (Post.Category == PostCategory.Liputan)
-            {
-                <Liputan />
-            }
-            @if (Post.Category == PostCategory.Pengumuman)
-            {
-                <Pengumuman />
-            }
-        </div>
-    </EditForm>
+        <RtrwContainer>
+            <div class="form-content">
+                <RtrwSelect T="PostCategory"
+                            @bind-Value="Post.Category"
+                            For="@(()=>Post.Category)"
+                            ToStringFunc="@enumConverter"
+                            Label="Kategori"
+                            Placeholder="Umum, Bisnis, Keamanan-Ketertiban, Kebersihan"
+                            AnchorOrigin="Origin.BottomLeft"
+                            Variant="Variant.Outlined"
+                            Class="kategori-input">
+                    @foreach (PostCategory kategori in Enum.GetValues(typeof(PostCategory)))
+                    {
+                        <RtrwSelectItem Value="@kategori" />
+                    }
+                </RtrwSelect>
+
+                <div class="textarea-input">
+                    <RtrwTextArea T="string"
+                                  @bind-Value="@Post.Text"
+                                  For="@(()=>Post.Text)"
+                                  Label="Konten"
+                                  Placeholder="Apa yang #terjadi di RTRW kamu, &#64;kelurahan"
+                                  Lines="15"
+                                  Variant="Variant.Outlined"
+                                  Clearable
+                                  Immediate
+                                  Style="border-bottom-left-radius: none; border-bottom-right-radius: none;">
+                    </RtrwTextArea>
+                    <PostScopeDisplay Scope="Post.Scope" ScopeChanged="@OnScopeChanged" />
+                </div>
+                <TambahLokasi Style="padding-left: 14px;" />
+                <TambahFoto Media="@Post.Media" OnMediaChanged="@OnMediaChanged" OnGpsFound="@OnGpsFound" Style="padding-left: 14px;" />
+                <TambahPoll Poll="@Post.Poll" Style="padding-left: 14px;" />
+            </div>
+        </RtrwContainer>
+    </RtrwForm>
 </CascadingValue>
 
+<RtrwOverlay DarkBackground LockScroll Visible="savePost">
+    <RtrwSpinner />
+</RtrwOverlay>
+
 @code {
-    [Parameter] public Post Post { get; set; } = new();
-    void UpdatePostCategory(PostCategory category)
+    protected Post Post { get; set; } = new();
+    bool isValid;
+    bool savePost;
+    PostRequestFluentValidator postRequestFluentValidator = new();
+
+    Func<PostCategory, string> enumConverter = e => e.EnumToDescriptionString();
+
+    void OnScopeChanged(Scope scope) => Post.Scope = scope;
+
+    void OnMediaChanged(List<Medium> media) {
+        Post.Media = media;
+    }
+
+    void OnGpsFound(Geocoder geocoder)
     {
-        Post.Category = category;
+        Post.PostGeocoder = geocoder;
+    }
+
+    async Task SavePostAsync()
+    {
+        savePost = true;
+        try
+        {
+            if (await PostService.SavePostAsync(Post))
+            {
+                NavigationManager.NavigateTo("/home");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Rtrw: {Post.GetType()} error: {ex.Message}");
+        }
+        savePost = false;
     }
 }

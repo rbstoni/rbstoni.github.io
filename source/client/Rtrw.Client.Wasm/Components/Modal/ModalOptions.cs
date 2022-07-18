@@ -9,5 +9,6 @@ namespace Rtrw.Client.Wasm.Components
         public bool? NoHeader { get; set; }
         public bool? FullScreen { get; set; }
         public ModalPosition? Position { get; set; }
+        public bool? FullWidth { get; set; }
     }
 }

@@ -19,3 +19,9 @@
   padding: 4px 0;
   cursor: pointer;
 }
+
+.section-body-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}/*# sourceMappingURL=RtrwMapFeed.razor.css.map */

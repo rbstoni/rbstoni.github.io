@@ -82,13 +82,14 @@ $headings-color: null !default;
   --#{$prefix}body-bg: #{$body-bg};
   --#{$prefix}disabled-bg: #{$default-disabled-bg};
   --#{$prefix}disabled-color: #{$default-disabled-color};
+  --#{$prefix}hover-color: rgba(0, 0, 0, 0.058823529411764705);
+  --#{$prefix}hover-bg: rgba(0,0,0,0.058823529411764705);
 
   --#{$prefix}border-width: #{$border-width};
   --#{$prefix}border-style: #{$border-style};
   --#{$prefix}border-color: #{$border-color};
   --#{$prefix}border-color-translucent: #{$border-color-translucent};
   --#{$prefix}border-radius: 8px;
-  --#{$prefix}hover-color: rgba(0, 0, 0, 0.058823529411764705);
   --#{$prefix}overlay-dark: rgba(33, 33, 33, 0.4980392156862745);
   --#{$prefix}overlay-light: rgba(255, 255, 255, 0.4980392156862745);
 
@@ -107,7 +108,7 @@ $headings-color: null !default;
   --#{$prefix}zindex-tooltip: #{$zindex-tooltip};
 
 
-  // // development
+  // development
   // * {
   //   outline: 1px solid red;
   // }

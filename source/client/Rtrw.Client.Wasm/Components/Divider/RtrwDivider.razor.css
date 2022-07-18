@@ -1,0 +1,35 @@
+.divider {
+  border: none;
+  height: 1px;
+  margin: 0;
+  flex-shrink: 0;
+  background-color: var(--rtrw-divider-bg);
+}
+.divider.divider-absolute {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.divider.divider-flexitem {
+  height: auto;
+  align-self: stretch;
+}
+.divider.divider-light {
+  background-color: var(--rtrw-divider-bg-light);
+}
+.divider.divider-vertical {
+  width: 1px;
+  height: 100%;
+}
+.divider.divider-inset {
+  margin-left: 72px;
+  -webkit-margin-start: 72px;
+          margin-inline-start: 72px;
+  -webkit-margin-end: unset;
+          margin-inline-end: unset;
+}
+.divider.divider-middle {
+  margin-left: 16px;
+  margin-right: 16px;
+}/*# sourceMappingURL=RtrwDivider.razor.css.map */

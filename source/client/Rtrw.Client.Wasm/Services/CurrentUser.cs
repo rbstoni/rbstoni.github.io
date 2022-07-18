@@ -1,4 +1,8 @@
-﻿using Rtrw.Client.Wasm.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Rtrw.Client.Wasm.FakeData;
+using Rtrw.Client.Wasm.FakeData.Database;
+using Rtrw.Client.Wasm.Models;
 
 namespace Rtrw.Client.Wasm.Services
 {
@@ -9,25 +13,22 @@ namespace Rtrw.Client.Wasm.Services
 
     public class CurrentUser : ICurrentUser
     {
-        readonly Warga warga = new()
+        private readonly ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory;
+        public CurrentUser(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory)
         {
-            DateOfBirth = new DateTime(1985, 5, 28),
-            FirstName = "Toni",
-            LastName = "Ribas",
-            Email = "toni@rtrw.app",
-            Gender = Enums.Gender.Lakilaki,
-            Geocoder = new Geocoder()
-            {
-                Provinsi = "DKI Jakarta",
-                KabupatenKota = "Kota Jakarta Utara",
-                Kecamatan = "Tanjung Priok",
-                Kelurahan = "Sunter Agung",
-                KodePos = "14350",
-                Alamat = "Sunter Muara 1B",
-                Longitude = "106.8563909153426",
-                Latitude = "-6.144614964014737",               
-            },
-        };
-        public Warga Warga => warga;
+            this.dbContextFactory = dbContextFactory;
+        }
+
+        public Warga Warga => GetCurrentUser().Result;
+
+        async Task<Warga> GetCurrentUser()
+        {
+            using var dbContext = await dbContextFactory.CreateDbContextAsync();
+            var warga = dbContext?.Warga?
+                .Include(x=>x.Geocoder)
+                .FirstOrDefaultAsync(x => x.Phone.Trim().ToLower() == "+6281904084351");
+
+            return await warga;
+        }
     }
 }

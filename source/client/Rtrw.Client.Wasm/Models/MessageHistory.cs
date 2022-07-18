@@ -9,6 +9,6 @@ namespace Rtrw.Client.Wasm.Models
     public class MessageHistory
     {
         public string Id { get; set; } = $"message-history-{Guid.NewGuid().ToString("N")}";
-        List<Message> Messages { get; set; } = new();
+        public List<Message> Messages { get; set; } = new();
     }
 }

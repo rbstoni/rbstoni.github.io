@@ -1,0 +1,23 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<hr @attributes="UserAttributes" class="@Classname" style="@Style" />
+
+@code {
+
+    protected string Classname
+        => new CssBuilder("divider")
+            .AddClass($"divider-absolute", Absolute)
+            .AddClass($"divider-flexitem", FlexItem)
+            .AddClass($"divider-light", Light)
+            .AddClass($"divider-vertical", Vertical)
+            .AddClass($"divider-{DividerType.EnumToDescriptionString()}", when: () => DividerType != DividerType.FullWidth)
+            .AddClass(Class)
+            .Build();
+
+    [Parameter] public bool Absolute { get; set; }
+    [Parameter] public bool FlexItem { get; set; }
+    [Parameter] public bool Light { get; set; }
+    [Parameter] public bool Vertical { get; set; }
+    [Parameter] public DividerType DividerType { get; set; } = DividerType.FullWidth;
+}

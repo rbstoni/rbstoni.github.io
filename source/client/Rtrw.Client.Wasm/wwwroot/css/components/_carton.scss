@@ -1,0 +1,14 @@
+.#{$prefix}paper {
+    color: var(--#{$prefix}body-color);
+    background-color: var(--#{$prefix}body-bg);
+    border-radius: var(--#{$prefix}border-radius);
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.#{$prefix}paper-square {
+    border-radius: 0px;
+}
+
+.#{$prefix}paper-outlined {
+    border: 1px solid var(--#{$prefix}border-color);
+}

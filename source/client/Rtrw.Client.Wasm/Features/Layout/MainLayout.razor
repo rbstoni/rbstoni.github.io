@@ -6,9 +6,11 @@
 @inject IPostService PostService
 @inject NavigationManager Nagivation
 
+<RtrwPopoverProvider />
 <RtrwModalProvider />
+
 <RtrwLayout>
-    <CascadingValue Value="@CurrentUser" IsFixed="true">
+    <CascadingValue Value="@Warga" IsFixed="true">
         <CascadingValue Value="@UserHasChosen" IsFixed="true">
             @if (UserHasChosen)
             {
@@ -19,7 +21,7 @@
 </RtrwLayout>
 
 @code {
-    Warga CurrentUser => currentUser.Warga;
+    Warga Warga => currentUser.Warga;
     bool UserHasChosen { get; set; }
     protected override async void OnAfterRender(bool firstRender)
     {

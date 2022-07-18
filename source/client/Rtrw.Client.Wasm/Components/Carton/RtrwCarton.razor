@@ -1,0 +1,40 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="@UserAttributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</div>
+
+@code {
+    protected string ClassName
+        => new CssBuilder("rtrw-carton")
+            .AddClass($"rtrw-carton-outlined", Outlined)
+            .AddClass($"rtrw-carton-square", Square)
+            .AddClass($"rtrw-position-{Position}")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle("height", $"{Height}", !String.IsNullOrEmpty(Height))
+            .AddStyle("width", $"{Width}", !String.IsNullOrEmpty(Width))
+            .AddStyle("max-height", $"{MaxHeight}", !String.IsNullOrEmpty(MaxHeight))
+            .AddStyle("max-width", $"{MaxWidth}", !String.IsNullOrEmpty(MaxWidth))
+            .AddStyle("min-height", $"{MinHeight}", !String.IsNullOrEmpty(MinHeight))
+            .AddStyle("min-width", $"{MinWidth}", !String.IsNullOrEmpty(MinWidth))
+            .AddStyle("background-color", $"{BackgroundColor}", !String.IsNullOrEmpty(BackgroundColor))
+            .AddStyle(Style)
+            .Build();
+
+    [Parameter] public bool Square { get; set; } = true;
+    [Parameter] public bool Outlined { get; set; }
+    [Parameter] public Position Position { get; set; } = Position.Relative;
+    [Parameter] public string Height { get; set; }
+    [Parameter] public string Width { get; set; }
+    [Parameter] public string MaxHeight { get; set; }
+    [Parameter] public string MaxWidth { get; set; }
+    [Parameter] public string MinHeight { get; set; }
+    [Parameter] public string MinWidth { get; set; }
+    [Parameter] public string BackgroundColor { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

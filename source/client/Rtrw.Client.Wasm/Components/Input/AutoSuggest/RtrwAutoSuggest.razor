@@ -1,0 +1,114 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwBaseInput<T>
+@typeparam T
+
+@using Rtrw.Client.Wasm.Components.Input
+
+<CascadingValue Name="Standalone" Value="false" IsFixed="true">
+    <div class="rtrw-select rtrw-autosuggest">
+        <RtrwInputControl Class="@Classname"
+                          Style="@Style"
+                          Label="@Label"
+                          Variant="@Variant"
+                          HelperText="@HelperText"
+                          HelperTextOnFocus="@HelperTextOnFocus"
+                          FullWidth="@FullWidth"
+                          Margin="@Margin"
+                          Error="@Error"
+                          ErrorText="@ErrorText"
+                          Disabled="@Disabled"
+                          @onclick="@ToggleMenu"
+                          Required="@Required"
+                          ForId="@FieldId">
+            <InputContent>
+                <RtrwInput @ref="_elementReference"
+                           @key="_elementKey"
+                           T="string"
+                           Class="rtrw-select-input"
+                           Margin="@Margin"
+                           InputType="InputType.Text"
+                           Variant="@Variant"
+                           TextUpdateSuppression="@TextUpdateSuppression"
+                           Value="@Text"
+                           DisableUnderLine="@DisableUnderLine"
+                           Disabled="@Disabled"
+                           ReadOnly="@ReadOnly"
+                           Error="@Error"
+                           OnAdornmentClick="@OnAdornmentClick" 
+                           Adornment="@Adornment"
+                           Clearable="@Clearable"
+                           OnClearButtonClick="@OnClearButtonClick"
+                           @attributes="UserAttributes"
+                           TextChanged="OnTextChanged"
+                           OnBlur="OnInputBlurred"
+                           OnKeyDown="@this.OnInputKeyDown"
+                           OnKeyUp="@this.OnInputKeyUp"
+                           autocomplete=@("rtrw-disabled-"+Guid.NewGuid())
+                           KeyUpPreventDefault="KeyUpPreventDefault"
+                           Placeholder="@Placeholder"
+                           Immediate="true"
+                           InputMode="@InputMode"
+                           Pattern="@Pattern" />
+                <RtrwPopover Open="@IsOpen"
+                             Class="@PopoverClass"
+                             MaxHeight="@MaxHeight"
+                             AnchorOrigin="@AnchorOrigin"
+                             TransformOrigin="@TransformOrigin"
+                             RelativeWidth="true">
+                    @if (_items != null && _items.Length != 0)
+                    {
+                        <RtrwList Clickable="true" Dense="@Dense">
+                            @for (var index = 0; index < _items.Length; index++)
+                            {
+                                var item = _items[index];
+                                bool is_selected = index == _selectedListItemIndex;
+                                bool is_disabled = !_enabledItemIndices.Contains(index);
+                                <RtrwListItem @key="@item"
+                                      id="@GetListItemId(index)"
+                                      Disabled="@(is_disabled)"
+                                      OnClick="@(async() => await ListItemOnClick(item))"
+                                      OnClickHandlerPreventDefault="true"
+                                      Class="@(is_selected ? "rtrw-selected-item rtrw-primary-text rtrw-primary-hover" : "")">
+                                    @if (ItemTemplate == null)
+                                    {
+                                        @GetItemString(item)
+                                    }
+                                    else if (is_disabled && ItemDisabledTemplate != null)
+                                    {
+                                        @ItemDisabledTemplate(item)
+                                    }
+                                    else if (is_selected)
+                                    {
+                                        @if (ItemSelectedTemplate == null)
+                                            @ItemTemplate(item)
+                                        else
+                                            @ItemSelectedTemplate(item)
+
+                                    }
+                                    else
+                                    {
+                                        @ItemTemplate(item)
+                                    }
+                                </RtrwListItem>
+                            }
+                            @if (MoreItemsTemplate != null && _itemsReturned > MaxItems)
+                            {
+                                <div class="pa-1">
+                                    @MoreItemsTemplate
+                                </div>
+                            }
+                        </RtrwList>
+                    }
+                    else if (NoItemsTemplate != null)
+                    {
+                        <div class="pa-1">
+                            @NoItemsTemplate
+                        </div>
+                    }
+                </RtrwPopover>
+            </InputContent>
+        </RtrwInputControl>
+    </div>
+</CascadingValue>
+
+<RtrwOverlay Visible="IsOpen" OnClick="@ToggleMenu" @ontouchstart="@ToggleMenu" LockScroll="false" />

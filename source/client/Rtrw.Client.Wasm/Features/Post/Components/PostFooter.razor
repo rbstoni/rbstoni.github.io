@@ -1,0 +1,16 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+
+<footer @attributes="UserAttributes" class="@ClassName" style="@Style">
+    @ChildContent
+</footer>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected string? ClassName
+        => new CssBuilder("post-footer")
+            .AddClass(Class)
+            .Build();
+}

@@ -1,9 +1,8 @@
 ﻿using Rtrw.Client.Wasm.Components.Enums;
 using Rtrw.Client.Wasm.Components.Extensions;
-using Rtrw.Client.Wasm.Components.Input.Base;
 using Rtrw.Client.Wasm.Utilities;
 
-namespace Rtrw.Client.Wasm.Components.Input.Internal
+namespace Rtrw.Client.Wasm.Components.Input
 {
     internal static class RtrwInputCssHelper
     {

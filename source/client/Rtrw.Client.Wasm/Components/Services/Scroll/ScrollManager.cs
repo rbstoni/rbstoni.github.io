@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using Rtrw.Client.Wasm.Components.Enums;
 using Rtrw.Client.Wasm.Components.Extensions;
 
 namespace Rtrw.Client.Wasm.Components.Services.Scroll
@@ -13,28 +14,28 @@ namespace Rtrw.Client.Wasm.Components.Services.Scroll
         }
 
         public ValueTask ScrollToFragmentAsync(string id, ScrollBehavior behavior) =>
-            jSRuntime.InvokeVoidAsync("scrollManager.scrollToFragment", id, behavior.EnumToDescriptionString());
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.scrollToFragment", id, behavior.EnumToDescriptionString());
 
         public ValueTask ScrollToAsync(string id, int left, int top, ScrollBehavior behavior) =>
-            jSRuntime.InvokeVoidAsync("scrollManager.scrollTo", id, left, top, behavior.EnumToDescriptionString());
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.scrollTo", id, left, top, behavior.EnumToDescriptionString());
 
         public ValueTask ScrollToTopAsync(string id, ScrollBehavior scrollBehavior = ScrollBehavior.Auto) =>
             ScrollToAsync(id, 0, 0, scrollBehavior);
 
         public ValueTask ScrollToBottomAsync(string id, ScrollBehavior behavior) =>
-            jSRuntime.InvokeVoidAsync("scrollManager.scrollToBottom", id, behavior.EnumToDescriptionString());
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.scrollToBottom", id, behavior.EnumToDescriptionString());
 
         public ValueTask ScrollToYearAsync(string elementId) =>
-            jSRuntime.InvokeVoidAsync("scrollManager.scrollToYear", elementId);
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.scrollToYear", elementId);
 
         public ValueTask ScrollToListItemAsync(string elementId) =>
-            jSRuntime.InvokeVoidAsync("scrollManager.scrollToListItem", elementId);
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.scrollToListItem", elementId);
 
         public ValueTask LockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
-            jSRuntime.InvokeVoidAsync("scrollManager.lockScroll", selector, cssClass);
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.lockScroll", selector, cssClass);
 
         public ValueTask UnlockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
-            jSRuntime.InvokeVoidAsync("scrollManager.unlockScroll", selector, cssClass);
+            jSRuntime.InvokeVoidAsync("rtrwScrollManager.unlockScroll", selector, cssClass);
     }
 
     public interface IScrollManager
@@ -47,11 +48,5 @@ namespace Rtrw.Client.Wasm.Components.Services.Scroll
         ValueTask LockScrollAsync(string selector = "body", string cssClass = "scroll-locked");
         ValueTask UnlockScrollAsync(string selector = "body", string cssClass = "scroll-locked");
         ValueTask ScrollToBottomAsync(string elementId, ScrollBehavior scrollBehavior = ScrollBehavior.Auto);
-    }
-
-    public enum ScrollBehavior
-    {
-        Smooth,
-        Auto
     }
 }

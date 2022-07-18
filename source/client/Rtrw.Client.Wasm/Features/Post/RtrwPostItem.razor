@@ -13,51 +13,45 @@
 @inject ICurrentUser CurrentUser
 
 <CascadingValue Value="@Post" IsFixed="true">
-    <div class="post-container @Class" style="@PostListItemStyle">
-        <div class="rtrw-flex rtrw-flex-col rtrw-gap-col-8px">
-            <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-start rtrw-margin-4px">
-                <div class="rtrw-flex rtrw-gap-col-8px">
-                    <AvatarWarga Id="@Post.Author.Id" Size="40" AvatarUrl="@Post.Author.AvatarUrl" />
-                    <div class="rtrw-flex rtrw-flex-col">
-                        <NameBar FullName="@Post.Author.FullName" Kelurahan="@Post.Author.Geocoder.Kelurahan" />
-                        <div class="display-date" type="button">
-                            @Post.CreatedAt.TimeSpanToString()
-                        </div>
-                    </div>
-                </div>
-                <PostOptions />
-            </div>
-        </div>
-
-        <RtrwConveyer Media="@Post.Media" BorderRadius="12px" Height="250px" />
-
-        <div class="post-content" type="button" @onclick="@(()=>NavigationManager.NavigateTo($"post/{Post.Id}"))">
-            <TruncateText Text="@Post.Text" />
-        </div>
-        <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center rtrw-gap-col-4px" type="button">
-            <RtrwSvgGeoTag />
-            <span class="display-post-location rtrw-margin-start-8px"> @Post.PostGeocoder?.Alamat</span>
-        </div>
-
-        <div class="rtrw-flex rtrw-justify-content-between rtrw-width-100">
-            <div class="rtrw-flex rtrw-justify-content-start rtrw-align-items-center">
-                <LastThreeReaction Reactions="@Post.Reactions" />
-            </div>
-            <div class="rtrw-flex rtrw-justify-content-end rtrw-align-items-center">
-                <AddReaction NewReaction="@AddCurrentUserReaction" RemoveReaction="@RemoveCurrentUserReaction" />
-                <RtrwButton Style="gap: 8px">
-                    <RtrwSvgComment />
-                    @if (Post.Comments?.Count > 0)
-                    {
-                        <span class="message-count-label">@Post.Comments?.Count</span>
-                    }
-                </RtrwButton>
-                <RtrwButton Style="margin-right: -22px;">
-                    <RtrwSvgShare />
-                </RtrwButton>
-            </div>
-        </div>
-    </div>
+    <PostContainer>
+        <PostHeader>
+            <Flex Direction="FlexDirection.Row" Gap="8">
+                <AvatarWarga Id="@Post.Author.Id" Size="40" AvatarUrl="@Post.Author.AvatarUrl" />
+                <FlexItem AlignSelf="FlexAlignSelf.FlexStart">
+                    <Flex Direction="FlexDirection.Column">
+                        <InfoWarga FullName="@Post.Author.FullName" Kelurahan="@Post.Author.Geocoder.Kelurahan" />
+                        <PostTimeSpan DateTime="@Post.CreatedAt" />
+                    </Flex>
+                </FlexItem>
+                <FlexItem AlignSelf="FlexAlignSelf.FlexStart" Class="rtrw-margin-start-auto">
+                    <ReportIconButton />
+                </FlexItem>
+            </Flex>
+        </PostHeader>
+        <PostBody>
+            @if (@Post?.Media.Count != 0)
+            {
+                <RtrwConveyor Media="@Post?.Media" BorderRadius="12px" Height="250px" />
+            }
+            <PostText Text="@Post?.Text" PostId="@Post?.Id" MaxCharacter="160" Truncate />
+            <PostGeocoder Geocoder="@Post?.PostGeocoder" />
+        </PostBody>
+        <PostFooter>
+            <LastThreeReaction Reactions="@Post.Reactions" />
+            <RtrwSpacer />
+            <AddReaction NewReaction="@AddCurrentUserReaction" RemoveReaction="@RemoveCurrentUserReaction" />
+            <RtrwButton Style="gap: 8px">
+                <RtrwSvgComment />
+                @if (Post.Comments?.Count > 0)
+                {
+                    <span class="message-count-label">@Post.Comments?.Count</span>
+                }
+            </RtrwButton>
+            <RtrwButton Style="margin-right: -22px;">
+                <RtrwSvgShare />
+            </RtrwButton>
+        </PostFooter>
+    </PostContainer>
 </CascadingValue>
 
 @code {

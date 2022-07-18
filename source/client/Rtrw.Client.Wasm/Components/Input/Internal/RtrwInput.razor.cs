@@ -2,39 +2,39 @@
 using Microsoft.AspNetCore.Components.Web;
 using Rtrw.Client.Wasm.Components.Enums;
 using Rtrw.Client.Wasm.Components.Extensions;
-using Rtrw.Client.Wasm.Components.Input.Base;
 using Rtrw.Client.Wasm.Components.Utilities;
 using Rtrw.Client.Wasm.Utilities;
 
-namespace Rtrw.Client.Wasm.Components.Input.Internal
+namespace Rtrw.Client.Wasm.Components.Input
 {
     public partial class RtrwInput<T> : RtrwBaseInput<T>
     {
+
         private ElementReference elementReference1;
         private string? internalText;
         private bool showClearable;
 
+        [Parameter] public RenderFragment? AdornmentContent { get; set; }
+        [Parameter] public RenderFragment? AdornmentSvg { get; set; }
         [Parameter] public RenderFragment? ChildContent { get; set; }
         [Parameter] public bool Clearable { get; set; } = false;
         public ElementReference ElementReference { get; private set; }
         [Parameter] public bool HideSpinButtons { get; set; } = true;
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
-        [Parameter] public RenderFragment? AdornmentContent { get; set; }
-        [Parameter] public RenderFragment? AdornmentSvg { get; set; }
         [Parameter] public EventCallback OnDecrement { get; set; }
-        //public override ValueTask SelectAsync()
-        //{
-        //    return ElementReference.RtrwSelectAsync();
-        //}
-        //public override ValueTask SelectRangeAsync(int pos1, int pos2)
-        //{
-        //    return ElementReference.RtrwSelectRangeAsync(pos1, pos2);
-        //}
+        public override ValueTask SelectAsync()
+        {
+            return ElementReference.RtrwSelectAsync();
+        }
+        public override ValueTask SelectRangeAsync(int pos1, int pos2)
+        {
+            return ElementReference.RtrwSelectRangeAsync(pos1, pos2);
+        }
         [Parameter] public EventCallback OnIncrement { get; set; }
         [Parameter] public EventCallback<WheelEventArgs> OnMouseWheel { get; set; }
         protected string AdornmentClassname => RtrwInputCssHelper.GetAdornmentClassname(this);
-        protected string Classname 
+        protected string Classname
             => RtrwInputCssHelper.GetClassname(this,
                 () => HasNativeHtmlPlaceholder() ||
                         !string.IsNullOrEmpty(Text) ||
@@ -64,7 +64,6 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
                 Console.WriteLine("RtrwInput.FocusAsync: " + e.Message);
             }
         }
-
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
@@ -83,22 +82,18 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
                 internalText = Text;
             }
         }
-
         public Task SetText(string text)
         {
             internalText = text;
             return SetTextAsync(text);
         }
-
         internal override InputType GetInputType() => InputType;
-
         protected virtual async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
             await SetTextAsync(string.Empty, updateValue: true);
             await ElementReference.FocusAsync();
             await OnClearButtonClick.InvokeAsync(e);
         }
-
         protected async Task OnChange(ChangeEventArgs args)
         {
             internalText = args?.Value as string;
@@ -108,7 +103,6 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
                 await SetTextAsync(args?.Value as string);
             }
         }
-
         protected Task OnInput(ChangeEventArgs args)
         {
             if (!Immediate)
@@ -116,33 +110,28 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
             isFocused = true;
             return SetTextAsync(args?.Value as string);
         }
-
         protected virtual async Task OnPaste(ClipboardEventArgs args)
         {
             // do nothing
             return;
         }
-
         protected override async Task UpdateTextPropertyAsync(bool updateValue)
         {
             await base.UpdateTextPropertyAsync(updateValue);
             if (Clearable)
                 UpdateClearable(Text);
         }
-
         protected override async Task UpdateValuePropertyAsync(bool updateText)
         {
             await base.UpdateValuePropertyAsync(updateText);
             if (Clearable)
                 UpdateClearable(Value);
         }
-
         private bool HasNativeHtmlPlaceholder()
         {
             return GetInputType() is InputType.Color or InputType.Date or InputType.DateTimeLocal or InputType.Month
                 or InputType.Time or InputType.Week;
         }
-
         private void UpdateClearable(object value)
         {
             var _showClearable = Clearable &&
@@ -151,7 +140,7 @@ namespace Rtrw.Client.Wasm.Components.Input.Internal
             if (showClearable != _showClearable)
                 showClearable = _showClearable;
         }
-    }
 
-    public class RtrwInputString : RtrwInput<string>{}
+    }
+    public class RtrwInputString : RtrwInput<string> { }
 }

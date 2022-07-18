@@ -1,0 +1,24 @@
+﻿@using Rtrw.Client.Wasm.Utilities
+
+<RtrwContainer>
+    <div @attributes="@Attributes" class="@ClassName" style="@StyleName">
+        @ChildContent
+    </div>
+</RtrwContainer>
+
+@code {
+    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected string ClassName
+        => new CssBuilder("horizontal-scrollable")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle(Style)
+            .Build();
+}

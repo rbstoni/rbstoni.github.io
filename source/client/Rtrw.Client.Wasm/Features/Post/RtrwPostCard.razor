@@ -1,11 +1,12 @@
 ﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Features.Avatar
 @using Rtrw.Client.Wasm.Features.Post.Components
 @using Rtrw.Client.Wasm.Utilities
 
 <div @attributes="@Attributes" class="@ClassName" style="@StyleName">
     <div class="header-content">
-        <AvatarWarga AvatarUrl="@AvatarUrl" Id="@WargaId" Size="30" />
-        <NameBar FullName="@FullName" Kelurahan="@Kelurahan" Verified="@Verified" />
+        <RtrwAvatarWarga AvatarUrl="@AvatarUrl" Id="@WargaId" Size="30" />
+        <InfoWarga FullName="@FullName" Kelurahan="@Kelurahan" Verified="@Verified" />
         <RtrwIconButton Padding="6px" Style="margin-right: -6px">
             <svg xmlns="http://www.w3.org/2000/svg" width="14.076" height="15.836" viewBox="0 0 14.076 15.836">
                 <path id="Path_2508" data-name="Path 2508" d="M17.434,4.478a1.575,1.575,0,0,0-1.408-.22,6.625,6.625,0,0,1-1.909.246,7.513,7.513,0,0,1-2.754-.686A8.93,8.93,0,0,0,7.959,3,5.531,5.531,0,0,0,4.264,4,.88.88,0,0,0,4,4.636v13.32a.88.88,0,0,0,1.76,0V14.173a5.525,5.525,0,0,1,2.2-.361,7.513,7.513,0,0,1,2.754.686,8.93,8.93,0,0,0,3.4.818A6.739,6.739,0,0,0,17.2,14.7a1.531,1.531,0,0,0,.88-1.364v-7.6a1.557,1.557,0,0,0-.642-1.258ZM16.317,13.2a5.56,5.56,0,0,1-2.2.361,7.355,7.355,0,0,1-2.754-.7,9.1,9.1,0,0,0-3.4-.809,8.367,8.367,0,0,0-2.2.255V5.129a5.393,5.393,0,0,1,2.2-.37,7.355,7.355,0,0,1,2.754.7,9.1,9.1,0,0,0,3.4.809A8.279,8.279,0,0,0,16.317,6Z" transform="translate(-4 -3)" fill="#0f1419" />

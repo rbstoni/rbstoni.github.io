@@ -1,0 +1,41 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Extensions
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+@inject NavigationManager NavigationManager
+
+<div @attributes="UserAttributes" class="@ClassName" style="@Style" @onclick="@(()=>NavigationManager.NavigateTo($"post/{PostId}"))">
+     @if (Truncate)
+     {
+     @:@{
+         @truncateText
+            <span class="truncate-button" type="button" @onclick="OnClickHandler" @onclick:stopPropagation="true">Selengkapnya</span>
+         }
+    }
+    else
+    {
+        @Text
+    }
+</div>
+
+@code {
+    [Parameter] public string PostId { get; set; }
+    [Parameter] public string Text { get; set; }
+    [Parameter] public bool Truncate { get; set; } = false;
+    [Parameter] public int MaxCharacter { get; set; } = 160;
+    string? truncateText;
+    protected string? ClassName
+        => new CssBuilder("post-text")
+            .AddClass(Class)
+            .Build();
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (Truncate)
+        {
+            truncateText = Text.TruncateString(MaxCharacter);
+        }
+        return base.OnParametersSetAsync();
+    }
+    void OnClickHandler() => Truncate = false;
+}

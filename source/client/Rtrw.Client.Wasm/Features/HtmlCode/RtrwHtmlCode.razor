@@ -1,0 +1,28 @@
+﻿@using Rtrw.Client.Wasm.Features.Color
+@if (Code == HtmlCode.Bullet)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}
+@if (Code == HtmlCode.Copyright)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}@if (Code == HtmlCode.Degree)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}
+@if (Code == HtmlCode.Ellipsis)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}
+@if (Code == HtmlCode.RegisteredTrademark)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}
+@if (Code == HtmlCode.Trademark)
+{
+    <span style="color: @Color">@HtmlCode.Bullet</span>
+}
+@code {
+    [Parameter] public string Code { get; set; } = HtmlCode.Bullet;
+    [Parameter] public string Color { get; set; } = RtrwColors.Shades.Black;
+}

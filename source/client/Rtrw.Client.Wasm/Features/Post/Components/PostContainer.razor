@@ -1,0 +1,20 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    protected string? ClassName
+            => CssBuilder.Default("post-container")
+                .AddClass(Class ?? string.Empty, Class != null)
+                .Build();
+
+    protected string? StyleName
+        => new StyleBuilder()
+            .AddStyle(Style ?? string.Empty)
+            .Build();
+}

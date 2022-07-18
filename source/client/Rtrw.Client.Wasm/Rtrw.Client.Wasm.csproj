@@ -18,18 +18,15 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.6" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="6.0.6" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="FakeData\Helpers\" />
-	  <Folder Include="FakeData\Services\" />
 	</ItemGroup>
 
 </Project>

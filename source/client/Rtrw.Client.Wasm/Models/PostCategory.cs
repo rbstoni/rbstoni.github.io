@@ -4,11 +4,13 @@ namespace Rtrw.Client.Wasm.Models
 {
     public enum PostCategory
     {
-        [Description("Suara Warga")]
-        SuaraWarga,
-        [Description("Liputan")]
-        Liputan,
-        [Description("Pengumuman")]
-        Pengumuman
+        [Description("Umum")]
+        Umum,
+        [Description("Bisnis")]
+        Bisnis,
+        [Description("Keamanan-Ketertiban")]
+        KeamananKetertiban,
+        [Description("Kebersihan")]
+        Kebersihan
     }
 }

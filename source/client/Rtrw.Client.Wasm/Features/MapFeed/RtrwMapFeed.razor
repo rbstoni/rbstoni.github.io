@@ -1,5 +1,4 @@
-﻿@using Rtrw.Client.Wasm.Components.Container
-@using Rtrw.Client.Wasm.Components.Enums
+﻿@using Rtrw.Client.Wasm.Components.Enums
 @using Rtrw.Client.Wasm.Components.Extensions
 @using Rtrw.Client.Wasm.Utilities
 
@@ -12,7 +11,7 @@
                 </svg>
             </div>
             <div class="rtrw-flex rtrw-justify-content-between rtrw-align-items-center rtrw-width-100">
-                <div class="rtrw-flex rtrw-flex-col rtrw-justify-content-start rtrw-margin-end-auto">
+                <div class="rtrw-flex rtrw-flex-column rtrw-justify-content-start rtrw-margin-end-auto">
                     <div style="font-family:Raleway; font-weight: normal; font-size: 24px; color: #716464">
                         @Kelurahan
                     </div>
@@ -26,6 +25,7 @@
             </div>
         </div>
         <div class="section-body-content">
+            @ChildContent
         </div>
     </RtrwContainer>
 </section>

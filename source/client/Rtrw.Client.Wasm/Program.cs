@@ -10,7 +10,9 @@ using Rtrw.Client.Wasm.FakeData;
 using Rtrw.Client.Wasm.FakeData.Authentication;
 using Rtrw.Client.Wasm.FakeData.Database;
 using Rtrw.Client.Wasm.FakeData.Extensions;
+using Rtrw.Client.Wasm.JsInterop;
 using Rtrw.Client.Wasm.Services;
+using Rtrw.Client.Wasm.Services.Geocoding;
 using Rtrw.Client.Wasm.ViewModels;
 
 namespace Rtrw.Client.Wasm
@@ -34,6 +36,9 @@ namespace Rtrw.Client.Wasm
             builder.Services.AddScoped<ICurrentUser, CurrentUser>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IWindowHistoryService, WindowHistoryService>();
+            builder.Services.AddScoped<IMapboxJsInterop, MapboxJsInterop>();
+            builder.Services.AddScoped<IGeocodingApiService, GeocodingApiService>();
+            builder.Services.AddScoped<IDummyService, DummyService>();
 
             builder.Services.AddRtrwComponentServices();
 
@@ -41,14 +46,14 @@ namespace Rtrw.Client.Wasm
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
 
-            //var host = builder.Build();
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    await scope.ServiceProvider.GetRequiredService<IInitializerService>().InitializeFakeRandomPostAsync();
-            //}
-            //await host.RunAsync();
+            var host = builder.Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                await scope.ServiceProvider.GetRequiredService<IInitializerService>().InitializeFakeRandomWargaAsync();
+            }
+            await host.RunAsync();
 
-            await builder.Build().RunAsync();
+            //await builder.Build().RunAsync();
         }
     }
 }

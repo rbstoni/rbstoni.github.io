@@ -19,7 +19,7 @@
                            Clearable>
             </RtrwTextField>
             <div class="rtrw-typography-h6 rtrw-margin-y-4px">Opsi Jawaban: </div>
-            <div class="rtrw-flex rtrw-flex-col">
+            <Flex Direction="FlexDirection.Column">
                 @foreach (var (answer, idx) in @Poll.Answers.Select((answer, idx) => (answer, idx)))
                 {
                     <RtrwTextField T="string"
@@ -32,6 +32,7 @@
                                OnAdornmentClick="@(e=>RemovePollAnswer(answer))"
                                Required
                                Immediate
+                               FullWidth
                                MaxLength="160"
                                Clearable>
                         <AdornmentSvg>
@@ -50,7 +51,7 @@
                             FullWidth="false">
                     Tambahkan pilihan
                 </RtrwButton>
-            </div>
+            </Flex>
         </RtrwForm>
     </ModalContent>
     <FooterContent>

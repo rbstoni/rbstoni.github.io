@@ -1,0 +1,10 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@using Rtrw.Client.Wasm.Components.Input.Radio
+@inherits RtrwFormComponent<T, T>
+@typeparam T
+
+<CascadingValue Value="@((IRtrwRadioGroup)this)" IsFixed="true">
+    <div role="radiogroup" @attributes="UserAttributes" class=@Class style="@Style">
+        @ChildContent
+    </div>
+</CascadingValue>

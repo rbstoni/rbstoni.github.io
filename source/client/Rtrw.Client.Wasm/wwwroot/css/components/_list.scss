@@ -84,6 +84,7 @@
 .#{$prefix}list-subheader-sticky {
     top: 0;
     z-index: 1;
+    position: -webkit-sticky;
     position: sticky;
     background-color: inherit;
 }
@@ -97,7 +98,9 @@
 .#{$prefix}nested-list {
     &>.#{$prefix}list-item {
         padding-left: 32px;
-        padding-inline-start: 32px;
-        padding-inline-end: unset;
+        -webkit-padding-start: 32px;
+                padding-inline-start: 32px;
+        -webkit-padding-end: unset;
+                padding-inline-end: unset;
     }
 }

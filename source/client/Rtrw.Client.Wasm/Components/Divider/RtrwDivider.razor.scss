@@ -1,0 +1,40 @@
+﻿.divider {
+    border: none;
+    height: 1px;
+    margin: 0;
+    flex-shrink: 0;
+    background-color: var(--rtrw-divider-bg);
+
+    &.divider-absolute {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    &.divider-flexitem {
+        height: auto;
+        align-self: stretch;
+    }
+
+    &.divider-light {
+        background-color: var(--rtrw-divider-bg-light);
+    }
+
+    &.divider-vertical {
+        width: 1px;
+        height: 100%;
+    }
+
+
+    &.divider-inset {
+        margin-left: 72px;
+        margin-inline-start: 72px;
+        margin-inline-end: unset;
+    }
+
+    &.divider-middle {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}

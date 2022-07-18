@@ -12,8 +12,8 @@ namespace Rtrw.Client.Wasm.Services
         Task<Post> GetPostByIdAsync(string postId);
         Task<List<Post>> GetPostsAsync();
         Task SaveCommentAsync(Comment comment);
-        Task SavePostAsync(Post post);
-        Task SavePostAsync(IEnumerable<Post> post);
+        Task<bool> SavePostAsync(Post post);
+        Task<bool> SavePostAsync(IEnumerable<Post> post);
 
     }
 
@@ -21,21 +21,25 @@ namespace Rtrw.Client.Wasm.Services
     {
 
         private readonly ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory;
+        private readonly Warga warga;
 
-        public PostService(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory)
-        { this.dbContextFactory = dbContextFactory; }
+        public PostService(ISqliteWasmDbContextFactory<SqliteWasmDbContext> dbContextFactory, ICurrentUser currentUser)
+        {
+            this.dbContextFactory = dbContextFactory;
+            warga = currentUser.Warga;
+        }
 
         public async Task<Comment> GetCommentByIdAsync(string commentId)
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
             var storageComment = await dbContext.Comments
-                .AsSplitQuery()
-                .Include(x => x.Commenter)
-                .ThenInclude(y => y.Geocoder)
-                .Include(x => x.Media)
-                .Include(x => x.Mentions)
-                .Include(x => x.Reactions)
-                .Include(x => x.Replies)
+                //.AsSplitQuery()
+                //.Include(x => x.Commenter)
+                //.ThenInclude(y => y.Geocoder)
+                //.Include(x => x.Media)
+                //.Include(x => x.Mentions)
+                //.Include(x => x.Reactions)
+                //.Include(x => x.Replies)
                 .Where(x => x.Id == commentId)
                 .FirstOrDefaultAsync();
             if (storageComment == null)
@@ -48,14 +52,14 @@ namespace Rtrw.Client.Wasm.Services
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
             var storagePost = dbContext.Posts
-                .AsSplitQuery()
-                .Include(x => x.Author)
-                .ThenInclude(p => p.Geocoder)
-                .Include(x => x.PostGeocoder)
-                .Include(x => x.Media)
-                .Include(x => x.Comments)
-                .Include(x => x.Reactions)
-                .ThenInclude(reaction => reaction.Reactor)
+                //.AsSplitQuery()
+                //.Include(x => x.Author)
+                //.ThenInclude(p => p.Geocoder)
+                //.Include(x => x.PostGeocoder)
+                //.Include(x => x.Media)
+                //.Include(x => x.Comments)
+                //.Include(x => x.Reactions)
+                //.ThenInclude(reaction => reaction.Reactor)
                 .Where(x => x.Id == postId)
                 .FirstOrDefault();
             if (storagePost == null)
@@ -66,9 +70,9 @@ namespace Rtrw.Client.Wasm.Services
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
             var storagePosts = dbContext.Posts
-                .AsSplitQuery()
-                .Include(x => x.Author)
-                .Include(x => x.Comments)
+                //.AsSplitQuery()
+                //.Include(x => x.Author)
+                //.Include(x => x.Comments)
                 .OrderBy(x => x.CreatedAt)
                 .ToList();
             if (storagePosts == null)
@@ -82,17 +86,38 @@ namespace Rtrw.Client.Wasm.Services
             dbContext.Comments.Add(comment);
             await dbContext.SaveChangesAsync();
         }
-        public async Task SavePostAsync(Post post)
+        public async Task<bool> SavePostAsync(Post post)
         {
             using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            await dbContext.Posts.AddAsync(post);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                var author = await dbContext.Warga.FirstOrDefaultAsync(x => x.Id == warga.Id);
+                post.Author = author; 
+                await dbContext.Posts!.AddAsync(post);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            return true;
         }
-        public async Task SavePostAsync(IEnumerable<Post> posts)
+        public async Task<bool> SavePostAsync(IEnumerable<Post> posts)
         {
-            using var dbContext = await dbContextFactory.CreateDbContextAsync();
-            dbContext.Posts.AddRange(posts);
-            await dbContext.SaveChangesAsync();
+            using (var dbContext = await dbContextFactory.CreateDbContextAsync())
+            {
+                try
+                {
+                    await dbContext.Posts.AddRangeAsync(posts);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
         }
 
     }

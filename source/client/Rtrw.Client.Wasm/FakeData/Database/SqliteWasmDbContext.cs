@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Rtrw.Client.Wasm.Components.Extensions;
 using Rtrw.Client.Wasm.Enums;
 using Rtrw.Client.Wasm.Models;
 using System.ComponentModel;
@@ -18,14 +19,13 @@ namespace Rtrw.Client.Wasm.FakeData.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Warga>()
-                .HasMany(x => x.Posts);
-            modelBuilder.Entity<Post>()
-                .HasOne(x => x.Author);
-            modelBuilder.Entity<Post>()
-                .HasMany(x => x.Mentions);
-            modelBuilder.Entity<Post>()
-                .HasMany(x => x.Comments);
+            modelBuilder.Entity<Warga>(entity =>
+            {
+                entity.HasIndex(e => e.Phone).IsUnique();
+                entity.HasMany(e => e.Posts).WithOne(e => e.Author).OnDelete(DeleteBehavior.NoAction);
+                entity.HasMany(e => e.Reports).WithOne(e => e.ReportedBy).OnDelete(DeleteBehavior.NoAction);
+                entity.HasMany(e => e.Contacts);
+            });
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -34,6 +34,8 @@ namespace Rtrw.Client.Wasm.FakeData.Database
                 .HaveConversion<EnumToStringConverter<Gender>>();
             configurationBuilder.Properties<Emoji>()
                 .HaveConversion<EnumToStringConverter<Emoji>>();
+            configurationBuilder.Properties<Scope>()
+                .HaveConversion<EnumToStringConverter<Scope>>();
         }
 
         public class EnumToStringConverter<TEnum> : ValueConverter<TEnum, string> where TEnum : Enum

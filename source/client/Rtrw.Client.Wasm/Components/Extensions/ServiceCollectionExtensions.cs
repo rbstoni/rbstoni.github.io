@@ -13,17 +13,19 @@ namespace Rtrw.Client.Wasm.Components.Extensions
                 .AddJsApi()
                 .AddRtrwModal()
                 .AddRtrwPopoverService(configuration.PopoverOptions)
+                .AddRtrwKeyInterceptor()
                 .AddRtrwScrollManager();
         }
         public static IServiceCollection AddRtrwComponentServices(this IServiceCollection services, Action<ServiceConfiguration> configuration)
         {
-            if(configuration==null) throw new ArgumentNullException(nameof(configuration));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             var options = new ServiceConfiguration();
             configuration(options);
             return services
                 .AddJsApi()
                 .AddRtrwModal()
                 .AddRtrwPopoverService(options.PopoverOptions)
+                .AddRtrwKeyInterceptor()
                 .AddRtrwScrollManager();
         }
 
@@ -35,6 +37,13 @@ namespace Rtrw.Client.Wasm.Components.Extensions
         public static IServiceCollection AddRtrwModal(this IServiceCollection services)
         {
             services.TryAddScoped<IModalService, ModalService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddRtrwKeyInterceptor(this IServiceCollection services)
+        {
+            services.TryAddTransient<IKeyInterceptor, KeyInterceptor>();
 
             return services;
         }

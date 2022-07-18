@@ -1,85 +1,25 @@
 ﻿@namespace Rtrw.Client.Wasm.Components
 @inherits RtrwComponentBase
 
-<div @attributes="UserAttributes" class="@DivClassname" role="progressbar" style="@Style" aria-valuenow="@Value">
-    <svg class="rtrw-progress-circular-svg" viewBox="22 22 44 44">
-        @if (Indeterminate)
-        {
-            <circle class="@SvgClassname" cx="44" cy="44" r="20" fill="none" stroke-width="@StrokeWidth"></circle>
-        }
-        else
-        {
-            <circle class="@SvgClassname" cx="44" cy="44" r="20" fill="none" stroke-width="@StrokeWidth" style="stroke-dasharray: @_magicNumber; stroke-dashoffset: @_svgValue;"></circle>
-        }
-    </svg>
+<div @attributes="UserAttributes" class="@ClassName" style="@StyleName" role="status">
 </div>
 
 @code {
-    private const int _magicNumber = 126; // weird, but required for the SVG to work
-
-    protected string DivClassname =>
-        new CssBuilder("rtrw-progress-circular")
-            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text")
-            .AddClass($"rtrw-progress-{Size}")
-            .AddClass($"rtrw-progress-indeterminate", Indeterminate)
-            .AddClass($"rtrw-progress-static", !Indeterminate)
-            .AddClass(Class)
+    protected string? ClassName
+        => new CssBuilder()
+            .AddClass($"spinner-{SpinnerType.EnumToDescriptionString()}")
+            .AddClass($"rtrw-{Color.EnumToDescriptionString()}-text", Color != ThemeColor.Default || Color != ThemeColor.Inherit)
+            .AddClass(Class ?? string.Empty)
             .Build();
 
-    protected string SvgClassname =>
-        new CssBuilder("rtrw-progress-circular-circle")
-            .AddClass($"rtrw-progress-indeterminate", Indeterminate)
-            .AddClass($"rtrw-progress-static", !Indeterminate)
+    protected string? StyleName
+        => new StyleBuilder()
+            .AddStyle("width", Size.ToPx())
+            .AddStyle("height", Size.ToPx())
+            .AddStyle(Style ?? string.Empty)
             .Build();
 
-    [Parameter]
-    public ThemeColor Color { get; set; } = ThemeColor.Default;
-
-    [Parameter]
-    public string Size { get; set; } = "24px";
-
-    [Parameter]
-    public bool Indeterminate { get; set; }
-
-    [Parameter]
-    public double Min { get; set; } = 0.0;
-
-    [Parameter]
-    public double Max { get; set; } = 100.0;
-
-    private int _svgValue;
-    private double _value;
-
-    [Parameter]
-    public double Value
-    {
-        get => _value;
-        set
-        {
-            if (_value != value)
-            {
-                _value = value;
-                _svgValue = ToSvgValue(_value);
-                StateHasChanged();
-            }
-        }
-    }
-
-    private int ToSvgValue(double in_value)
-    {
-        var value = Math.Min(Math.Max(Min, in_value), Max);
-        // calculate fraction, which is a value between 0 and 1
-        var fraction = (value - Min) / (Max - Min);
-        // now project into the range of the SVG value (126 .. 0)
-        return (int)Math.Round(_magicNumber - _magicNumber * fraction);
-    }
-
-    [Parameter]
-    public int StrokeWidth { get; set; } = 3;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        _svgValue = ToSvgValue(_value);
-    }
+    [Parameter] public SpinnerType SpinnerType { get; set; } = SpinnerType.Border;
+    [Parameter] public ThemeColor Color { get; set; } = ThemeColor.Primary;
+    [Parameter] public int? Size { get; set; } = 24;
 }

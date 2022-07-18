@@ -1,0 +1,48 @@
+﻿@namespace Rtrw.Client.Wasm.Components.Input
+@using Rtrw.Client.Wasm.Components.Input
+@typeparam T
+@inherits RtrwBaseInput<T>
+
+<div class="@Classname" style="@Style">
+    <textarea class="@InputClassname"
+              @ref="ElementReference"
+              rows="@Lines"
+              @attributes="UserAttributes"
+              type="@InputTypeString"
+              placeholder="@Placeholder"
+              disabled=@Disabled
+              readonly="@ReadOnly"
+              inputmode="@InputMode.ToString()"
+              @oninput="OnInput"
+              @onchange="OnChange"
+              @onblur="@OnBlurred"
+              @onkeydown="@InvokeKeyDown"
+              @onkeypress="@InvokeKeyPress"
+              @onkeyup="@InvokeKeyUp"
+              @onpaste="@OnPaste"
+              value="@internalText"
+              maxlength="@MaxLength"
+              @onkeydown:preventDefault="@KeyDownPreventDefault"
+              @onkeypress:preventDefault="@KeyPressPreventDefault"
+              @onkeyup:preventDefault="@KeyUpPreventDefault"
+              @onmousewheel="@OnMouseWheel"
+              @onwheel="@OnMouseWheel"
+              aria-invalid="@Error.ToString().ToLower()"
+              aria-describedby="@ErrorId">
+        @Text
+    </textarea>
+
+    @if (showClearable && !Disabled)
+    {
+        <RtrwIconButton Class="@ClearButtonClassname"
+                    Style="padding: 6px; margin-right: 8px"
+                    Color=ThemeColor.Inherit
+                    OnClick="@ClearButtonClickHandlerAsync">
+            <RtrwSvgClearX />
+        </RtrwIconButton>
+    }
+    @if (Variant == Variant.Outlined)
+    {
+        <div class="rtrw-input-outlined-border" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"></div>
+    }
+</div>

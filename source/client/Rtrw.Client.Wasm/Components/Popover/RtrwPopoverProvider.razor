@@ -1,5 +1,6 @@
 ﻿@namespace Rtrw.Client.Wasm.Components
 @implements IDisposable
+@inject IRtrwPopoverService Service
 
 @if (IsEnabled)
 {
@@ -7,7 +8,7 @@
         @foreach (var handler in Service.Handlers)
         {
             <RtrwRender @ref="handler.ElementReference" @key="handler.Id">
-                <div id="@($"popovercontent-{handler.Id}")" data-ticks="@(handler.ActivationDate?.Ticks ?? 0)" @attributes="@handler.UserAttributes" class="@handler.Class" style="@handler.Style">
+                <div id="@($"popovercontent-{handler.Id}")" data-ticks="@(handler.ActivationDate?.Ticks ?? 0)" @attributes="@handler.Attributes" class="@handler.Class" style="@handler.Style">
                     @if (handler.ShowContent == true)
                     {
                         @handler.Fragment
@@ -23,7 +24,6 @@
 
     [CascadingParameter(Name = "UsePopoverProvider")]
     public bool IsEnabled { get; set; } = true;
-    [Inject] public IRtrwPopoverService Service { get; set; }
 
     public void Dispose()
     {

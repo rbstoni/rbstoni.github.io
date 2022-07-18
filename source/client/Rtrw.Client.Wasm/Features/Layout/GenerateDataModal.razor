@@ -33,10 +33,10 @@
         </div>
         @if (initial)
         {
-            <RtrwButton Disabled="busy" Color="ThemeColor.Primary" Variant="Variant.Filled" FullWidth OnClick="()=>GenerateFakeData(100)">
+            <RtrwButton Disabled="busy" Color="ThemeColor.Primary" Variant="Variant.Filled" FullWidth OnClick="()=>GenerateFakeData(5)">
                 @if (busy)
                 {
-                    <RtrwSpinner StrokeWidth="6" Indeterminate="true" Color="ThemeColor.Primary" Style="align-self: center" />
+                    <RtrwSpinner Color="ThemeColor.Primary" Style="align-self: center" />
                 }
                 else
                 {

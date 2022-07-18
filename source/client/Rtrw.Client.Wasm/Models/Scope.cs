@@ -1,9 +1,12 @@
-﻿namespace Rtrw.Client.Wasm.Models
+﻿using System.ComponentModel;
+
+namespace Rtrw.Client.Wasm.Models
 {
     public enum Scope
     {
-        SemuaWargaRtrw,
-        WargaLebihLuas,
+        [Description("Semua Warga")]
+        SemuaWarga,
+        [Description("Warga Sekitar")]
         WargaSekitar,
     }
 
@@ -20,11 +23,10 @@
         public string Description { get; set; }
         public Scope Scope { get; set; }
 
-        public static Audience SemuaWargaRtrw => new(Scope.SemuaWargaRtrw,"Semua Warga RTRW","Area yang lebih luas di kota Anda");
-        public static Audience WargaLebihLuas => new(Scope.WargaLebihLuas, "Warga Lebih Luas", "Kelurahan sekitar Anda");
-        public static Audience WargaSekitar => new(Scope.WargaSekitar, "Warga Sekitar", "Hanya di kelurahan Anda");
+        public static Audience SemuaWarga => new(Scope.SemuaWarga, "Semua Warga", "Area yang lebih luas di kota kamu");
+        public static Audience WargaSekitar => new(Scope.WargaSekitar, "Warga Sekitar", "Hanya di kelurahan kamu");
 
-        public static List<Audience> AllScopes = new() { SemuaWargaRtrw, WargaLebihLuas, WargaSekitar };
+        public static List<Audience> AllScopes = new() { SemuaWarga, WargaSekitar };
     }
 }
 

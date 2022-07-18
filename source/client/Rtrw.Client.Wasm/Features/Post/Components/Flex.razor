@@ -1,0 +1,39 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Utilities
+
+@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool IsInline { get; set; } = false;
+    [Parameter] public FlexDirection Direction { get; set; } = FlexDirection.Row;
+    [Parameter] public FlexWrap Wrap { get; set; } = FlexWrap.NoWrap;
+    [Parameter] public FlexJustifyContent JustifyContent { get; set; } = FlexJustifyContent.FlexStart;
+    [Parameter] public FlexAlignItems AlignItems { get; set; } = FlexAlignItems.FlexStart;
+    [Parameter] public FlexAlignContent? AlignContent { get; set; } = FlexAlignContent.FlexStart;
+    [Parameter] public int? Gap { get; set; }
+    protected string? ClassName
+            => new CssBuilder()
+                .AddClass("rtrw-flex", !IsInline)
+                .AddClass("rtrw-flex-inline", IsInline)
+                .AddClass($"rtrw-flex-{Direction.EnumToDescriptionString()}")
+                .AddClass($"rtrw-flex-wrap-{Wrap.EnumToDescriptionString()}")
+                .AddClass($"rtrw-justify-content-{JustifyContent.EnumToDescriptionString()}")
+                .AddClass($"rtrw-align-items-{AlignItems.EnumToDescriptionString()}")
+                .AddClass($"rtrw-align-content-{AlignContent?.EnumToDescriptionString()}", AlignContent != null)
+                .AddClass(Class ?? string.Empty)
+                .Build();
+
+    protected string? StyleName
+    => new StyleBuilder()
+        .AddStyle("column-gap", Gap.ToPx(), (Direction==FlexDirection.Row || Direction==FlexDirection.RowReverse) && Gap !=null)
+        .AddStyle("row-gap", Gap.ToPx(), (Direction==FlexDirection.Column ||Direction==FlexDirection.ColumnReverse)  && Gap !=null)
+        .AddStyle(Style ?? string.Empty)
+        .Build();
+}

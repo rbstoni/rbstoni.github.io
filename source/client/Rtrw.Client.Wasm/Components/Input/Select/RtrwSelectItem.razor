@@ -1,0 +1,17 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@typeparam T
+@inherits RtrwBaseSelectItem
+
+@if (HideContent == false)
+{
+    <RtrwListItem @attributes="UserAttributes" Value="@ItemId" id="@ItemId" OnClick="@OnClicked" OnClickHandlerPreventDefault="true" Disabled="@Disabled" Class="@GetCssClasses()" Style="@Style">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @DisplayString
+        }
+        </RtrwListItem>
+}

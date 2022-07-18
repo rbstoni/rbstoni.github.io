@@ -1,0 +1,52 @@
+.rtrw-select {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+
+    &.rtrw-autocomplete {
+        display: block;
+
+        & .rtrw-select-input {
+            cursor: text;
+        }
+
+        & .rtrw-input-adornment {
+            cursor: pointer;
+        }
+    }
+
+    .rtrw-select-input {
+        cursor: pointer;
+
+        & .rtrw-input-slot {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        & .rtrw-input-adornment-end {
+            margin-left: 0;
+        }
+
+        &:disabled {
+            cursor: default;
+        }
+    }
+
+    .rtrw-disabled {
+        .rtrw-select-input {
+            cursor: default;
+        }
+    }
+}
+
+
+.rtrw-select > .rtrw-form-helpertext {
+    margin-top: -21px;
+}
+
+.rtrw-select-all {
+    margin-top: 10px;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 18px;
+}

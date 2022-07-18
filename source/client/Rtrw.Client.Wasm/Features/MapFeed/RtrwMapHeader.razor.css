@@ -1,0 +1,12 @@
+.map-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-height: 58px;
+}
+@media screen and (min-device-width: 600px) {
+  .map-header {
+    max-width: 600px;
+  }
+}/*# sourceMappingURL=RtrwMapHeader.razor.css.map */

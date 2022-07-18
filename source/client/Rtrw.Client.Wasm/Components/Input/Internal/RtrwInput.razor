@@ -1,4 +1,5 @@
-﻿@using Rtrw.Client.Wasm.Components.Input.Base
+﻿@namespace Rtrw.Client.Wasm.Components.Input
+@using Rtrw.Client.Wasm.Components.Input
 @typeparam T
 @inherits RtrwBaseInput<T>
 
@@ -39,7 +40,7 @@
               aria-invalid="@Error.ToString().ToLower()"
               aria-describedby="@ErrorId">
             @Text
-                    </textarea>
+        </textarea>
     }
     else
     {
@@ -84,14 +85,21 @@
 
     @if (showClearable && !Disabled)
     {
-        <RtrwIconButton Class="@ClearButtonClassname" Style="padding: 6px" Color=ThemeColor.Inherit OnClick="@ClearButtonClickHandlerAsync">
+        <RtrwIconButton Class="@ClearButtonClassname"
+                    Style="padding: 6px"
+                    Color=ThemeColor.Inherit
+                    OnClick="@ClearButtonClickHandlerAsync">
             <RtrwSvgClearX />
         </RtrwIconButton>
     }
 
     @if (Adornment == Adornment.End)
     {
-        <RtrwInputAdornment Class="@AdornmentClassname" Style="margin-right: -6px" AdornmentClick="@OnAdornmentClick" AdornmentContent="@AdornmentContent" AdornmentSvg="@AdornmentSvg" />
+        <RtrwInputAdornment Class="@AdornmentClassname"
+                        Style="margin-right: -6px"
+                        AdornmentClick="@OnAdornmentClick"
+                        AdornmentContent="@AdornmentContent"
+                        AdornmentSvg="@AdornmentSvg" />
     }
 
     @if (Variant == Variant.Outlined)

@@ -1,7 +1,10 @@
-﻿namespace Rtrw.Client.Wasm.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Rtrw.Client.Wasm.Models
 {
     public class CommentOption
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public bool CanDelete { get; set; }
         public bool CanEdit { get; set; }

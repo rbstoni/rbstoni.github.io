@@ -1,22 +1,25 @@
 ﻿@page "/"
+
 @inject NavigationManager NavigationManager
 @inject IModalService ModalService
 @inject IPostService PostService
+@inject IDummyService DummyService
+@inject ILogger<Peta> Logger
 
-@using Rtrw.Client.Wasm.Components.Container
 @using Rtrw.Client.Wasm.Extensions
 @using Rtrw.Client.Wasm.Features
-@using Rtrw.Client.Wasm.Features.HorizontalScrollable
 @using Rtrw.Client.Wasm.Features.MapFeed
+@using Rtrw.Client.Wasm.Features.Navbar
+@using Rtrw.Client.Wasm.Features.ScrollableContent
 @using Rtrw.Client.Wasm.JsInterop
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Services
 @using Rtrw.Client.Wasm.Svgs
 
 <CascadingValue Value="@HeaderBarWasClicked">
-    <RtrwMapbox OnKelurahanChange="@ChangeKelurahan" @ref="MapboxReference" />
-    <RtrwMapFeedTopToolbars />
-    <RtrwFooter>
+    <RtrwMapbox OnKelurahanChanged="OnKelurahanChanged" @ref="MapboxReference" />
+    <RtrwMapHeader />
+    <RtrwMapFooter>
         @if (!HeaderBarWasClicked)
         {
             <RtrwContainer>
@@ -52,7 +55,7 @@
                           FullName="@post.Author?.FullName"
                           Kelurahan="@post.Author?.Geocoder?.Kelurahan"
                           PostText="@post.Text"
-                          Source="@post.Media?.FirstOrDefault()?.FileUrl"
+                          Source="@post.Media?.FirstOrDefault()?.Url"
                           WargaId="@post.Author?.Id" />
                 }
             </RtrwHorizontalScrollable>
@@ -66,27 +69,61 @@
             <RtrwMapFeed Provinsi="@featureProperties.ADM2_EN"
                      KabupatenKota="@featureProperties.ADM3_EN"
                      Kelurahan="@featureProperties.ADM4_EN"
-                     HeaderBarIsClick=HeaderBarIsClick />
+                     HeaderBarIsClick=HeaderBarIsClick>
+                @if (Posts?.Count == 0 && HeaderBarWasClicked)
+                {
+                    <RtrwNoPostFull />
+                }
+                @if (Posts?.Count != 0 && HeaderBarWasClicked)
+                {
+                    <Virtualize Items="Posts" Context="post">
+                        <ItemContent>
+                            <RtrwPostItem PostId="@post.Id" @key="@post.Id" />
+                        </ItemContent>
+                    </Virtualize>
+                }
+            </RtrwMapFeed>
         }
-        <RtrwNavBar />
-    </RtrwFooter>
+        <RtrwNavbar />
+    </RtrwMapFooter>
 </CascadingValue>
+
 @code {
     MapboxFeatureProperties? featureProperties;
-    protected Warga Warga { get; set; }
+    [CascadingParameter] protected Warga Warga { get; set; }
     bool HeaderBarWasClicked { get; set; }
     List<Post>? Posts { get; set; } = new();
     RtrwMapbox? MapboxReference { get; set; }
 
-    async void ChangeKelurahan(MapboxFeatureProperties featureProperties)
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        this.featureProperties = featureProperties;
-        var results = (await PostService.GetPostsAsync()).Where(x => x.Author?.Geocoder?.Kelurahan.ToLower().Trim() == featureProperties.ADM4_EN.ToLower().Trim()).ToList();
-        if (results?.Count != 0)
+        if (firstRender && featureProperties == null)
         {
-            Posts = results;
-            Console.WriteLine("hit");
+            Logger.LogInformation("Trying to add some content for you!");
+            Posts = DummyService.GenerateFakePost(5, Warga.Geocoder.Kelurahan);
+            Logger.LogInformation("Content added...");
         }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    async void OnKelurahanChanged(MapboxFeatureProperties _featureProperties)
+    {
+        Logger.LogInformation("Trying to change kelurahan...");
+        featureProperties = _featureProperties;
+
+        if (featureProperties.ADM4_EN != Warga.Geocoder.Kelurahan)
+        {
+            Logger.LogInformation("Trying to add some content for you!");
+            Posts = DummyService.GenerateFakePost(5, featureProperties.ADM4_EN);
+            Logger.LogInformation("Content added...");
+        }
+
+        //var results = (await PostService.GetPostsAsync()).Where(x => x.Author?.Geocoder?.Kelurahan?.ToLower().Trim() == featureProperties.ADM4_EN.ToLower().Trim()).ToList();
+        //if (results?.Count != 0)
+        //{
+        //    Posts = results;
+        //}
+        Logger.LogInformation($"Kelurahan changed to: {featureProperties.ADM4_EN}");
         StateHasChanged();
     }
 
@@ -98,6 +135,13 @@
 
     async Task GoCurrentUserKelurahan()
     {
-        await MapboxReference.ShowAsync(Warga.Geocoder.Latitude.StringToDouble(), Warga.Geocoder.Longitude.StringToDouble());
+        var longitude = Warga?.Geocoder?.Longitude?.StringToDouble();
+        var latitude = Warga?.Geocoder?.Latitude?.StringToDouble();
+        Logger.LogInformation($"longitude: {longitude}");
+        Logger.LogInformation($"latitude: {latitude}");
+        if ((latitude, longitude) != (null, null))
+        {
+            await MapboxReference!.ShowAsync(longitude, latitude);
+        }
     }
 }

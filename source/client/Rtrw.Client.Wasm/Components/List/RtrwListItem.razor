@@ -1,0 +1,35 @@
+﻿@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div tabindex="0" @attributes="UserAttributes" class="@ClassName" @onclick="OnClickHandler" @onclick:stopPropagation="true" style="@Style">
+    <div class="rtrw-list-item-text @(Inset? "rtrw-list-item-text-inset":"")">
+        @ChildContent
+    </div>
+    @if (NestedList != null)
+    {
+        <RtrwIcon Size="@IconSize" Color="@AdornmentColor">
+            @if (_expanded)
+            {
+                <svg class="rtrw-icon-root rtrw-icon-default rtrw-svg-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
+                </svg>
+            }
+            else
+            {
+                <svg class="rtrw-icon-root rtrw-icon-default rtrw-svg-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg>
+            }
+        </RtrwIcon>
+    }
+</div>
+@if (NestedList != null)
+{
+    <RtrwCollapse Expanded="@Expanded">
+        <RtrwList Clickable="RtrwList?.Clickable ?? false" Color="RtrwList?.Color ?? ThemeColor.Primary" DisablePadding="true" Class="rtrw-nested-list" Disabled="@Disabled">
+            @NestedList
+        </RtrwList>
+    </RtrwCollapse>
+}

@@ -6,7 +6,7 @@ using Rtrw.Client.Wasm.Components.Extensions;
 using Rtrw.Client.Wasm.Components.Utilities;
 using System.Globalization;
 
-namespace Rtrw.Client.Wasm.Components.Input.Base
+namespace Rtrw.Client.Wasm.Components.Input
 {
     public abstract class RtrwBaseInput<T> : RtrwFormComponent<T, string>
     {

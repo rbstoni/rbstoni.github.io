@@ -21,7 +21,7 @@
                 <RtrwPostItem PostId="@post.Id" @key="@post.Id" />
             </ItemContent>
             <Placeholder>
-                <RtrwSpinner Color="ThemeColor.Primary" Size="40px" Indeterminate />
+                <RtrwSpinner Color="ThemeColor.Primary" Size="40"/>
             </Placeholder>
         </Virtualize>
     }
@@ -29,7 +29,7 @@
     @if (dataLoaded)
     {
         <RtrwOverlay Absolute DarkBackground LockScroll Visible="dataLoaded">
-            <RtrwSpinner Indeterminate StrokeWidth="4" Color="ThemeColor.Primary" />
+            <RtrwSpinner />
         </RtrwOverlay>
     }
 </RtrwMainContent>

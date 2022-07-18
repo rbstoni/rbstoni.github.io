@@ -1,0 +1,58 @@
+﻿.rtrw-popover {
+    outline: 0;
+    z-index: calc(var(--rtrw-zindex-popover) + 1);
+    position: absolute;
+    opacity: 0;
+
+    &.rtrw-popover-fixed {
+        position: fixed;
+    }
+
+    &.rtrw-popover-relative-width {
+        width: 100%;
+    }
+
+    &.rtrw-popover-open {
+        opacity: 1;
+        transition: opacity;
+    }
+
+    &:not(.rtrw-popover-open ) {
+        pointer-events: none;
+        transition-duration:0ms !important;
+        transition-delay:0ms !important;
+    }
+}
+
+.rtrw-appbar {
+    .rtrw-popover-cascading-value {
+        z-index: calc(var(--rtrw-zindex-appbar) + 2);
+    }
+}
+
+.rtrw-drawer {
+    &:not(.rtrw-drawer-temporary) {
+        .rtrw-popover-cascading-value {
+            z-index: calc(var(--rtrw-zindex-drawer) + 2);
+        }
+    }
+
+    &.rtrw-drawer-temporary, &.rtrw-drawer-responsive {
+        .rtrw-popover-cascading-value {
+            z-index: calc(var(--rtrw-zindex-appbar) + 4);
+        }
+    }
+}
+
+.rtrw-modal {
+    .rtrw-popover-cascading-value {
+        z-index: calc(var(--rtrw-zindex-modal) + 3);
+    }
+}
+
+.rtrw-popover {
+    .rtrw-list {
+        max-height: inherit;
+        overflow-y: auto;
+    }
+}

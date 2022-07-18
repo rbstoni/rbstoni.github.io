@@ -1,0 +1,98 @@
+﻿.rtrw-radio{
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    color: var(--rtrw-body-color);
+
+    &.rtrw-disabled, .rtrw-disabled:hover, .rtrw-disabled:focus-visible {
+        cursor: default;
+        background-color: transparent !important;
+
+        & * {
+            cursor: default;
+            color: var(--rtrw-disabled-color);
+        }
+    }
+
+    & .rtrw-radio-dense {
+        padding: 4px;
+    }
+
+    &.rtrw-checked {
+        color: var(--rtrw-body-color);
+
+        &:hover {
+            background-color: var(--rtrw-hover-bg);
+        }
+    }
+}
+
+.rtrw-radio-button{
+    display: flex;
+    justify-content: inherit;
+    align-items: inherit;
+    width: 100%;
+    & .rtrw-radio-input {
+        top: 0;
+        left: 0;
+        width: 100%;
+        cursor: inherit;
+        height: 100%;
+        margin: 0;
+        opacity:0;
+        padding: 0;
+        z-index: 1;
+        position: absolute;
+    }
+
+    & .rtrw-radio-icons {
+        display: flex;
+        position: relative;
+    }
+}
+
+.rtrw-radio-icons.rtrw-checked .rtrw-radio-icon-checked {
+    transform: scale(1);
+    transition: transform 150ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+}
+
+.rtrw-radio-icon-checked {
+    left: 0;
+    position: absolute;
+    transform: scale(0);
+    transition: transform 150ms cubic-bezier(0.4, 0, 1, 1) 0ms;
+}
+
+.rtrw-radio-content-placement- {
+    &start {
+        margin-left: 16px;
+        margin-right: -11px;
+        margin-inline-start: 16px;
+        margin-inline-end: -11px;
+        flex-direction: row-reverse;
+    }
+
+    &end {
+        margin-left: -11px;
+        margin-right: 16px;
+        margin-inline-start: -11px;
+        margin-inline-end: 16px;
+        flex-direction: row;
+    }
+
+    &top {
+        margin-left: 16px;
+        margin-inline-start: 16px;
+        margin-inline-end: unset;
+        flex-direction: column-reverse;
+    }
+
+    &bottom {
+        margin-left: 16px;
+        margin-inline-start: 16px;
+        margin-inline-end: unset;
+        flex-direction: column;
+    }
+}

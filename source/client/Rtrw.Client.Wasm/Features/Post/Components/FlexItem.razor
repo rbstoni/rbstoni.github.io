@@ -1,0 +1,68 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Utilities
+@using System.Text
+
+@namespace Rtrw.Client.Wasm.Components
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool IsInline { get; set; } = false;
+    [Parameter] public int? Order { get; set; } = 0;
+    [Parameter] public int? Grow { get; set; } = 0;
+    [Parameter] public int? Shrink { get; set; } = 1;
+    [Parameter] public string? Basis { get; set; } = "auto";
+    [Parameter] public FlexAlignSelf AlignSelf { get; set; } = FlexAlignSelf.Auto;
+
+    protected string? ClassName
+            => new CssBuilder()
+                .AddClass($"rtrw-align-self-{AlignSelf.EnumToDescriptionString()}")
+                .AddClass(Class ?? string.Empty)
+                .Build();
+
+    protected string? StyleName
+    => new StyleBuilder()
+        .AddStyle("order", Order.ToString() ?? null!, Order != null)
+        .AddStyle("flex-grow", Grow.ToString() ?? null!, Grow != null)
+        .AddStyle("flex-shrink", Shrink.ToString() ?? null!, Shrink != null)
+        .AddStyle("flex-basis", ConvertToPercentage(Basis ?? null!) ?? null!, ConvertToPercentage(Basis ?? null!) != null)
+        .AddStyle(Style ?? string.Empty)
+        .Build();
+
+    string? ConvertToPercentage(string basis)
+    {
+        var stringBuilder = new StringBuilder();
+        var str = basis.Trim().ToLower();
+        if (str != "auto" && str.IsNonEmpty() && IsStringAValidNumber(str))
+        {
+
+            return stringBuilder.AppendJoin("", str, "%").ToString();
+        }
+        else if (str == "auto")
+        {
+            return str;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    bool IsStringAValidNumber(string str)
+    {
+        try
+        {
+            Int32.Parse(str);
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+        return true;
+    }
+}

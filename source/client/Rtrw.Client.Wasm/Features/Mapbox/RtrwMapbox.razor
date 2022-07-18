@@ -1,58 +1,65 @@
-﻿@implements IAsyncDisposable
+﻿@inherits RtrwComponentBase
+@implements IAsyncDisposable
 @inject IJSRuntime JSRuntime
+@inject ILogger<RtrwMapbox> Logger
+
+@using Rtrw.Client.Wasm.Components.Base
 @using Rtrw.Client.Wasm.Extensions
 @using Rtrw.Client.Wasm.JsInterop
 @using Rtrw.Client.Wasm.Models
 @using Rtrw.Client.Wasm.Utilities
 @using System.Text.Json
 
-<div @ref="mapboxRef" @attributes="@Attributes" class="@Classname" style="@StyleName"></div>
+<div @ref="mapElementReference" @attributes="@UserAttributes" class="@ClassName" style="@StyleName" />
 
 @code {
-    private ElementReference mapboxRef;
-    [CascadingParameter] protected MapboxFeatureProperties? FeatureProperties { get; set; }
-    [CascadingParameter] protected Warga Warga { get; set; } 
-    [Parameter] public Dictionary<string, object>? Attributes { get; set; }
-    [Parameter] public string? Class { get; set; }
-    [Parameter] public string? Style { get; set; }
-    [Parameter] public EventCallback<MapboxFeatureProperties> OnKelurahanChange { get; set; }
-    IJSObjectReference? mapJsModule, mapInstance, mapControl;
-    protected string Classname
+    protected string ClassName
         => new CssBuilder("mapbox")
-            .AddClass(Class)
+            .AddClass(Class ?? null!)
             .Build();
+
     protected string StyleName
         => new StyleBuilder()
-            .AddStyle(Style)
+            .AddStyle(Style ?? null!)
             .Build();
+
+    private ElementReference mapElementReference;
+    IJSObjectReference? mapJsModule, mapInstance, mapControl;
+
+    //[CascadingParameter] protected MapboxFeatureProperties? FeatureProperties { get; set; }
+    [CascadingParameter] protected Warga Warga { get; set; }
+    [Parameter] public EventCallback<MapboxFeatureProperties> OnKelurahanChanged { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            mapJsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/mapboxComponent.js");
-            Console.WriteLine(Warga is null);
-            mapInstance = await mapJsModule.InvokeAsync<IJSObjectReference>("addMapToElement", mapboxRef, Warga.Geocoder.Longitude.StringToDouble(), Warga.Geocoder.Latitude.StringToDouble());
-            await mapJsModule.InvokeVoidAsync("addMapControl", mapInstance);
-            var dotNetReference = DotNetObjectReference.Create(this);
-            await mapJsModule.InvokeAsync<string>("getMapFeatures", mapInstance, dotNetReference);
+            var longitude = Warga?.Geocoder?.Longitude?.StringToDouble();
+            var latitude = Warga?.Geocoder?.Latitude?.StringToDouble();
+            mapJsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/mapboxElement.js");
+            mapInstance = await mapJsModule.InvokeAsync<IJSObjectReference>("addMapToElement", mapElementReference, longitude, latitude, DotNetObjectReference.Create(this));
         }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
-    [JSInvokable("GetFeatureProperties")]
-    public async void AddFeaturePropertiesToElement(string result)
+    [JSInvokable("GetQueryRenderedFeatures")]
+    public async void GetQueryRenderedFeatures(string result)
     {
         var deserializedObject = JsonSerializer.Deserialize<MapboxFeatureProperties>(result);
-        FeatureProperties = deserializedObject;
-        await OnKelurahanChange.InvokeAsync(FeatureProperties);
+        await OnKelurahanChanged.InvokeAsync(deserializedObject);
         StateHasChanged();
     }
 
-    public async Task ShowAsync(double latitude, double longitude)
+    public async Task ShowAsync(double? longitude, double? latitude)
     {
+        if (latitude == null || longitude == null)
+        {
+            return;
+        }
         if (mapJsModule is not null && mapInstance is not null)
         {
-            await mapJsModule.InvokeVoidAsync("setMapCenter", mapInstance, latitude, longitude).AsTask();
+            await mapJsModule.InvokeVoidAsync("setMapCenter", mapInstance, longitude, latitude).AsTask();
         }
     }
 

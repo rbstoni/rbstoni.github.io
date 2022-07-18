@@ -1,0 +1,41 @@
+﻿.conveyor{
+    position: relative;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.conveyor-indicators{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-bottom: 8px;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px 4px 8px;
+    border-radius: 9999px;
+
+    >.conveyor-indicator-bullet{
+        background-color: var(--rtrw-white);
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+
+        &.active{
+            background-color: var(--rtrw-primary);
+        }
+    }
+}
+.conveyor-controls{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

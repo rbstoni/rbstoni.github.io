@@ -5,7 +5,7 @@ namespace Rtrw.Client.Wasm.Enums
     public enum Gender
     {
         [Description("Laki-laki")]
-        Lakilaki,
+        LakiLaki,
         [Description("Perempuan")]
         Perempuan
     }

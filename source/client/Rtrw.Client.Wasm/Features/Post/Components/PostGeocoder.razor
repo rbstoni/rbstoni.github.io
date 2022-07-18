@@ -1,0 +1,27 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+
+<div @attributes="UserAttributes" class="@ClassName" style="@Style">
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18.509" height="23.393" viewBox="0 0 18.509 23.393">
+            <g id="Rtrw-Pin-Location" transform="translate(-34.419 148.793)">
+                <g id="Group_176" data-name="Group 176" transform="translate(34.987 -147.106)">
+                    <path id="Path_2158" data-name="Path 2158" d="M52.452,26.839a9.34,9.34,0,0,0,.3,12.956l6.473,6.473,6.553-6.553a9.267,9.267,0,0,0,0-13.106h0a9.267,9.267,0,0,0-13.329.23Z" transform="translate(-50.556 -25.581)" fill="#11a830" />
+                    <path id="Path_2159" data-name="Path 2159" d="M64.108,55.493a7.922,7.922,0,0,0,.257,10.989l5.49,5.49,5.558-5.558a7.86,7.86,0,0,0,0-11.116h0a7.861,7.861,0,0,0-11.305.2Z" transform="translate(-61.182 -50.972)" fill="#ffce44" stroke="#fff" stroke-miterlimit="10" stroke-width="1" />
+                    <path id="Path_2160" data-name="Path 2160" d="M122.908,119.537l-1.083-1.083a.391.391,0,0,0-.076-.076l-2.648-2.648-.01-.01a.379.379,0,0,0-.535,0l-.01.01-2.648,2.648a.391.391,0,0,0-.076.076l-1.083,1.083a.378.378,0,0,0,.534.534l.473-.473V123a.378.378,0,0,0,.378.378h5.4A.378.378,0,0,0,121.9,123v-3.4l.473.473a.378.378,0,0,0,.534-.534Zm-1.762,3.085H116.5v-3.778l2.321-2.321,2.321,2.321v3.778Z" transform="translate(-110.138 -109.237)" fill="#fff" />
+                </g>
+            </g>
+        </svg>
+    </div>
+    <span class="location-label">@Geocoder?.Alamat</span>
+</div>
+
+@code {
+    [Parameter] public Geocoder? Geocoder { get; set; }
+
+    protected string? ClassName
+        => new CssBuilder("post-location")
+            .AddClass(Class)
+            .Build();
+}

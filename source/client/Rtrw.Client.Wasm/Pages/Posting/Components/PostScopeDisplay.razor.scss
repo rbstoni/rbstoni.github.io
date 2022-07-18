@@ -1,0 +1,36 @@
+﻿$prefix: rtrw-;
+
+.scope-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-right: auto;
+    gap: 8px;
+    background: rgba(193, 248, 206, 0.28);
+    border: 1px solid #707070;
+    padding: 4px 14px;
+    border-radius: var(--#{$prefix}border-radius);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--#{$prefix}border-color);
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    cursor: default;
+
+    .scope-name {
+        font-weight: bold;
+        font-size: 15px;
+        text-align: left;
+        color: #716464;
+    }
+
+    .scope-description {
+        font-weight: normal;
+        font-size: 15px;
+        text-align: left;
+        color: #716464;
+    }
+}

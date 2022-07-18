@@ -1,0 +1,15 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Extensions
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+
+<span @attributes="UserAttributes" class="@ClassName" style="@Style">@DateTime.TimeSpanToString()</span>
+
+@code {
+    [Parameter] public DateTime DateTime { get; set; }
+    
+    protected string ClassName
+        => new CssBuilder("timespan")
+            .AddClass(Class??string.Empty)
+            .Build();
+}

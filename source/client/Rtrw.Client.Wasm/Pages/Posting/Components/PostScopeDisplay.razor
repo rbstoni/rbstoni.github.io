@@ -1,0 +1,49 @@
+﻿@using Rtrw.Client.Wasm.Components.Enums
+@using Rtrw.Client.Wasm.Models
+@inject IModalService Modal
+
+@if (Scope == Scope.SemuaWarga)
+{
+    <div class="scope-display" @onclick="()=>OpenChangePostScopeModal(Scope.SemuaWarga)">
+        <img src="media/scope/Semua_Warga.png" width="43">
+        <Flex Direction="FlexDirection.Column">
+            <div class="scope-name">@Audience.SemuaWarga.Name</div>
+            <div class="scope-description">@Audience.SemuaWarga.Description</div>
+        </Flex>
+    </div>
+}
+@if (Scope == Scope.WargaSekitar)
+{
+    <div class="scope-display" @onclick="()=>OpenChangePostScopeModal(Scope.WargaSekitar)">
+        <img src="/media/scope/Warga_Sekitar.png" width="43">
+        <Flex Direction="FlexDirection.Column">
+            <div class="scope-name">@Audience.WargaSekitar.Name</div>
+            <div class="scope-description">@Audience.WargaSekitar.Description</div>
+        </Flex>
+    </div>
+}
+@code {
+    [Parameter] public Scope Scope { get; set; }
+    [Parameter] public EventCallback<Scope> ScopeChanged { get; set; }
+
+    async void OpenChangePostScopeModal(Scope scope)
+    {
+        var options = new ModalOptions()
+            {
+                CloseButton = true,
+                DisableBackdropClick = false,
+                FullScreen = false,
+                NoHeader = false,
+                Position = ModalPosition.Center
+            };
+        var parameters = new ModalParameters();
+        parameters.Add("Scope", Scope);
+        var modal = Modal.Show<ChangePostScopeModal>("Opsi jangkauan posting:", parameters, options);
+        var result = await modal.Result;
+        if (!result.Cancelled)
+        {
+            Scope = (Scope)result.Data;
+        }
+        await ScopeChanged.InvokeAsync(Scope);
+    }
+}

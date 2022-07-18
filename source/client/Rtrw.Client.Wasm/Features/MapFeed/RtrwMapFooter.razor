@@ -1,0 +1,22 @@
+﻿@using Rtrw.Client.Wasm.Components.Base
+@using Rtrw.Client.Wasm.Utilities
+@inherits RtrwComponentBase
+
+<footer @attributes="@UserAttributes" class="@ClassName" style="@StyleName">
+    @ChildContent
+</footer>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected string ClassName
+        => new CssBuilder()
+            .AddClass("footer")
+            .AddClass(Class)
+            .Build();
+
+    protected string StyleName
+        => new StyleBuilder()
+            .AddStyle(Style)
+            .Build();
+}

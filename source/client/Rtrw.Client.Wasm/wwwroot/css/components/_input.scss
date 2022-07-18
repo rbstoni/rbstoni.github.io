@@ -233,9 +233,9 @@
             transition: border-width, border-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
         }
 
-        &:not(.#{$prefix}input-disabled):not(:focus-within):hover .#{$prefix}input-outlined-border {
-            border-color: var(--#{$prefix}gray);
-        }
+        // &:not(.#{$prefix}input-disabled):not(:focus-within):hover .#{$prefix}input-outlined-border {
+        //     border-color: var(--#{$prefix}gray);
+        // }
 
         &:focus-within .#{$prefix}input-outlined-border {
             border-width: 2px;

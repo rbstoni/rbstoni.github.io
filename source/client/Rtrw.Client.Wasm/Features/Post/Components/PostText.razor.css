@@ -1,0 +1,11 @@
+.post-text {
+  font-family: Roboto;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: left;
+  color: #0f1419;
+}
+
+.truncate-button {
+  color: #b4a9a9;
+}/*# sourceMappingURL=PostText.razor.css.map */
