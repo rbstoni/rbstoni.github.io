@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy RTRW to GitHub Pages
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy-to-github-pages:
+    # Using ubuntu-latest imgae to run
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with: 
+          dotnet-version: 6.0.x
+      
+      - name: Install .NET WebAssembly build tools
+        run: dotnet workload install wasm-tools
+        
+      - name: Publish .NET Core Project
+        run: dotnet publish source/client/Rtrw.Client.Wasm/Rtrw.Client.Wasm.csproj -c Release -o release --nologo
+        
+      - name: Add .nojekyll file
+        run: touch release/wwwroot/.nojekyll
+        
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.3.4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: release/wwwroot
